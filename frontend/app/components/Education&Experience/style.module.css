@@ -1,0 +1,185 @@
+.form > p {
+  margin-bottom: 30px;
+  color: #ccc;
+}
+.addedSection {
+  position: relative;
+  border: 2px solid var(--charcoal-gray);
+  margin: 40px 0;
+  border-radius: 12px;
+  padding: 50px 20px 0;
+}
+.formGroup {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+}
+.formGroup div {
+  width: 100%;
+}
+.addedSection > div {
+  margin-bottom: 30px;
+}
+.addedSection label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 900;
+}
+.addedSection label span {
+  color: var(--forge-red);
+}
+.addedSection select,
+.addedSection input,
+.addedSection textarea {
+  width: 100%;
+  border: 2px solid var(--charcoal-gray);
+  background-color: transparent;
+  color: var(--ash-white);
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 1.1rem;
+  transition-duration: 0.3s;
+}
+.addedSection input::placeholder,
+.addedSection textarea::placeholder {
+  opacity: 0.5;
+}
+.addedSection select:hover,
+.addedSection input:hover,
+.addedSection textarea:hover {
+  border: 2px solid var(--molten-orange);
+}
+.addedSection select:focus,
+.addedSection input:focus,
+.addedSection textarea:focus {
+  border: 2px solid var(--molten-orange);
+  background-color: var(--charcoal-gray);
+  outline: none;
+}
+.addedSection textarea {
+  resize: vertical;
+  min-height: 150px;
+}
+.addedSection input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) brightness(0.7);
+  cursor: pointer;
+}
+.textareaContainer {
+  position: relative;
+}
+.addedSection input:disabled {
+  opacity: 0.5;
+  cursor: no-drop;
+}
+.addedSection input:disabled:hover {
+  border: 2px solid var(--charcoal-gray);
+}
+.checkdate {
+  width: 50%;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 0.7rem;
+  color: #ccc;
+}
+.checkdate label {
+  margin: 0;
+}
+.checkdate span {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--charcoal-gray);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 0.3s;
+  color: var(--ash-white);
+}
+.checkdate span svg {
+  display: none;
+}
+.checkdate span.active {
+  background-color: var(--molten-orange);
+  border: none;
+}
+.checkdate span.active svg {
+  display: block;
+}
+.charCount {
+  position: absolute;
+  opacity: 0.7;
+  bottom: 20px;
+  right: 20px;
+  font-size: 0.8rem;
+}
+.removeButton {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  transition-duration: 0.3s;
+}
+.removeButton:hover {
+  opacity: 1;
+  color: var(--forge-red);
+}
+.removeButton,
+.addButton {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  opacity: 0.7;
+  font-size: 1.1rem;
+  color: var(--ash-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.addButton {
+  width: 100%;
+  border-radius: 12px;
+  text-align: center;
+  border: 2px solid var(--ash-white);
+  padding: 10px 20px;
+  margin-bottom: 30px;
+  transition-duration: 0.3s;
+}
+.addButton:hover {
+  opacity: 1;
+  background-color: var(--charcoal-gray);
+  border: 2px solid var(--forge-red);
+}
+@media (max-width: 767px) {
+  .addedSection {
+    padding: 50px 10px 0;
+  }
+  .formGroup {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .addedSection label {
+    font-size: 0.8rem;
+  }
+  .addedSection select,
+  .addedSection input,
+  .addedSection textarea {
+    font-size: 0.8rem;
+  }
+  .checkdate {
+    width: 100%;
+    margin-left: 20px;
+    gap: 10px;
+  }
+  .checkdate label {
+    font-size: 0.6rem;
+  }
+  .removeButton,
+  .addButton {
+    font-size: 0.8rem;
+  }
+}

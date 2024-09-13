@@ -1,0 +1,174 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+.footer {
+  background-color: var(--charcoal-gray);
+  box-shadow: 0 -5px 5px var(--molten-orange);
+  padding: 50px 0 0;
+  margin-top: 100px;
+}
+.footer .container > div:first-child {
+  display: flex;
+  gap: 20px;
+  background-color: var(--ash-black);
+  color: var(--ash-white);
+  font-family: "Montserrat", sans-serif;
+}
+.footer .container > div:first-child > div {
+  flex: 1 1;
+}
+.logo {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+}
+.logo div a {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}
+.logo strong {
+  color: var(--molten-orange);
+  font-family: "Montserrat", sans-serif;
+  font-size: 900;
+  font-size: 1.5rem;
+  height: auto;
+}
+.logo p {
+  opacity: 0.8;
+}
+.cta {
+  padding: 20px;
+}
+.cta h3 {
+  margin-bottom: 10px;
+}
+.cta p {
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.legals {
+  padding: 20px;
+}
+.legals h3 {
+  margin-bottom: 10px;
+}
+.legals ul {
+  list-style: none;
+}
+.legals ul li {
+  margin-bottom: 5px;
+}
+.legals ul li a:hover {
+  color: var(--molten-orange);
+  transition-duration: 0.3s;
+  text-decoration: underline;
+}
+.subscribe {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  padding: 20px;
+}
+.subscribe h3 {
+  margin-bottom: 10px;
+  text-align: left;
+}
+.subscribe p {
+  font-size: 0.9rem;
+  text-align: left;
+}
+.subscribe form {
+  margin: 20px 0 10px;
+  display: flex;
+}
+.subscribe form input {
+  border: 1px solid var(--molten-orange);
+  background-color: transparent;
+  padding: 10px 20px;
+  color: var(--ash-black);
+  border-radius: 10px 0 0 10px;
+}
+.subscribe form button {
+  border: 1px solid var(--molten-orange);
+  border-radius: 0 10px 10px 0;
+  padding: 10px 20px;
+  background-color: var(--molten-orange);
+  color: var(--ash-black);
+  border: none;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+.subscribe form button:hover {
+  border: 1px solid var(--forge-red);
+  background-color: var(--forge-red);
+}
+.subscribe form input:focus {
+  border: 1px solid var(--forge-red);
+  outline: none;
+}
+.subscribe form button:focus {
+  outline: none;
+}
+.subscribe form + span {
+  display: block;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+.socialContainer {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  grid-column: 1/4;
+  text-align: center;
+  border-top: 1px solid var(--ash-white);
+}
+.socialContainer p {
+  text-align: left;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+}
+.socialContainer p span {
+  color: var(--molten-orange);
+  font-weight: 700;
+}
+.socialContainer span {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+.socials ul {
+  display: flex;
+  list-style: none;
+  gap: 10px;
+}
+.socials ul a {
+  font-size: 1.4rem;
+}
+.socials ul a:hover {
+  color: var(--ember-yellow);
+}
+@media (max-width: 767px) {
+  .footer .container > div:first-child,
+  .subscribe {
+    flex-direction: column;
+  }
+  .socialContainer {
+    flex-direction: column;
+  }
+  .socialContainer p,
+  .socialContainer span {
+    text-align: center;
+  }
+}
+@media (max-width: 500px) {
+  .subscribe form,
+  .subscribe form input,
+  .subscribe form button {
+    width: 100%;
+  }
+}

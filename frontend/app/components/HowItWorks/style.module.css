@@ -1,0 +1,45 @@
+.howitworks {
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+.cardsContainer {
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.card {
+  display: flex;
+  height: 300px;
+  border: 1px solid var(--molten-orange);
+  box-shadow: -1px 1px 2px 0 var(--molten-orange);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: auto;
+  padding: 50px;
+  background-color: var(--iron-black);
+  border-radius: 10px;
+  line-height: 1.5;
+}
+.card svg {
+  font-size: 3rem;
+  color: var(--ember-yellow);
+}
+.card h3 {
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+@media (max-width: 767px) {
+  .cardsContainer {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    width: 100%;
+    height: auto;
+    padding: 50px 20px;
+  }
+}

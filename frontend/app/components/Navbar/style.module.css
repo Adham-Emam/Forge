@@ -1,0 +1,180 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar .logo img {
+  width: 50px;
+  height: 50px;
+  margin-right: 8px;
+}
+
+.navbar .logo strong {
+  font-family: "Montserrat", sans-serif;
+  font-size: 1.5rem;
+  color: var(--ash-white);
+}
+
+.navbar img {
+  width: 50px;
+  height: 50px;
+}
+
+.navbar ul {
+  display: flex;
+  list-style: none;
+  align-items: center;
+}
+
+.navbar ul li {
+  padding: 8px 12px;
+}
+.navbar ul li svg {
+  display: none;
+}
+.navbar ul li a {
+  color: var(--ash-white);
+  transition-duration: 0.3s;
+  padding: 10px 0;
+  font-weight: 600;
+  position: relative;
+}
+.joinBtn a {
+  padding: 10px 20px !important;
+}
+.navbar ul li a::before,
+.navbar ul li a::after {
+  content: "";
+  width: 0%;
+  height: 1px;
+  background-color: var(--forge-red);
+  position: absolute;
+  bottom: 0;
+  transition-duration: 0.5s;
+}
+
+.navbar ul li a::before {
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.navbar ul li a::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.navbar ul li:not(:last-child) a:hover {
+  color: var(--forge-red);
+}
+
+.navbar ul li:not(:last-child) a:hover::before,
+.navbar ul li:not(:last-child) a:hover::after {
+  width: 50%;
+}
+
+.navbar .navIcon {
+  display: none;
+  position: relative;
+  width: 25px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.navbar .navIcon span {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: var(--ash-white);
+  transition-duration: 0.3s;
+}
+
+.navbar .navIcon span:nth-child(1) {
+  top: 0;
+}
+
+.navbar .navIcon span:nth-child(2) {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.navbar .navIcon span:nth-child(3) {
+  bottom: 0;
+}
+
+.navbar.active .navIcon span:nth-child(1) {
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.navbar.active .navIcon span:nth-child(2) {
+  opacity: 0;
+}
+
+.navbar.active .navIcon span:nth-child(3) {
+  bottom: 50%;
+  transform: translateY(50%) rotate(-45deg);
+}
+
+.navbar.active .navIcon span {
+  background-color: var(--forge-red);
+}
+
+@media (max-width: 991px) {
+  .navbar.active {
+    background-color: var(--charcoal-gray);
+  }
+  .navbar .navIcon {
+    display: block;
+  }
+  .navbar ul {
+    display: block;
+    flex-direction: column;
+    align-items: flex-start;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background-color: var(--charcoal-gray);
+    padding: 10px 20px 20px;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    box-shadow: 0 2px 2px 0 var(--molten-orange);
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    z-index: 1000;
+  }
+
+  .navbar ul li {
+    display: block;
+    margin: 10px 0;
+  }
+  .navbar ul li svg {
+    display: block;
+  }
+  .navbar ul li a {
+    padding: 10px 0;
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 10px;
+  }
+  .navbar.active ul {
+    max-height: 500px;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 500px) {
+  .navbar ul {
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,24 @@
+.container {
+  padding: 100px 0 50px;
+}
+.container h1 {
+  text-align: left;
+  margin: 0 0 10px 0;
+}
+.container h1 + span {
+  display: block;
+  opacity: 0.6;
+  margin-bottom: 50px;
+}
+.terms {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    padding: 0 20px;
+}
+.terms li {
+    margin-bottom: 20px;
+}
+.terms li a{
+    color: var(--molten-orange);
+    font-weight: 900;
+}

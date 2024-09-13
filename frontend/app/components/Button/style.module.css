@@ -1,0 +1,33 @@
+.btn {
+  display: inline-block;
+  width: fit-content;
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  background-image: linear-gradient(
+    -45deg,
+    var(--ember-yellow) 0%,
+    var(--molten-orange) 50%,
+    var(--forge-red) 100%
+  );
+  background-size: 200% 200%;
+  animation: gradient 2s infinite ease-in-out;
+}
+.btn:hover {
+  transform: scale(1.05);
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
