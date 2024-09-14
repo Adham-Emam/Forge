@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { DashboardNavbar, getTimeDifference } from "../components";
+import { DashboardNavbar, LoadingContainer } from "../components";
+import { getTimeDifference } from "../util";
 import api from "../api";
 import Button from "../components/Button/Button";
 import Link from "next/link";
@@ -14,8 +15,10 @@ import styles from "./style.module.css";
 const Dashborad = () => {
   const [userName, setUserName] = useState("");
   const [projects, setProjects] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     api
       .get("http://127.0.0.1:8000/api/current-user/")
       .then((res) => {
@@ -36,7 +39,8 @@ const Dashborad = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -49,47 +53,54 @@ const Dashborad = () => {
           </h1>
           <p>Explore and manage all your projects in one place.</p>
           <div className={styles.projects}>
-            {projects.map((project, index) => {
-              return (
-                project.status === "open" && (
-                  <div key={index} className={styles.project}>
-                    <span className={styles.date}>
-                      {getTimeDifference(project.created_at)}
-                    </span>
-                    <Link href={`/dashboard/projects/${project.id}`}>
-                      <h3>{project.title}</h3>
-                    </Link>
-                    <div className={styles.projectOwner}>
-                      <span>
-                        <Link href={`/dashboard/profile/${project.owner}`}>
-                          <FaUser />
-                          {project.owner_first_name} {project.owner_last_name}
-                        </Link>
+            {!isLoading ? (
+              projects.map((project, index) => {
+                return (
+                  project.status === "open" && (
+                    <div key={index} className={styles.project}>
+                      <span className={styles.date}>
+                        {getTimeDifference(project.created_at)}
                       </span>
-                      <span>
-                        <IoLocationSharp />
-                        {project.owner_location}
+                      <Link href={`/dashboard/projects/${project.id}`}>
+                        <h3>{project.title}</h3>
+                      </Link>
+                      <div className={styles.projectOwner}>
+                        <span>
+                          <Link href={`/dashboard/profile/${project.owner}`}>
+                            <FaUser />
+                            {project.owner_first_name} {project.owner_last_name}
+                          </Link>
+                        </span>
+                        <span>
+                          <IoLocationSharp />
+                          {project.owner_location}
+                        </span>
+                      </div>
+                      <p>{project.description.slice(0, 300) + "..."}</p>
+                      <ul className={styles.skills}>
+                        {project.skills_needed.map((skill, i) => {
+                          return <li key={i}>{skill}</li>;
+                        })}
+                      </ul>
+                      <span className={styles.budget}>
+                        <Image src={ember} alt="ember" width={30} height={30} />
+                        {project.budget}
+                      </span>
+                      <span className={styles.btn}>
+                        <Button href={`/dashboard/projects/${project.id}`}>
+                          Browse Project
+                        </Button>
                       </span>
                     </div>
-                    <p>{project.description.slice(0, 300) + "..."}</p>
-                    <ul className={styles.skills}>
-                      {project.skills_needed.map((skill, i) => {
-                        return <li key={i}>{skill}</li>;
-                      })}
-                    </ul>
-                    <span className={styles.budget}>
-                      <Image src={ember} alt="ember" width={30} height={30} />
-                      {project.budget}
-                    </span>
-                    <span className={styles.btn}>
-                      <Button href={`/dashboard/projects/${project.id}`}>
-                        Browse Project
-                      </Button>
-                    </span>
-                  </div>
-                )
-              );
-            })}
+                  )
+                );
+              })
+            ) : (
+              <>
+                <LoadingContainer />
+                <LoadingContainer />
+              </>
+            )}
           </div>
         </section>
       </div>

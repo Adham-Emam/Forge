@@ -8,7 +8,7 @@
   --steel-blue: #4a6572;
   --ash-white: #f2f2f2;
   --iron-black: #181818;
-  --copper-brown: #9b4f0f;
+  --copper-brown: #050504;
 }
 /* Style the scroll bar */
 ::-webkit-scrollbar {
@@ -121,8 +121,8 @@ a {
   border-radius: 50%;
   animation: spin 1s linear infinite;
   position: absolute;
- top: 50%;
- left: 50%;
+  top: 50%;
+  left: 50%;
   z-index: 1001;
 }
 @keyframes spin {

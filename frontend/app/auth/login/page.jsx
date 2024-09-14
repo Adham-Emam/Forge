@@ -15,7 +15,6 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 import api from "../../api";
 
-
 const Login = () => {
   const router = useRouter();
 
@@ -68,11 +67,16 @@ const Login = () => {
 
   return (
     <>
-
       <div className={`containe ${styles.container}`}>
         <div className={styles.greeting}>
           <div className={styles.logo}>
-            <Image src={Logo} alt="Logo Image" width={50} height={50} />
+            <Image
+              src={Logo}
+              alt="Logo Image"
+              width={50}
+              height={50}
+              priority={true}
+            />
             <strong>Forge</strong>
           </div>
           <h2>Create An Account</h2>

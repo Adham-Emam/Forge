@@ -37,6 +37,7 @@ const forgeProfile = () => {
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
+    user_title: "",
     description: "",
     country_code: "",
     phone: "",
@@ -62,7 +63,12 @@ const forgeProfile = () => {
   const fetchUser = async () => {
     try {
       const response = await api.get("http://127.0.0.1:8000/api/current-user/");
-      setFormData(response.data);
+      Object.keys(formData).forEach((key) => {
+        setFormData((prevState) => ({
+          ...prevState,
+          [key]: response.data[key],
+        }));
+      });
     } catch (error) {
       console.log(error);
     }
@@ -84,6 +90,7 @@ const forgeProfile = () => {
     const requiredFields = [
       "first_name",
       "last_name",
+      "user_title",
       "country_code",
       "phone",
       "country",
@@ -308,6 +315,7 @@ const forgeProfile = () => {
     const updatedFormData = { ...formData };
     updatedFormData[name] = value;
 
+    console.log(updatedFormData);
     setFormData(updatedFormData);
 
     // Save the form data in local storage
@@ -455,7 +463,21 @@ const StepOne = ({ handleChange, formData }) => (
           />
         </div>
       </div>
-
+      <div className={styles.formGroup}>
+        <div>
+          <label htmlFor="user_title">
+            Title <span>*</span>
+          </label>
+          <input
+            type="text"
+            id="user_title"
+            name="user_title"
+            onChange={handleChange}
+            autoComplete="on"
+            value={formData.user_title}
+          />
+        </div>
+      </div>
       <div className={styles.textareaContainer}>
         <label htmlFor="description">Description</label>
         <textarea

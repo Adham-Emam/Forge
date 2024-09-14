@@ -3,11 +3,9 @@ import { DashboardNavbar } from "../../components";
 
 export default function ProfileLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        <DashboardNavbar />
-        {children}
-      </body>
-    </html>
+    <>
+      <DashboardNavbar />
+      {children}
+    </>
   );
 }

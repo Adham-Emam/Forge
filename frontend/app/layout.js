@@ -1,4 +1,5 @@
 import "./globals.css";
+import NextTopLoader from "nextjs-toploader";
 
 export const metadata = {
   title: "Forge - Skill Exchange Platform | Freelance & Earn Embers",
@@ -9,7 +10,21 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <NextTopLoader
+          color="var(--molten-orange)"
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px var(--ember-yellow),0 0 5px var(--molten-orange)"
+          zIndex={2000}
+          showSpinner={false}
+        />
+        {children}
+      </body>
     </html>
   );
 }

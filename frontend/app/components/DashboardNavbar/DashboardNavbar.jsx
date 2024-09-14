@@ -13,7 +13,6 @@ import { MdLogout } from "react-icons/md";
 import { FaHome, FaUser, FaFire, FaPlus } from "react-icons/fa";
 import { RiDashboardFill } from "react-icons/ri";
 
-
 const DashboardNavbar = () => {
   const [user, setUser] = useState({});
   const [userName, setUserName] = useState("");
@@ -95,7 +94,7 @@ const DashboardNavbar = () => {
                 </span>
               </li>
               <li>
-                <Link href={`/dashboard/profile/me/${user.username}`}>
+                <Link href={`/dashboard/profile/${user.id}`}>
                   <FaUser /> My Profile
                 </Link>
               </li>

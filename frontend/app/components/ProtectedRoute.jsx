@@ -9,14 +9,20 @@ function ProtectedRoute({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    checkAuth().catch((error) => {
-      setIsAuthenticated(false);
-      console.error("Error checking authentication:", error);
-    });
+    if (typeof window !== "undefined") {
+      checkAuth().catch((error) => {
+        setIsAuthenticated(false);
+        console.error("Error checking authentication:", error);
+      });
+    }
   }, []);
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN);
+    if (!refreshToken) {
+      setIsAuthenticated(false);
+      return;
+    }
     try {
       const response = await api.post(
         "http://127.0.0.1:8000/api/token/refresh/",
@@ -41,7 +47,9 @@ function ProtectedRoute({ children }) {
     if (!token) {
       setIsAuthenticated(false);
       return;
-    } else {
+    }
+
+    try {
       const decoded = jwtDecode(token);
       const tokenExpiration = decoded.exp;
       const now = Date.now() / 1000;
@@ -51,9 +59,15 @@ function ProtectedRoute({ children }) {
       } else {
         setIsAuthenticated(true);
       }
+    } catch (error) {
+      console.error("Error decoding token:", error);
+      setIsAuthenticated(false);
     }
   };
 
+  if (isAuthenticated === null) {
+    return null;
+  }
 
   return isAuthenticated ? children : redirect("/auth/login");
 }

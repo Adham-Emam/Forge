@@ -2,7 +2,7 @@ from rest_framework import generics
 from .models import Project
 from Users.models import CustomUser
 from .serializers import ProjectSerializer
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import  IsAuthenticatedOrReadOnly
 from django.shortcuts import get_object_or_404
 
 
