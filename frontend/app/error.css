@@ -112,8 +112,11 @@
   .error-container > .container h1 {
     font-size: 2.5rem;
   }
-  .error-container nav {
-    display: none;
+  .error-container nav .container {
+    flex-direction: column;
+  }
+  .error-container nav ul {
+    align-items: center;
   }
   .error-container .image img {
     width: 100%;

@@ -25,10 +25,7 @@ export default function NotFound() {
               <a href="/dashboard">Dashboard</a>
             </li>
             <li>
-              <a href="/auth/login">Login</a>
-            </li>
-            <li>
-              <a href="/auth/register">Register</a>
+              <a href="/bonfire">Forge Bonfire</a>
             </li>
           </ul>
         </div>
@@ -39,8 +36,9 @@ export default function NotFound() {
           <h3>404 - Page Not Found</h3>
           <p>
             It looks like the page you're searching for has drifted off into the
-            void.<br /> But don't worry, even the best explorers sometimes lose
-            their way!
+            void.
+            <br /> But don't worry, even the best explorers sometimes lose their
+            way!
           </p>
           <button onClick={() => router.back()}>Go Back</button>
         </div>

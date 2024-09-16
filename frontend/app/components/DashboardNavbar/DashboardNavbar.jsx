@@ -15,7 +15,6 @@ import { RiDashboardFill } from "react-icons/ri";
 
 const DashboardNavbar = () => {
   const [user, setUser] = useState({});
-  const [userName, setUserName] = useState("");
   const [notification, setNotification] = useState(0);
 
   const [menuClicked, setMenuClicked] = useState(false);
@@ -25,7 +24,6 @@ const DashboardNavbar = () => {
       .get("http://127.0.0.1:8000/api/current-user/")
       .then((res) => {
         setUser(res.data);
-        setUserName(`${res.data.first_name[0]}${res.data.last_name[0]}`);
       })
       .catch((error) => {
         console.log(error);
@@ -62,7 +60,7 @@ const DashboardNavbar = () => {
               quality={100}
               priority={true}
             />
-            <span className={styles.emberCount}>50</span>
+            <span className={styles.emberCount}>{user.credits}</span>
             <Link href="/add-embers">
               <FaPlus />
             </Link>
@@ -71,7 +69,7 @@ const DashboardNavbar = () => {
             className={styles.userImg}
             onClick={() => setMenuClicked(!menuClicked)}
           >
-            {userName}
+            {user.first_name ? `${user.first_name[0]}${user.last_name[0]}` : ""}
             <ul
               className={`${styles.userMenu} ${
                 menuClicked ? styles.active : ""
@@ -87,14 +85,22 @@ const DashboardNavbar = () => {
                     quality={100}
                     priority={true}
                   />
-                  <span className={styles.emberCount}>50</span>
+                  <span className={styles.emberCount}>{user.credits}</span>
                   <Link href="/add-embers">
                     <FaPlus />
                   </Link>
                 </span>
               </li>
               <li>
-                <Link href={`/dashboard/profile/${user.id}`}>
+                <Link
+                  href={{
+                    pathname: `/dashboard/profile/${user.id}`,
+                    query: {
+                      username: user.first_name + " " + user.last_name,
+                      title: user.user_title,
+                    },
+                  }}
+                >
                   <FaUser /> My Profile
                 </Link>
               </li>
@@ -109,12 +115,12 @@ const DashboardNavbar = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/">
+                <Link href="/my-jobs">
                   <IoMdBriefcase /> My Jobs
                 </Link>
               </li>
               <li>
-                <Link href="/">
+                <Link href="/bonfire">
                   <FaFire />
                   Forge Bonfire
                 </Link>

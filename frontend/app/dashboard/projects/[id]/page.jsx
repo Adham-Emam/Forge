@@ -25,10 +25,9 @@ const ProjectPage = ({ params }) => {
 
   return (
     <>
-      <DashboardNavbar />
       <div className="container">
         {project ? (
-          <div className={styles.projectContainer}></div>
+          <div className={styles.projectContainer}>{params.id}</div>
         ) : (
           <p>Loading...</p>
         )}

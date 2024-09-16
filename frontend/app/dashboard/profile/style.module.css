@@ -4,16 +4,86 @@
 }
 .popup {
   display: none;
+  padding: 20px;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 500px;
-  min-height: 50vh;
+  min-height: 400px;
   background-color: var(--iron-black);
   border: 1px solid var(--molten-orange);
-  box-shadow: -2px 2px 2px 0 var(--molten-orange);
+  border-radius: 25px;
   z-index: 500;
+}
+.popup > svg {
+  position: absolute;
+  font-size: 2rem;
+  color: var(--forge-red);
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 504;
+}
+.popup form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.popup input {
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 502;
+}
+.popup label {
+  cursor: pointer;
+  background-color: var(--charcoal-gray);
+  border-radius: 12px;
+  border: 1px solid var(--molten-orange);
+  padding: 5px 10px;
+  font-weight: 500;
+  color: var(--ash-white);
+  margin: 10px 0;
+  position: absolute;
+  z-index: 501;
+  top: 40px;
+  left: 20px;
+  width: calc(100% - 40px);
+  height: calc(100% - 120px);
+  text-align: center;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.popup label svg {
+  font-size: 5rem;
+  color: var(--ember-yellow);
+}
+.popup label span {
+  font-size: 0.8rem;
+}
+.popup button {
+  background-color: var(--molten-orange);
+  border: 1px solid var(--molten-orange);
+  border-radius: 12px;
+  padding: 5px 10px;
+  font-weight: 900;
+  color: var(--ash-white);
+  margin: 10px 0;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 503;
 }
 .overlay {
   display: none;
@@ -52,6 +122,11 @@
   font-size: 2rem;
   position: relative;
 }
+.profilePic img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
 .uploadPhoto {
   position: absolute;
   top: -0px;
@@ -80,6 +155,7 @@
 }
 .profileInfo span {
   opacity: 0.5;
+  text-transform: capitalize;
 }
 .profileSocials {
   position: absolute;
@@ -108,6 +184,7 @@
   background-color: var(--iron-black);
   border: 1px solid var(--molten-orange);
   border-bottom: none;
+  min-height: calc(100vh - 325px);
 }
 .aside h3 {
   margin-top: 30px;
@@ -211,10 +288,14 @@
   border-radius: 25px;
   cursor: pointer;
 }
+.project .projectGroup {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-bottom: 20px;
+}
 .project .budget {
-  position: absolute;
-  top: 40px;
-  right: 40px;
   background-color: var(--charcoal-gray);
   border: 1px solid var(--molten-orange);
   border-radius: 50px;
@@ -276,6 +357,9 @@
   }
   .content {
     grid-template-columns: 1fr;
+  }
+  .popup {
+    width: 90%;
   }
 }
 @media (max-width: 500px) {

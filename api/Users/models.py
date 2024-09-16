@@ -36,6 +36,11 @@ class CustomUser(AbstractUser):
     instagram_profile = models.URLField(null=True, blank=True)
     linktree_profile = models.URLField(null=True, blank=True)
 
+
+    # Saved projects IDs
+    saved_projects = models.JSONField(default=list, blank=True)
+    
+
     groups = models.ManyToManyField(
         Group,
         related_name="customuser_set",  # Custom related name

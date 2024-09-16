@@ -66,9 +66,6 @@ class CreateUserSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = [
-            'id', 'username', 'first_name', 'last_name', 'profile_image', 'email', 'password',
-            'description', 'birth_date', 'country', 'state', 'country_code', 'phone', 'gender', 'education', 'experience', 'skills', 'interests',
-            'website_url', 'linkedin_profile', 'github_profile', 'twitter_profile', 'reddit_profile', 'instagram_profile', 'linktree_profile',
-        ]
+        fields ='__all__'
         extra_kwargs = {'password': {'write_only': True}}
+        read_only_fields = ['id', 'created_at', 'updated_at', 'username','credits', 'email']

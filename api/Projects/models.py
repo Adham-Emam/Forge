@@ -23,5 +23,8 @@ class Project(models.Model):
     assigned_to = models.ForeignKey(
         CustomUser, related_name='assigned_projects', on_delete=models.SET_NULL, null=True, blank=True)
 
+    class Meta:
+        ordering = ['-created_at']
+        
     def __str__(self):
         return self.title
