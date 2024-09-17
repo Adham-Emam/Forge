@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { DashboardNavbar, LoadingContainer } from "../components";
+import { DashboardNavbar, LoadingContainer, HeartFill } from "../components";
 import { getTimeDifference } from "../util";
 import api from "../api";
 import Button from "../components/Button/Button";
@@ -9,7 +9,6 @@ import Image from "next/image";
 
 import { FaUser } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ember from "../assets/ember.png";
 import styles from "./style.module.css";
 
@@ -59,10 +58,6 @@ const Dashborad = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    console.log(savedProjects);
-  }, [savedProjects]);
 
   useEffect(() => {
     if (userData.id) {
@@ -175,11 +170,7 @@ const Dashborad = () => {
                           onClick={() => saveProject(project)}
                           className={styles.save}
                         >
-                          {isProjectSaved(project) ? (
-                            <FaHeart />
-                          ) : (
-                            <FaRegHeart />
-                          )}
+                          <HeartFill isSaved={isProjectSaved(project)} />
                         </span>
                         <div className={styles.projectGroup}>
                           <span className={styles.budget}>

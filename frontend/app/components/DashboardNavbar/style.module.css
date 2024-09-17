@@ -16,7 +16,6 @@
   font-size: 1.5rem;
   color: var(--ash-white);
 }
-.navbar ul,
 .navbar .navMenu {
   width: fit-content;
   display: flex;
@@ -45,7 +44,7 @@
 .navbar .notifications svg:hover {
   color: var(--molten-orange);
 }
-.navbar .ember {
+.ember {
   border: 1px solid var(--molten-orange);
   background-color: var(--iron-black);
   border-radius: 25px;
@@ -55,10 +54,10 @@
   align-items: center;
   gap: 15px;
 }
-.navbar .ember a {
+.ember a {
   transition-duration: 0.3s;
 }
-.navbar .emberCount {
+.emberCount {
   font-weight: 500;
   font-size: 1.2rem;
 }
@@ -77,52 +76,77 @@
   transition-duration: 0.3s;
   outline: none;
   position: relative;
+  overflow: hidden;
 }
-.navbar .userMenu {
-  display: none;
-  width: 250px;
-  flex-direction: column;
-  align-items: flex-start;
-  position: absolute;
-  top: 75px;
-  right: 0;
+.navbar .userImg img {
+  pointer-events: all;
+}
+.userMenuOverlay {
+  width: 0vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  transition-duration: 0.5s;
+}
+.userMenu {
+  width: 0px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  list-style: none;
+  overflow: hidden;
   background-color: var(--iron-black);
-  border: 1px solid var(--molten-orange);
-  padding: 0 20px;
+  border-right: 1px solid var(--molten-orange);
   border-radius: 5px;
-  z-index: 100;
+  z-index: 201;
+  transition-duration: 0.5s;
 }
-.navbar .userMenu .ember {
+.userMenu > svg {
+  position: absolute;
+  font-size: 2rem;
+  color: var(--forge-red);
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 202;
+}
+.userMenu .ember {
   display: none;
 }
-.navbar .userMenu li a {
+.userMenu li {
+  width: 249px;
+  padding: 40px 20px 0;
+}
+.userMenu li a {
   display: flex;
   align-items: center;
   gap: 10px;
+  transition-duration: 0.3s;
+  position: relative;
 }
-.navbar .userMenu a::before {
+.userMenu li a:hover {
+  color: var(--molten-orange);
+}
+.userMenu li:not(:first-child) a::before,
+.userMenu li:not(:last-child) a::before {
   content: "";
   background-color: var(--charcoal-gray);
   width: 100%;
   height: 1px;
   position: absolute;
-  bottom: 0px;
+  bottom: -20px;
   right: 0;
+  opacity: 0.5;
 }
-.navbar .userMenu.active {
-  display: block;
+.userMenuOverlay.active {
+  width: 100vw;
 }
-.navbar .userMenu::before {
-  content: "";
-  background-color: var(--iron-black);
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: -11px;
-  right: 15px;
-  transform: rotate(45deg);
-  border-left: 1px solid var(--molten-orange);
-  border-top: 1px solid var(--molten-orange);
+.userMenu.active {
+  width: 250px;
 }
 @media (max-width: 991px) {
   .navbar .userImg {
@@ -142,16 +166,17 @@
   .navbar .ember {
     display: none;
   }
-  .navbar .userMenu {
-    padding: 20px 20px 0;
-  }
-  .navbar .userMenu .ember {
+  .userMenu .ember {
     display: flex;
     background-color: var(--charcoal-gray);
   }
 }
 @media (max-width: 500px) {
-  .navbar .userMenu {
+  .userMenu li {
+    width: 199px;
+    padding: 30px 10px 0;
+  }
+  .userMenu.active {
     width: 200px;
   }
 }

@@ -25,8 +25,9 @@ import { IoSchoolSharp, IoCloudUploadOutline, IoClose } from "react-icons/io5";
 import styles from "../style.module.css";
 import { LoadingContainer } from "../../../components";
 
-const ProfileSection = ({ params, user }) => {
+const ProfileSection = ({ params }) => {
   const [userData, setUserData] = useState([]);
+  const [profileImage, setProfileImage] = useState(null);
   const [userProjects, setUserProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(false);
@@ -69,7 +70,6 @@ const ProfileSection = ({ params, user }) => {
   };
 
   useEffect(() => {
-    console.log(user);
     setIsLoading(true);
     Promise.all([fetchUserData(), isCurrentUser(), fetchUserProjects()]).then(
       () => {
@@ -78,11 +78,29 @@ const ProfileSection = ({ params, user }) => {
     );
   }, []);
 
+  const handleChange = (e) => {
+    const newImage = e.target.files[0];
+
+    const validExtensions = ["image/jpeg", "image/png", "image/jpg"];
+    const isValidExtension = validExtensions.includes(newImage.type);
+    const isValidSize = newImage.size < 5 * 1024 * 1024;
+
+    if (!isValidExtension) {
+      alert("The image must be a valid image file (jpeg, png, jpg).");
+      return;
+    } else if (!isValidSize) {
+      alert("The image size must be less than 5mb.");
+      return;
+    }
+
+    setProfileImage(newImage);
+  };
+
   const uploadPhoto = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("profile_image", e.target[0].files[0]);
+    formData.append("profile_image", profileImage);
 
     try {
       const response = await api.patch(
@@ -121,15 +139,27 @@ const ProfileSection = ({ params, user }) => {
               name="profile_image"
               id="profile_image"
               accept="image/jpeg, image/png, image/jpg"
+              onChange={(e) => handleChange(e)}
             />
             <label htmlFor="profile_image">
-              <IoCloudUploadOutline />
-              <span>Drag & Drop your photo here</span>
-              <span>or</span>
-              <span>Browse to upload from your device</span>
-              <span>
-                Only JPG, JPEG, PNG files are allowed with max size of 5MB
-              </span>
+              {profileImage ? (
+                <Image
+                  src={URL.createObjectURL(profileImage)}
+                  alt="profile"
+                  fill
+                  sizes="(100px, 100px)"
+                />
+              ) : (
+                <>
+                  <IoCloudUploadOutline />
+                  <span>Drag & Drop your photo here</span>
+                  <span>or</span>
+                  <span>Browse to upload from your device</span>
+                  <span>
+                    Only JPG, JPEG, PNG files are allowed with max size of 5MB
+                  </span>
+                </>
+              )}
             </label>
             <button type="submit">Apply</button>
           </form>
@@ -139,7 +169,13 @@ const ProfileSection = ({ params, user }) => {
             <div className={styles.profilePic}>
               <span>
                 {userData.profile_image ? (
-                  <Image src={userData.profile_image} alt="profile" fill />
+                  <Image
+                    src={userData.profile_image}
+                    alt="profile"
+                    fill
+                    sizes="(100px, 100px)"
+                    priority={true}
+                  />
                 ) : userData.first_name ? (
                   `${userData.first_name?.[0]}${userData.last_name?.[0]}`
                 ) : (

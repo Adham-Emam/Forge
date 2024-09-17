@@ -10,7 +10,7 @@ import {
   CountryCodes,
   Skills,
   Interests,
-  EductaionForm,
+  EducationForm,
   ExperienceForm,
 } from "../../components";
 
@@ -585,7 +585,7 @@ const StepTwo = ({ formData, setFormData }) => (
   <div className={styles.formContainer}>
     <h2 className="section-title">Forge Your Knowledge</h2>
     <p>Tell Us About Your Academic Background</p>
-    <EductaionForm formData={formData} setFormData={setFormData} />
+    <EducationForm formData={formData} setFormData={setFormData} />
   </div>
 );
 

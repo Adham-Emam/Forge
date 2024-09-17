@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { FaCheck, FaPlus, FaTrashAlt } from "react-icons/fa";
 import styles from "./style.module.css";
 
-const EductaionForm = ({ formData, setFormData }) => {
+const EducationForm = ({ formData, setFormData }) => {
   const handleChange = (e, index) => {
     const { name, value } = e.target;
     const updatedFormData = { ...formData };
@@ -197,7 +197,8 @@ const EductaionForm = ({ formData, setFormData }) => {
               <span className={styles.charCount}>
                 {formData.education[index].description
                   ? 5000 - formData.education[index].description.length
-                  : 5000} characters left
+                  : 5000}{" "}
+                characters left
               </span>
             </div>
             <button
@@ -230,4 +231,4 @@ const EductaionForm = ({ formData, setFormData }) => {
   );
 };
 
-export default EductaionForm;
+export default EducationForm;

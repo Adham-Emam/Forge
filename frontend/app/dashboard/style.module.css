@@ -135,22 +135,9 @@
   gap: 10px;
 }
 .dashboard .project .save {
-  color: var(--ember-yellow);
   position: absolute;
   top: 40px;
   right: 40px;
-  width: 40px;
-  height: 40px;
-  background-color: var(--charcoal-gray);
-  border: 1px solid var(--molten-orange);
-  border-radius: 50%;
-  padding: 5px 10px;
-  font-size: 1.2rem;
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
   cursor: pointer;
 }
 .noProjects p {
