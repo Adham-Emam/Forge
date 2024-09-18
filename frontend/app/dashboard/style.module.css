@@ -1,5 +1,56 @@
-.dashboard {
-  padding: 50px 0 0;
+.container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 30px;
+  min-height: calc(100vh - 90px);
+  position: relative;
+  padding-top: 50px;
+}
+.sidebar {
+  height: 100%;
+  background-color: var(--iron-black);
+  border: 1px solid var(--molten-orange);
+  border-bottom: none;
+  border-radius: 25px 25px 0 0;
+  padding: 50px 20px;
+}
+.sidebar > * {
+  margin-bottom: 20px;
+}
+.sidebar .addProject a {
+  width: 100%;
+}
+.sidebar .sparks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+.sidebar .sparks div {
+  background-color: var(--charcoal-gray);
+  border-radius: 24px;
+  padding: 10px 20px;
+  width: 100%;
+  border: 1px solid var(--molten-orange);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar .sparks ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+}
+.sidebar .sparks ul a {
+  color: var(--ember-yellow);
+  transition-duration: 0.3s;
+}
+.sidebar .sparks ul a:hover {
+  text-decoration: underline;
+  color: var(--forge-red);
 }
 .dashboard h1 {
   margin: 0;
@@ -8,6 +59,10 @@
 .dashboard h1 + p {
   margin: 10px 0;
   text-align: left;
+}
+.tabDescription {
+  margin-bottom: 20px;
+  opacity: 0.6;
 }
 .dashboard .tabs {
   display: flex;
@@ -30,17 +85,18 @@
   opacity: 0.3;
 }
 .dashboard .tabs li {
-  opacity: 0.6;
-  cursor: pointer;
   padding-bottom: 15px;
-  transition-duration: 0.3s;
   position: relative;
 }
-.dashboard .tabs li.active {
+.dashboard .tabs li a {
+  opacity: 0.6;
+  transition-duration: 0.3s;
+}
+.dashboard .tabs li a.active {
   opacity: 1;
   color: var(--ember-yellow);
 }
-.dashboard .tabs li::before {
+.dashboard .tabs li a::before {
   content: "";
   display: block;
   width: 0%;
@@ -51,8 +107,37 @@
   left: 0;
   transition-duration: 0.3s;
 }
-.dashboard .tabs li.active::before {
+.dashboard .tabs li a.active::before {
   width: 100%;
+}
+.dashboard .search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--iron-black);
+  border: 1px solid var(--molten-orange);
+  border-radius: 25px;
+  margin-bottom: 30px;
+  padding: 5px;
+}
+.dashboard .search input {
+  width: 100%;
+}
+.dashboard .search button {
+  font-size: 1.2rem;
+  transition-duration: 0.3s;
+  cursor: pointer;
+}
+.dashboard .search button:hover {
+  color: var(--molten-orange);
+}
+.dashboard .search input,
+.dashboard .search button {
+  padding: 10px 20px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--ash-white);
 }
 .dashboard .project {
   margin: 0 0 30px;
@@ -136,9 +221,18 @@
 }
 .dashboard .project .save {
   position: absolute;
-  top: 40px;
-  right: 40px;
+  top: 30px;
+  right: 30px;
   cursor: pointer;
+  background-color: var(--charcoal-gray);
+  border: 1px solid var(--molten-orange);
+  color: var(--ember-yellow);
+  border-radius: 50%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
 }
 .noProjects p {
   opacity: 0.6;

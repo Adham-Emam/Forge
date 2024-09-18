@@ -1,0 +1,76 @@
+.projectContainer {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  padding-top: 50px;
+  position: relative;
+  min-height: calc(100vh - 92px);
+}
+.info {
+  height: 100%;
+  background-color: var(--iron-black);
+  border: 1px solid var(--molten-orange);
+  border-bottom: none;
+  border-radius: 25px 25px 0 0;
+  padding: 50px 20px;
+  display: flex;
+  flex-direction: column;
+}
+.info > a {
+  width: 100%;
+  margin-bottom: 20px;
+}
+.info ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.info ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+}
+.info ul li svg {
+  color: var(--molten-orange);
+}
+.spark,
+.budget {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  background-color: var(--charcoal-gray);
+  border: 1px solid var(--molten-orange);
+  padding: 5px 20px;
+  border-radius: 25px;
+}
+.projectContainer main > span {
+  opacity: 0.5;
+  font-size: 0.9rem;
+}
+.projectContainer h1 {
+  margin-bottom: 30px;
+}
+.content {
+  line-height: 1.5;
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.skills span {
+  background-color: var(--iron-black);
+  border: 1px solid var(--molten-orange);
+  padding: 5px 10px;
+  border-radius: 25px;
+  font-size: 0.9rem;
+}

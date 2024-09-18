@@ -38,8 +38,9 @@ class CustomUser(AbstractUser):
 
 
     # Saved projects IDs
-    saved_projects = models.JSONField(default=list, blank=True)
+    saved_projects = models.ManyToManyField('Projects.Project', related_name='saved_by', blank=True)
     
+    sparks = models.IntegerField(default=0)
 
     groups = models.ManyToManyField(
         Group,

@@ -2,7 +2,7 @@ import React from "react";
 import { DashboardNavbar } from "../../../components";
 import ProfileSection from "./ProfileSection";
 
-export const generateMetadata = async ({ params, searchParams }) => {
+export const generateMetadata = async ({ searchParams }) => {
   const { username, title } = searchParams;
 
   return {

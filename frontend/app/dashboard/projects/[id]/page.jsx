@@ -1,37 +1,20 @@
-"use client";
-import React, { useState, useEffect } from "react";
 import { DashboardNavbar } from "../../../components";
-import api from "../../../api";
+import ProjectSection from "./ProjectSection";
 
-import styles from "./style.module.css";
+export function generateMetadata({ searchParams }) {
+  const { title, description } = searchParams;
+
+  return {
+    title: `${title} - Forge Skill Exchange Platform`,
+    description: description,
+  };
+}
 
 const ProjectPage = ({ params }) => {
-  const [project, setProject] = useState(null);
-
-  useEffect(() => {
-    getProjectData();
-  }, []);
-
-  const getProjectData = async () => {
-    try {
-      const response = await api.get(
-        `http://127.0.0.1:8000/api/projects/${params.id}`
-      );
-      setProject(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
-      <div className="container">
-        {project ? (
-          <div className={styles.projectContainer}>{params.id}</div>
-        ) : (
-          <p>Loading...</p>
-        )}
-      </div>
+      <DashboardNavbar />
+      <ProjectSection projectId={params.id} />
     </>
   );
 };

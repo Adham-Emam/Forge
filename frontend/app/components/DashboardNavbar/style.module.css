@@ -82,7 +82,7 @@
   pointer-events: all;
 }
 .userMenuOverlay {
-  width: 0vw;
+  width: 100vw;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -90,6 +90,8 @@
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 200;
   transition-duration: 0.5s;
+  opacity: 0;
+  pointer-events: none;
 }
 .userMenu {
   width: 0px;
@@ -143,7 +145,7 @@
   opacity: 0.5;
 }
 .userMenuOverlay.active {
-  width: 100vw;
+  opacity: 1;
 }
 .userMenu.active {
   width: 250px;

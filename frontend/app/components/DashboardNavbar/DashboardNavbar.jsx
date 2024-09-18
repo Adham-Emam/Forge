@@ -128,7 +128,7 @@ const DashboardNavbar = () => {
           </Link>
         </li>
         <li>
-          <Link href="/dashboard">
+          <Link href="/dashboard?tab=recent">
             <RiDashboardFill /> Dashboard
           </Link>
         </li>

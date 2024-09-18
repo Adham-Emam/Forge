@@ -1,51 +1,11 @@
-"use client";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import Link from "next/link";
-import Logo from "./assets/logo.png";
-import error from "./assets/error-img.svg";
-import "./error.css";
+import React from "react";
+import { Error404 } from "./components";
+
+export const metadata = {
+  title: "404 - Not Found",
+  description: "The page you are looking for does not exist.",
+};
 
 export default function NotFound() {
-  const router = useRouter();
-
-  return (
-    <div className="error-container">
-      <nav>
-        <div className="container">
-          <Link className="logo" href="/">
-            <Image src={Logo} alt="Forge Logo" width={50} height={50} />
-            <strong>Forge</strong>
-          </Link>
-          <ul>
-            <li>
-              <a href="/">Home</a>
-            </li>
-            <li>
-              <a href="/dashboard">Dashboard</a>
-            </li>
-            <li>
-              <a href="/bonfire">Forge Bonfire</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <div className="container">
-        <div>
-          <h1 className="section-title">Oops!</h1>
-          <h3>404 - Page Not Found</h3>
-          <p>
-            It looks like the page you're searching for has drifted off into the
-            void.
-            <br /> But don't worry, even the best explorers sometimes lose their
-            way!
-          </p>
-          <button onClick={() => router.back()}>Go Back</button>
-        </div>
-        <div className="image">
-          <Image src={error} alt="404" width={400} height={400} />
-        </div>
-      </div>
-    </div>
-  );
+  return <Error404 />;
 }

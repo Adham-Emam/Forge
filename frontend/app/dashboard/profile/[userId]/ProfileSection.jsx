@@ -394,7 +394,15 @@ const ProfileSection = ({ params }) => {
                           {project.budget}
                         </span>
                         <span className={styles.btn}>
-                          <Button href={`/dashboard/projects/${project.id}`}>
+                          <Button
+                            href={{
+                              pathname: `/dashboard/projects/${project.id}`,
+                              query: {
+                                title: project.title,
+                                description: project.description,
+                              },
+                            }}
+                          >
                             Browse Project
                           </Button>
                         </span>

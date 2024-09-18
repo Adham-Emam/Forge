@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Project
+from .models import Project, Bid
+from Users.models import CustomUser
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -9,7 +10,15 @@ class ProjectSerializer(serializers.ModelSerializer):
     owner_title = serializers.ReadOnlyField(source='owner.user_title')
     owner_location = serializers.ReadOnlyField(source='owner.country')
 
+
     class Meta:
         model = Project
         fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at']
+
+class BidSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Bid
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at']

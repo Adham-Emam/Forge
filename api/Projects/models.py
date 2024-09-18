@@ -1,5 +1,7 @@
 from django.db import models
 from Users.models import CustomUser
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 
 
 class Project(models.Model):
@@ -9,22 +11,42 @@ class Project(models.Model):
         ('closed', 'Closed'),
         ('completed', 'Completed'),
     )
+    TYPE_CHOICES = (
+        ('exchange', 'Skill Exchange'),
+        ('freelancer', 'Freelancer'),
+    )
 
     title = models.CharField(max_length=200)
     description = models.TextField()
     skills_needed = models.JSONField(default=list, blank=True)
     budget = models.IntegerField()
+
+    bid_amount = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(40)])
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='open')
     owner = models.ForeignKey(
         CustomUser, related_name='projects', on_delete=models.CASCADE)
     assigned_to = models.ForeignKey(
         CustomUser, related_name='assigned_projects', on_delete=models.SET_NULL, null=True, blank=True)
+    applicants = models.ManyToManyField(CustomUser, related_name='applied_projects', blank=True)
+
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='freelancer')
+    exchange_for = models.TextField(null=True, blank=True)
+
 
     class Meta:
         ordering = ['-created_at']
         
     def __str__(self):
         return self.title
+
+class Bid(models.Model):
+    project = models.ForeignKey(Project, related_name='bids', on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, related_name='bids', on_delete=models.CASCADE)
+    proposal = models.TextField(null=True)
+    amount = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username

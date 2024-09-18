@@ -17,4 +17,5 @@ export { default as ExperienceForm } from "./Education&Experience/ExperienceForm
 export { default as DashboardNavbar } from "./DashboardNavbar/DashboardNavbar";
 export { default as ProtectedRoute } from "./ProtectedRoute";
 export { default as LoadingContainer } from "./Loaders/LoadingContainer";
-export { default as HeartFill } from "./Animations/HeartFill/HeartFill";
+export { default as Error500 } from "./Error/500";
+export { default as Error404 } from "./Error/404";

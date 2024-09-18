@@ -5,6 +5,7 @@ from Users.models import CustomUser
 from .serializers import ProjectSerializer
 from rest_framework.permissions import  IsAuthenticatedOrReadOnly
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 
 class ProjectListCreateView(generics.ListCreateAPIView):
@@ -50,27 +51,44 @@ class UserSavedProjectsList(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         user = get_object_or_404(CustomUser, id=user_id)
-        projects = Project.objects.all()
+        return user.saved_projects.all()
 
-        saved_projects_ids = [project_id for project_id in user.saved_projects if project_id in projects.values_list('id', flat=True)]
-
-        return Project.objects.filter(id__in=saved_projects_ids)
-
-class ToggleSavedProject(generics.UpdateAPIView):
+class ToggleSavedProject(generics.GenericAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ProjectSerializer
 
-    def update(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         user_id = self.kwargs['user_id']
         project_id = self.kwargs['project_id']
 
+        # Get the user and project objects
         user = get_object_or_404(CustomUser, id=user_id)
+        project = get_object_or_404(Project, id=project_id)
 
-        if project_id in user.saved_projects:
-            user.saved_projects.remove(project_id)
+        # Toggle saving/removing the project
+        if project in user.saved_projects.all():
+            user.saved_projects.remove(project)
+            message = 'Project removed from saved projects'
         else:
-            user.saved_projects.append(project_id)
+            user.saved_projects.add(project)
+            message = 'Project added to saved projects'
 
-        user.save()
+        return Response({'message': message})
 
-        return Response({'message': 'Project saved status updated'})
+
+class SearchProjects(generics.ListAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = ProjectSerializer
+
+    def get(self, request):
+        query = request.GET.get('search')
+
+        if query:
+            projects = Project.objects.filter(
+                Q(title__icontains=query) | Q(skills_needed__icontains=query)
+            )
+            serializer = self.serializer_class(projects, many=True)
+            return Response(serializer.data)
+        else :
+            return Project.objects.none()
+
