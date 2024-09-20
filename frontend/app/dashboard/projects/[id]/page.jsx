@@ -13,7 +13,6 @@ export function generateMetadata({ searchParams }) {
 const ProjectPage = ({ params }) => {
   return (
     <>
-      <DashboardNavbar />
       <ProjectSection projectId={params.id} />
     </>
   );

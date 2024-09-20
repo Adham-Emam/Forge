@@ -22,10 +22,8 @@ const Dashboard = ({ searchParams }) => {
 
   const router = useRouter();
 
+  const activeTab = searchParams?.tab;
   const validTabs = ["recent", "matches", "saved"];
-  const activeTab = searchParams.tab;
-
-  const search = (searchParams.search || "").replace(/ /g, "+");
 
   const fetchUserData = async () => {
     try {
@@ -123,11 +121,12 @@ const Dashboard = ({ searchParams }) => {
 
   return (
     <>
-      <DashboardNavbar />
       <div className={`container ${styles.container}`}>
         <aside className={styles.sidebar}>
           <div className={styles.addProject}>
-            <Button href={"/dashboard/add-project"}>Add Project</Button>
+            <Button href={"/dashboard/projects/add-project"}>
+              Add Project
+            </Button>
           </div>
           <div className={styles.sparks}>
             <div>

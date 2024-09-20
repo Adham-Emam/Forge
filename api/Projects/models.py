@@ -12,14 +12,21 @@ class Project(models.Model):
         ('completed', 'Completed'),
     )
     TYPE_CHOICES = (
-        ('exchange', 'Skill Exchange'),
+        ('exchange', 'Exchange'),
         ('freelancer', 'Freelancer'),
+    )
+
+    EXPERIENCE_LEVEL_CHOICES = (
+        ('beginner', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('Expert', 'Expert'),
     )
 
     title = models.CharField(max_length=200)
     description = models.TextField()
     skills_needed = models.JSONField(default=list, blank=True)
     budget = models.IntegerField()
+    duration = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(365)])
 
     bid_amount = models.IntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(40)])
     created_at = models.DateTimeField(auto_now_add=True)
@@ -34,6 +41,7 @@ class Project(models.Model):
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='freelancer')
     exchange_for = models.TextField(null=True, blank=True)
 
+    experience_level= models.CharField(max_length=20, null=True, choices=EXPERIENCE_LEVEL_CHOICES)
 
     class Meta:
         ordering = ['-created_at']

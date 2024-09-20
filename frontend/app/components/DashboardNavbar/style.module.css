@@ -102,7 +102,6 @@
   list-style: none;
   overflow: hidden;
   background-color: var(--iron-black);
-  border-right: 1px solid var(--molten-orange);
   border-radius: 5px;
   z-index: 201;
   transition-duration: 0.5s;
@@ -149,6 +148,7 @@
 }
 .userMenu.active {
   width: 250px;
+  border-right: 1px solid var(--molten-orange);
 }
 @media (max-width: 991px) {
   .navbar .userImg {
@@ -168,6 +168,9 @@
   .navbar .ember {
     display: none;
   }
+  .userMenu {
+    padding-top: 30px;
+  }
   .userMenu .ember {
     display: flex;
     background-color: var(--charcoal-gray);
@@ -177,6 +180,7 @@
   .userMenu li {
     width: 199px;
     padding: 30px 10px 0;
+    font-size: 0.8rem;
   }
   .userMenu.active {
     width: 200px;

@@ -1,5 +1,6 @@
 import React from "react";
 import { ProtectedRoute } from "../components";
+import { DashboardNavbar } from "../components";
 
 export const metadata = {
   title: "Dashboard | Forge - Skill Exchange Platform",
@@ -13,7 +14,10 @@ export const metadata = {
 export default function ProfileLayout({ children }) {
   return (
     <>
-      <ProtectedRoute>{children}</ProtectedRoute>
+      <ProtectedRoute>
+        <DashboardNavbar />
+        {children}
+      </ProtectedRoute>
     </>
   );
 }
