@@ -32,6 +32,9 @@
   color: var(--molten-orange);
 }
 .navbar .notifications {
+  position: relative;
+}
+.navbar .notifications button {
   background-color: transparent;
   border: none;
   cursor: pointer;
@@ -41,10 +44,52 @@
   font-size: 2rem;
   transition-duration: 0.3s;
 }
+.navbar .notifications.active svg,
 .navbar .notifications svg:hover {
   color: var(--molten-orange);
 }
-.ember {
+.navbar .notifications ul {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 250px;
+  height: 250px;
+  overflow-y: auto;
+  background-color: var(--iron-black);
+  border: 1px solid var(--molten-orange);
+  box-shadow: 0 2px 2px 0 var(--molten-orange);
+  list-style: none;
+  padding: 30px 10px 0;
+  border-radius: 5px;
+  z-index: 200;
+}
+.navbar .notifications.active ul {
+  display: block;
+}
+.navbar .notifications ul li {
+  margin-bottom: 20px;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+.navbar .notifications ul li svg {
+  font-size: 2rem;
+}
+.notificationCount {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: var(--molten-orange);
+  color: var(--charcoal-gray);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+}
+.navbar .ember {
   border: 1px solid var(--molten-orange);
   background-color: var(--iron-black);
   border-radius: 25px;
@@ -145,6 +190,7 @@
 }
 .userMenuOverlay.active {
   opacity: 1;
+  pointer-events: all;
 }
 .userMenu.active {
   width: 250px;

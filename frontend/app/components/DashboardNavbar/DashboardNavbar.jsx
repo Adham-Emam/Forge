@@ -4,21 +4,38 @@ import Link from "next/link";
 import Image from "next/image";
 
 import api from "../../api";
+import { getTimeDifference } from "../../util";
 import styles from "./style.module.css";
 
 import logo from "../../assets/logo.png";
 import ember from "../../assets/ember.png";
 import { IoIosNotificationsOutline, IoMdBriefcase } from "react-icons/io";
 import { IoCloseOutline } from "react-icons/io5";
+import { GiPartyPopper } from "react-icons/gi";
 import { MdLogout } from "react-icons/md";
-import { FaHome, FaUser, FaFire, FaPlus } from "react-icons/fa";
+import { FaHome, FaUser, FaFire, FaPlus, FaEnvelope } from "react-icons/fa";
 import { RiDashboardFill } from "react-icons/ri";
 
 const DashboardNavbar = () => {
   const [user, setUser] = useState({});
-  const [notification, setNotification] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const [menuClicked, setMenuClicked] = useState(false);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await api.get(
+        "http://127.0.0.1:8000/api/notifications/"
+      );
+      setNotifications(response.data);
+      console.log(response.data.length);
+      setNotificationCount(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const fetchUserName = async () => {
     try {
@@ -31,6 +48,7 @@ const DashboardNavbar = () => {
 
   useEffect(() => {
     fetchUserName();
+    fetchNotifications();
   }, []);
 
   return (
@@ -48,9 +66,45 @@ const DashboardNavbar = () => {
             <strong>Forge</strong>
           </Link>
           <div className={styles.navMenu}>
-            <button className={styles.notifications} type="button">
-              <IoIosNotificationsOutline />
-            </button>
+            <div
+              className={`${styles.notifications} ${
+                menuOpen ? styles.active : ""
+              }`}
+            >
+              <button type="button" onClick={() => setMenuOpen(!menuOpen)}>
+                <IoIosNotificationsOutline />
+              </button>
+              <span className={styles.notificationCount}>
+                {notificationCount}
+              </span>
+              <ul>
+                {notifications.length > 0 ? (
+                  notifications.map((notification) => (
+                    <li key={notification.id}>
+                      <div>
+                        <span>
+                          {getTimeDifference(notification.created_at)}
+                        </span>
+                        <br />
+                        <Link href={notification.url}>
+                          {notification.type === "message" ? (
+                            <FaEnvelope />
+                          ) : notification.type === "project" ? (
+                            <GiPartyPopper />
+                          ) : (
+                            <FaUser />
+                          )}
+                          {notification.message}
+                        </Link>
+                      </div>
+                    </li>
+                  ))
+                ) : (
+                  <li>No notifications</li>
+                )}
+              </ul>
+            </div>
+
             <span className={styles.ember}>
               <Image
                 src={ember}

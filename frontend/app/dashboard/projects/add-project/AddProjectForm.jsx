@@ -166,7 +166,11 @@ const AddProjectForm = () => {
         await api.post("http://127.0.0.1:8000/api/projects/", formData);
         router.push("/dashboard");
       } catch (error) {
-        console.log(error);
+        setError(error.response.data.error);
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth", // This gives a smooth scrolling effect
+        });
       }
     }
   };

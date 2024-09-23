@@ -121,6 +121,7 @@ const Dashboard = ({ searchParams }) => {
 
   return (
     <>
+      <DashboardNavbar />
       <div className={`container ${styles.container}`}>
         <aside className={styles.sidebar}>
           <div className={styles.addProject}>
@@ -237,7 +238,15 @@ const Dashboard = ({ searchParams }) => {
                         </p>
                         <ul className={styles.skills}>
                           {project.skills_needed.map((skill, i) => {
-                            return <li key={i}>{skill}</li>;
+                            return (
+                              <li key={i}>
+                                <Link
+                                  href={`/dashboard?tab=recent&search=${skill}`}
+                                >
+                                  {skill}
+                                </Link>
+                              </li>
+                            );
                           })}
                         </ul>
                         <span

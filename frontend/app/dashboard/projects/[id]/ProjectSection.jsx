@@ -115,7 +115,7 @@ const ProjectSection = ({ projectId }) => {
                       Project type:{" "}
                       <span>
                         {project?.type === "freelancer"
-                          ? "Normal Project"
+                          ? "Hire a freelancer"
                           : "Skill Exchange"}
                       </span>
                     </p>

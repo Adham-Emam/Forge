@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Notification
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -69,3 +69,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields ='__all__'
         extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ['id', 'created_at', 'updated_at', 'username','credits','sparks', 'email']
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at']

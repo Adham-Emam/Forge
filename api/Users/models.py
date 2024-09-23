@@ -56,3 +56,23 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class Notification(models.Model):
+    NOTIFICATION_TYPE_CHOICES = (
+        ('welcome', 'Welcome'),
+        ('message', 'Message'),
+        ('project', 'Project'),
+        ('bid', 'Bid'),
+    )
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    type = models.CharField(max_length=255, choices=NOTIFICATION_TYPE_CHOICES)
+    url = models.URLField()
+    message = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.user.username
