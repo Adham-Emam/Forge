@@ -231,7 +231,10 @@ const Dashboard = ({ searchParams }) => {
                             {project.owner_location}
                           </span>
                         </div>
-                        <p>{project.description.slice(0, 300) + "..."}</p>
+                        <p>
+                          {project.description.slice(0, 300)}
+                          {project.description.length > 300 && "..."}
+                        </p>
                         <ul className={styles.skills}>
                           {project.skills_needed.map((skill, i) => {
                             return <li key={i}>{skill}</li>;

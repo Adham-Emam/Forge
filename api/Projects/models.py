@@ -54,7 +54,12 @@ class Bid(models.Model):
     user = models.ForeignKey(CustomUser, related_name='bids', on_delete=models.CASCADE)
     proposal = models.TextField(null=True)
     amount = models.IntegerField()
+    duration = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(365)])
     created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('project', 'user')  # Prevent duplicate bids from the same user
+
 
     def __str__(self):
         return self.user.username

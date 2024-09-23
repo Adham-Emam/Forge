@@ -10,21 +10,37 @@ import spark from "../../../assets/spark.png";
 import ember from "../../../assets/ember.png";
 import styles from "./style.module.css";
 import { useRouter } from "next/navigation";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaBrain, FaExchangeAlt } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { IoMdBriefcase } from "react-icons/io";
 import Button from "../../../components/Button/Button";
 
 const ProjectSection = ({ projectId }) => {
   const [project, setProject] = useState(null);
+  const [bids, setBids] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
 
   useEffect(() => {
     getProjectData();
+    getProjectBids();
   }, []);
 
+  const getProjectBids = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get(
+        `http://127.0.0.1:8000/api/projects/${projectId}/bids`
+      );
+      setBids(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const getProjectData = async () => {
     try {
       const response = await api.get(
@@ -49,7 +65,7 @@ const ProjectSection = ({ projectId }) => {
               <div className={styles.budget}>
                 <h3>Budget</h3>
                 <Image src={ember} alt="ember" width={50} height={50} />
-                {project.budget}
+                {project?.budget}
               </div>
               <div
                 className={styles.spark}
@@ -57,35 +73,91 @@ const ProjectSection = ({ projectId }) => {
               >
                 <h3>Sparks</h3>
                 <Image src={spark} alt="Spark" width={50} height={50} />
-                {project.bid_amount}
+                {project?.bid_amount}
               </div>
-              <Button href={`/dashboard/projects/${project.id}/apply`}>
+              <Button href={`/dashboard/projects/${project?.id}/apply`}>
                 Apply now
               </Button>
               <ul>
                 <h3>Project Owner</h3>
                 <li>
-                  <FaUser /> {project.owner_first_name}{" "}
-                  {project.owner_last_name}
+                  <FaUser /> {project?.owner_first_name}{" "}
+                  {project?.owner_last_name}
                 </li>
                 <li>
-                  <IoMdBriefcase /> {project.owner_title}
+                  <IoMdBriefcase /> {project?.owner_title}
                 </li>
                 <li>
-                  <IoLocationSharp /> {project.owner_location}
+                  <IoLocationSharp /> {project?.owner_location}
                 </li>
               </ul>
             </aside>
             <main>
-              <span>{getTimeDifference(project.created_at)}</span>
-              <h1>{project.title}</h1>
+              <span>{getTimeDifference(project?.created_at)}</span>
+              <h1>{project?.title}</h1>
               <div className={styles.content}>
-                <p>{project.description}</p>
+                <p>{project?.description}</p>
               </div>
+              {project?.experience_level && (
+                <>
+                  <hr />
+                  <div className={styles.levelContainer}>
+                    <p className={styles.level}>
+                      <FaBrain /> Preferred experience level:{" "}
+                      <span>{project?.experience_level}</span>
+                    </p>
+                    <p className={styles.type}>
+                      {project?.type === "freelancer" ? (
+                        <FaUser />
+                      ) : (
+                        <FaExchangeAlt />
+                      )}
+                      Project type:{" "}
+                      <span>
+                        {project?.type === "freelancer"
+                          ? "Normal Project"
+                          : "Skill Exchange"}
+                      </span>
+                    </p>
+                  </div>
+                </>
+              )}
+              <hr />
               <div className={styles.skills}>
-                {project.skills_needed.map((skill, index) => (
+                {project?.skills_needed.map((skill, index) => (
                   <span key={index}>{skill}</span>
                 ))}
+              </div>
+              <div>
+                <hr />
+                <h3>Bids</h3>
+                <ul>
+                  {bids.length > 0 ? (
+                    bids.map((bid) => (
+                      <li key={bid.id} className={styles.bid}>
+                        <span>{getTimeDifference(bid.created_at)}</span>
+                        <h4>
+                          {bid.bidder_first_name} {bid.bidder_last_name}
+                        </h4>
+                        <p>{bid.proposal}</p>
+                        <p>Project completed in {bid.duration} days</p>
+                        <p>
+                          I want for this project
+                          <Image
+                            src={ember}
+                            alt="ember"
+                            width={40}
+                            height={40}
+                          />
+                          <span>{bid.amount}</span>
+                          Embers
+                        </p>
+                      </li>
+                    ))
+                  ) : (
+                    <p>No bids yet</p>
+                  )}
+                </ul>
               </div>
             </main>
           </div>

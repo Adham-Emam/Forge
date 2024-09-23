@@ -1,0 +1,78 @@
+.form {
+  max-width: 500px;
+  margin: 30px auto;
+  background-color: var(--iron-black);
+  padding: 50px 30px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: -2px 2px 10px var(--iron-black);
+}
+.form > div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.form div > input,
+.form div > textarea {
+  padding: 10px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid var(--molten-orange);
+  background-color: var(--charcoal-gray);
+  color: var(--ash-white);
+  transition: border-color 0.3s ease;
+  font-family: "Roboto", "Helvetica Neue", sans-serif;
+  font-size: 0.8rem;
+}
+.form div > input:focus,
+.form div > textarea:focus {
+  border-color: var(--ember-yellow);
+}
+.form input::-webkit-outer-spin-button,
+.form input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.form input[type="number"] {
+  -moz-appearance: textfield;
+}
+.form > div textarea {
+  resize: vertical;
+  min-height: 100px;
+  max-height: 300px;
+  transition-duration: 0.3s;
+}
+.form > div label {
+  transition-duration: 0.3s;
+  font-weight: 900;
+}
+.form button {
+  background-color: var(--molten-orange);
+  color: var(--ash-white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+.form button:hover {
+  background-color: var(--ember-yellow);
+}
+.error {
+  color: var(--forge-red);
+  border: 1px solid var(--forge-red);
+  padding: 10px 20px;
+  background-color: #ff555544;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+@media (max-width: 500px) {
+  .form {
+    width: 100%;
+  }
+}

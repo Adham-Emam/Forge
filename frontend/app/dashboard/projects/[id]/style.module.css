@@ -74,3 +74,49 @@
   border-radius: 25px;
   font-size: 0.9rem;
 }
+.levelContainer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+.levelContainer p {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.levelContainer p svg {
+  color: var(--molten-orange);
+  font-size: 1.2rem;
+}
+.levelContainer p span {
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.bid {
+  background-color: var(--iron-black);
+  border: 1px solid var(--molten-orange);
+  padding: 20px;
+  border-radius: 25px;
+  margin: 20px 0;
+  list-style: none;
+}
+.bid span {
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+.bid h4 {
+  margin-bottom: 10px;
+}
+.bid p {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.bid p span {
+  font-weight: 700;
+  opacity: 1;
+}

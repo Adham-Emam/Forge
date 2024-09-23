@@ -17,7 +17,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at', 'updated_at']
 
 class BidSerializer(serializers.ModelSerializer):
-
+    bidder_first_name = serializers.ReadOnlyField(source='user.first_name')
+    bidder_last_name = serializers.ReadOnlyField(source='user.last_name')
     class Meta:
         model = Bid
         fields = '__all__'

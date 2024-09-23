@@ -16,7 +16,6 @@ const AddProjectForm = () => {
     budget: 0,
     duration: 0,
     bid_amount: 0,
-    owner: "",
     type: "",
     exchange_for: "",
     experience_level: "",
