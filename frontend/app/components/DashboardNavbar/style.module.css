@@ -87,7 +87,7 @@
   grid-area: span2;
 }
 .navbar .notifications ul li svg {
-  font-size: 2rem;
+  font-size: 2rem !important;
   grid-area: svg;
 }
 .notificationCount {
@@ -103,6 +103,13 @@
   justify-content: center;
   align-items: center;
   font-size: 0.8rem;
+}
+.noNotifications {
+  opacity: 0.6;
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 20px;
+  font-weight: 700;
 }
 .navbar .ember {
   border: 1px solid var(--molten-orange);

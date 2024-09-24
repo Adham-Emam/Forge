@@ -186,7 +186,7 @@ class BidListCreateView(generics.ListCreateAPIView):
             user=project.owner,
             type="bid",
             url=f"/dashboard/projects/{project.id}?title={project.title}&description={project.description}",
-            message=f"{user.first_name} {user.last_name} has bid on your project."
+            message=f"{user.first_name} {user.last_name} has submitted a bid on your project."
             )
             notification.save()
 

@@ -19,7 +19,7 @@ class CreateUserView(generics.CreateAPIView):
         notification = Notification.objects.create(
             user=user,
             type="welcome",
-            url="",
+            url=f"/dashboard/profile/{user.id}?username={user.first_name}+{user.last_name}&title={user.title}",
             message="Welcome to Forge! Get started by creating a project.",
         )
         notification.save()
@@ -64,4 +64,12 @@ class NotificationsList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user.id
-        return Notification.objects.filter(user=user)
+        return Notification.objects.filter(user=user, is_read=False)
+    
+class MarkNotificationAsRead(generics.UpdateAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user.id
+        return Notification.objects.filter(user=user, is_read=False)

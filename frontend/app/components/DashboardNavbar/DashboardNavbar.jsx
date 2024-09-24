@@ -30,8 +30,21 @@ const DashboardNavbar = () => {
         "http://127.0.0.1:8000/api/notifications/"
       );
       setNotifications(response.data);
-      console.log(response.data.length);
       setNotificationCount(response.data.length);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleNotificationClick = async (notificationId) => {
+    try {
+      await api.patch(
+        `http://127.0.0.1:8000/api/notifications/${notificationId}/`,
+        {
+          is_read: true,
+        }
+      );
+      fetchNotifications();
     } catch (error) {
       console.log(error);
     }
@@ -74,16 +87,23 @@ const DashboardNavbar = () => {
               <button type="button" onClick={() => setMenuOpen(!menuOpen)}>
                 <IoIosNotificationsOutline />
               </button>
-              <span className={styles.notificationCount}>
-                {notificationCount}
-              </span>
+              {notificationCount > 0 && (
+                <span className={styles.notificationCount}>
+                  {notificationCount}
+                </span>
+              )}
               <ul>
                 {notifications.length > 0 ? (
                   notifications.map((notification) => (
                     <li key={notification.id}>
                       <div>
                         <br />
-                        <Link href={notification.url}>
+                        <Link
+                          href={notification.url}
+                          onClick={() =>
+                            handleNotificationClick(notification.id)
+                          }
+                        >
                           <span>
                             {getTimeDifference(notification.created_at)}
                           </span>
@@ -100,7 +120,7 @@ const DashboardNavbar = () => {
                     </li>
                   ))
                 ) : (
-                  <li>No notifications</li>
+                  <li className={styles.noNotifications}>No notifications</li>
                 )}
               </ul>
             </div>
