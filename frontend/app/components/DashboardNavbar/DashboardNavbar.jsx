@@ -82,11 +82,11 @@ const DashboardNavbar = () => {
                   notifications.map((notification) => (
                     <li key={notification.id}>
                       <div>
-                        <span>
-                          {getTimeDifference(notification.created_at)}
-                        </span>
                         <br />
                         <Link href={notification.url}>
+                          <span>
+                            {getTimeDifference(notification.created_at)}
+                          </span>
                           {notification.type === "message" ? (
                             <FaEnvelope />
                           ) : notification.type === "project" ? (
@@ -94,7 +94,7 @@ const DashboardNavbar = () => {
                           ) : (
                             <FaUser />
                           )}
-                          {notification.message}
+                          <span>{notification.message}</span>
                         </Link>
                       </div>
                     </li>
@@ -121,7 +121,10 @@ const DashboardNavbar = () => {
             </span>
             <span
               className={styles.userImg}
-              onClick={() => setMenuClicked(!menuClicked)}
+              onClick={() => {
+                setMenuClicked(!menuClicked);
+                setMenuOpen(false);
+              }}
             >
               {user.profile_image ? (
                 <Image

@@ -19,6 +19,7 @@ const Dashboard = ({ searchParams }) => {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [savedProjects, setSavedProjects] = useState([]);
+  const [apiURL, setApiURL] = useState("http://127.0.0.1:8000/api/projects/");
 
   const router = useRouter();
 
@@ -74,14 +75,21 @@ const Dashboard = ({ searchParams }) => {
     }
   }, [userData.id]);
 
-  const fetchProjects = async () => {
-    let apiURL =
-      activeTab === "recent"
-        ? "http://127.0.0.1:8000/api/projects/"
-        : activeTab === "matches"
-        ? `http://127.0.0.1:8000/api/projects/user/${userData.id}/matches/`
-        : `http://127.0.0.1:8000/api/projects/user/${userData.id}/saved/`;
+  useEffect(() => {
+    if (activeTab === "saved") {
+      setApiURL(
+        `http://127.0.0.1:8000/api/projects/user/${userData.id}/saved/`
+      );
+    } else if (activeTab === "matches") {
+      setApiURL(
+        `http://127.0.0.1:8000/api/projects/user/${userData.id}/matches/`
+      );
+    } else {
+      setApiURL("http://127.0.0.1:8000/api/projects/");
+    }
+  }, [activeTab]);
 
+  const fetchProjects = async () => {
     try {
       setIsLoading(true);
       const response = await api.get(apiURL);
@@ -94,11 +102,10 @@ const Dashboard = ({ searchParams }) => {
   };
 
   useEffect(() => {
-    if (userData.id && activeTab) {
-      // Ensure both userData and activeTab are ready
+    if (userData.id && activeTab && apiURL) {
       fetchProjects();
     }
-  }, [userData.id, activeTab]); // Fetch projects when both userData and activeTab are available
+  }, [userData.id, activeTab, apiURL]);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -241,7 +248,7 @@ const Dashboard = ({ searchParams }) => {
                             return (
                               <li key={i}>
                                 <Link
-                                  href={`/dashboard?tab=recent&search=${skill}`}
+                                  href={`/dashboard?tab=recent&search=${skill.toLowerCase()}`}
                                 >
                                   {skill}
                                 </Link>

@@ -60,7 +60,6 @@
   border: 1px solid var(--molten-orange);
   box-shadow: 0 2px 2px 0 var(--molten-orange);
   list-style: none;
-  padding: 30px 10px 0;
   border-radius: 5px;
   z-index: 200;
 }
@@ -68,12 +67,28 @@
   display: block;
 }
 .navbar .notifications ul li {
-  margin-bottom: 20px;
   font-size: 0.8rem;
-  opacity: 0.6;
+}
+.navbar .notifications ul li a {
+  padding: 20px;
+  display: grid;
+  grid-template-areas: "span1 span1" "svg span2";
+  gap: 5px;
+  transition-duration: 0.3s;
+}
+.navbar .notifications ul li a:hover {
+  color: var(--ash-white);
+  background-color: var(--charcoal-gray);
+}
+.navbar .notifications ul li a span:first-child {
+  grid-area: span1;
+}
+.navbar .notifications ul li a span:last-child {
+  grid-area: span2;
 }
 .navbar .notifications ul li svg {
   font-size: 2rem;
+  grid-area: svg;
 }
 .notificationCount {
   position: absolute;
