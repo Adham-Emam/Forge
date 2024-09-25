@@ -121,3 +121,16 @@
   font-weight: 700;
   opacity: 1;
 }
+@media (max-width: 991px) {
+  .projectContainer {
+    grid-template-columns: 1fr;
+  }
+  .projectContainer main > span {
+    margin-top: 30px;
+    display: block;
+  }
+  .info {
+    border-radius: 25px;
+    border-bottom: 1px solid var(--molten-orange);
+  }
+}

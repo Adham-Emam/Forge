@@ -358,6 +358,10 @@
   .content {
     grid-template-columns: 1fr;
   }
+  .aside {
+    border-bottom: 1px solid var(--molten-orange);
+    border-radius: 25px;
+  }
   .popup {
     width: 90%;
   }

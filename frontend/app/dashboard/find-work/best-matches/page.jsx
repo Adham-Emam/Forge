@@ -5,12 +5,12 @@ import api from "../../../api";
 import styles from "../style.module.css";
 
 const BestMatch = () => {
-  const [userData, setUserData] = useState();
+  const [userId, setUserId] = useState();
 
   const fetchUserId = async () => {
     try {
       const response = await api.get("http://127.0.0.1:8000/api/current-user/");
-      setUserData(response.data);
+      setUserId(response.data.id);
     } catch (error) {
       console.log(error);
     }
@@ -24,8 +24,8 @@ const BestMatch = () => {
     <div className={styles.dashboard}>
       <DashboardHead activeTab={"matches"} />
       <DashboardProjects
-        apiUrl={`http://127.0.0.1:8000/api/projects/user/${userData.id}/matches/`}
-        userId={userData.id}
+        apiUrl={`http://127.0.0.1:8000/api/projects/user/${userId}/matches/`}
+        userId={userId}
       />
     </div>
   );

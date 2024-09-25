@@ -184,6 +184,13 @@
 }
 .userMenu .ember {
   display: none;
+  border: 1px solid var(--molten-orange);
+  background-color: var(--charcoal-gray);
+  border-radius: 25px;
+  padding: 5px 10px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
 }
 .userMenu li {
   width: 249px;
@@ -241,7 +248,6 @@
   }
   .userMenu .ember {
     display: flex;
-    background-color: var(--charcoal-gray);
   }
 }
 @media (max-width: 500px) {
