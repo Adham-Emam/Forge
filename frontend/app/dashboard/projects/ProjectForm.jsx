@@ -1,27 +1,42 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import TagsInput from "react-tagsinput";
 import "react-tagsinput/react-tagsinput.css";
-import api from "../../../api";
+import api from "../../api";
 
-import { skills } from "../../../components/Skills&Interests/constants";
+import { skills } from "../../components/Skills&Interests/constants";
 import styles from "./style.module.css";
 
-const AddProjectForm = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    skills_needed: [],
-    budget: 0,
-    duration: 0,
-    bid_amount: 0,
-    type: "",
-    exchange_for: "",
-    experience_level: "",
-  });
-
+const ProjectForm = ({ title }) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const data = JSON.parse(searchParams.get("projectData")) || {};
+  const projectData = {
+    title: data.title,
+    description: data.description,
+    skills_needed: data.skills_needed,
+    budget: data.budget,
+    duration: data.duration,
+    bid_amount: data.bid_amount,
+    type: data.type,
+    exchange_for: data.exchange_for,
+    experience_level: data.experience_level,
+  };
+
+  const [formData, setFormData] = useState(
+    projectData || {
+      title: "",
+      description: "",
+      skills_needed: [],
+      budget: "",
+      duration: "",
+      bid_amount: "",
+      type: "",
+      exchange_for: "",
+      experience_level: "",
+    }
+  );
 
   const [projectSkills, setProjectSkills] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -32,21 +47,9 @@ const AddProjectForm = () => {
 
   const [error, setError] = useState("");
 
-  const getUserData = async () => {
-    try {
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
-      setFormData({ ...formData, owner: response.data.id });
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    getUserData();
-    const storedFormData = localStorage.getItem("forge-form-data");
-    if (storedFormData) {
-      setFormData(JSON.parse(storedFormData));
-      setProjectSkills(JSON.parse(storedFormData).skills_needed);
+    if (title === "Edit Project") {
+      setProjectSkills(projectData.skills_needed);
     }
   }, []);
 
@@ -63,7 +66,7 @@ const AddProjectForm = () => {
     const { name, value } = e.target;
 
     // Check if the value is a number
-    const numberValue = isNaN(value) ? value : parseInt(value);
+    const numberValue = isNaN(value) || value === "" ? value : parseInt(value);
 
     // Set the value in the formData state based on its type
     setFormData({
@@ -104,23 +107,23 @@ const AddProjectForm = () => {
   const validateForm = () => {
     const requiredFields = isExchange
       ? [
-          "title",
-          "description",
-          "skills_needed",
-          "duration",
-          "budget",
-          "bid_amount",
-          "type",
           "exchange_for",
+          "type",
+          "bid_amount",
+          "budget",
+          "duration",
+          "skills_needed",
+          "description",
+          "title",
         ]
       : [
-          "title",
-          "description",
-          "skills_needed",
-          "duration",
-          "budget",
-          "bid_amount",
           "type",
+          "bid_amount",
+          "budget",
+          "duration",
+          "skills_needed",
+          "description",
+          "title",
         ];
     let formIsValid = true;
 
@@ -163,8 +166,18 @@ const AddProjectForm = () => {
 
     if (validateForm()) {
       try {
-        await api.post("http://127.0.0.1:8000/api/projects/", formData);
-        router.push("/dashboard/find-work/most-recent");
+        if (title === "Edit Project") {
+          await api.patch(
+            `http://127.0.0.1:8000/api/projects/${data.id}/`,
+            formData
+          );
+          router.push(
+            `/dashboard/projects/${data.id}?title=${formData.title}&description=${formData.description}`
+          );
+        } else {
+          await api.post("http://127.0.0.1:8000/api/projects/", formData);
+          router.push("/dashboard/find-work/most-recent");
+        }
       } catch (error) {
         setError(error.response.data.error);
         window.scrollTo({
@@ -177,6 +190,7 @@ const AddProjectForm = () => {
 
   return (
     <>
+      <h2 className="section-title">{title}</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
         {error && <p className={styles.error}>{error}</p>}
         <div>
@@ -187,6 +201,7 @@ const AddProjectForm = () => {
             name="title"
             minLength={5}
             placeholder="Enter a project title"
+            defaultValue={formData.title}
             onChange={handleChange}
           />
         </div>
@@ -197,6 +212,7 @@ const AddProjectForm = () => {
             name="description"
             placeholder="Provide a detailed description about your project"
             minLength={20}
+            defaultValue={formData.description}
             onChange={handleChange}
           />
         </div>
@@ -237,6 +253,7 @@ const AddProjectForm = () => {
             min={1}
             max={365}
             placeholder="Enter number of days"
+            defaultValue={formData.duration}
             onChange={handleChange}
           />
           <small>Number of days you need to complete the project</small>
@@ -249,6 +266,7 @@ const AddProjectForm = () => {
             id="budget"
             min={0}
             placeholder="Enter the budget in Ember"
+            defaultValue={formData.budget}
             onChange={handleChange}
           />
           <small>
@@ -264,6 +282,7 @@ const AddProjectForm = () => {
             placeholder="Enter bid amount"
             min={0}
             max={40}
+            defaultValue={formData.bid_amount}
             onChange={handleChange}
           />
           <small>
@@ -273,7 +292,12 @@ const AddProjectForm = () => {
         </div>
         <div>
           <label htmlFor="type">Project Type</label>
-          <select name="type" id="type" onChange={handleChange}>
+          <select
+            name="type"
+            id="type"
+            defaultValue={formData.type}
+            onChange={handleChange}
+          >
             <option value="">Please select a project type</option>
             <option value="exchange">
               Skill Exchange (trade work for work)
@@ -296,6 +320,7 @@ const AddProjectForm = () => {
             id="exchange_for"
             name="exchange_for"
             placeholder="Describe what you can do in return for this project"
+            defaultValue={formData.exchange_for}
             onChange={handleChange}
             disabled={!isExchange ? true : false}
           ></textarea>
@@ -305,6 +330,7 @@ const AddProjectForm = () => {
           <select
             id="experience_level"
             name="experience_level"
+            defaultValue={formData.experience_level}
             onChange={handleChange}
           >
             <option value="">No preference</option>
@@ -318,5 +344,4 @@ const AddProjectForm = () => {
     </>
   );
 };
-
-export default AddProjectForm;
+export default ProjectForm;

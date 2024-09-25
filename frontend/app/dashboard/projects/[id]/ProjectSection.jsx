@@ -4,7 +4,6 @@ import { LoadingContainer } from "../../../components";
 import api from "../../../api";
 import { getTimeDifference } from "../../../util";
 import Image from "next/image";
-import Link from "next/link";
 
 import spark from "../../../assets/spark.png";
 import ember from "../../../assets/ember.png";
@@ -19,6 +18,8 @@ const ProjectSection = ({ projectId }) => {
   const [project, setProject] = useState(null);
   const [bids, setBids] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState(null);
+  const [isMyProject, setIsMyProject] = useState(false);
 
   const router = useRouter();
 
@@ -27,27 +28,12 @@ const ProjectSection = ({ projectId }) => {
     getProjectBids();
   }, []);
 
-  const getProjectBids = async () => {
-    try {
-      setIsLoading(true);
-      const response = await api.get(
-        `http://127.0.0.1:8000/api/projects/${projectId}/bids`
-      );
-      setBids(response.data);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const getProjectData = async () => {
     try {
       const response = await api.get(
         `http://127.0.0.1:8000/api/projects/${projectId}`
       );
       setProject(response.data);
-      console.log(response.data);
     } catch (error) {
       console.log(error);
       router.push("/404");
@@ -55,6 +41,36 @@ const ProjectSection = ({ projectId }) => {
       setIsLoading(false);
     }
   };
+
+  const getProjectBids = async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.get(
+        `http://127.0.0.1:8000/api/projects/${projectId}/bids`
+      );
+      setBids(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getCurrentUser = async () => {
+    try {
+      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      setUserId(response.data.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getCurrentUser();
+    if (userId === project?.owner) {
+      setIsMyProject(true);
+    }
+  }, [userId, project]);
 
   return (
     <>
@@ -75,9 +91,22 @@ const ProjectSection = ({ projectId }) => {
                 <Image src={spark} alt="Spark" width={50} height={50} />
                 {project?.bid_amount}
               </div>
-              <Button href={`/dashboard/projects/${project?.id}/apply`}>
-                Apply now
-              </Button>
+              {isMyProject ? (
+                <Button
+                  href={{
+                    pathname: `/dashboard/projects/${project?.id}/edit`,
+                    query: {
+                      projectData: JSON.stringify(project),
+                    },
+                  }}
+                >
+                  Edit Project
+                </Button>
+              ) : (
+                <Button href={`/dashboard/projects/${project?.id}/apply`}>
+                  Apply now
+                </Button>
+              )}
               <ul>
                 <h3>Project Owner</h3>
                 <li>

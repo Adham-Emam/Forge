@@ -1,5 +1,5 @@
 import React from "react";
-import AddProjectForm from "./AddProjectForm";
+import AddProjectForm from "../ProjectForm";
 
 export const metadata = {
   title: "Post a New Project | Forge - Skills Exchange Platform",
@@ -12,8 +12,7 @@ export const metadata = {
 const AddProject = () => {
   return (
     <div className="container">
-      <h2 className="section-title">Add Project</h2>
-      <AddProjectForm />
+      <AddProjectForm title="Add Project" />
     </div>
   );
 };
