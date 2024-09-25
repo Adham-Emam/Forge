@@ -205,7 +205,7 @@ const DashboardNavbar = () => {
           </Link>
         </li>
         <li>
-          <Link href="/dashboard?tab=recent">
+          <Link href="/dashboard/find-work/most-recent">
             <RiDashboardFill /> Dashboard
           </Link>
         </li>

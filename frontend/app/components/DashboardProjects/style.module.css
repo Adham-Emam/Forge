@@ -1,0 +1,111 @@
+.projects .project {
+  margin: 0 0 30px;
+  padding: 40px 20px;
+  background-color: var(--iron-black);
+  border: 2px solid var(--molten-orange);
+  box-shadow: -1px 1px 2px var(--molten-orange);
+  border-radius: 25px;
+  position: relative;
+}
+.projects .project .date {
+  opacity: 0.6;
+  font-size: 0.9rem;
+}
+.projects .project h3 {
+  font-size: 1.5rem;
+  margin: 5px 0 20px;
+}
+.projects .project .projectOwner {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.projects .project .projectOwner span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+.projects .project .projectOwner span:first-child a {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.projects .project .projectOwner span:first-child a:hover {
+  text-decoration: underline;
+}
+.projects .project .projectOwner span svg {
+  color: var(--molten-orange);
+}
+.projects .project p {
+  opacity: 0.6;
+  line-height: 1.5;
+  font-size: 0.9rem;
+  word-break: break-all;
+  margin-bottom: 20px;
+}
+.projects .project .skills {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.projects .project .skills li {
+  background-color: var(--charcoal-gray);
+  border: 1px solid var(--molten-orange);
+  padding: 7px 15px;
+  font-size: 0.8rem;
+  border-radius: 25px;
+  cursor: pointer;
+}
+.projects .project .projectGroup {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+.projects .project .budget {
+  background-color: var(--charcoal-gray);
+  border: 1px solid var(--molten-orange);
+  border-radius: 50px;
+  padding: 5px 10px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.projects .project .save {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  cursor: pointer;
+  background-color: var(--charcoal-gray);
+  border: 1px solid var(--molten-orange);
+  color: var(--ember-yellow);
+  border-radius: 50%;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+}
+.noProjects p {
+  opacity: 0.6;
+  font-size: 0.8rem;
+  margin-top: 10px;
+}
+.btn {
+  display: block;
+  text-align: right;
+}
+
+@media (max-width: 500px) {
+  .projects .project {
+    padding: 70px 20px 30px;
+  }
+}

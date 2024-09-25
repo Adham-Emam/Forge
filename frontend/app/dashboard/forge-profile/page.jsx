@@ -341,7 +341,7 @@ const forgeProfile = () => {
         console.log(`User updated successfully: ${response.data}`);
 
         // redirect to dashboard
-        router.push("/dashboard");
+        router.push("/dashboard/find-work/most-recent");
       })
       .catch((error) => {
         setError(error.message);

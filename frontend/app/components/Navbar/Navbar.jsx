@@ -66,7 +66,10 @@ const Navbar = () => {
           </li>
           <li className={styles.joinBtn}>
             {isAuthenticated ? (
-              <Button href="/dashboard" onClick={handleLinkClick}>
+              <Button
+                href="/dashboard/find-work/most-recent"
+                onClick={handleLinkClick}
+              >
                 <RiDashboardFill /> Dashboard
               </Button>
             ) : (

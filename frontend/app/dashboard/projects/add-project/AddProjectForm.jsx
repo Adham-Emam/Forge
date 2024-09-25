@@ -164,7 +164,7 @@ const AddProjectForm = () => {
     if (validateForm()) {
       try {
         await api.post("http://127.0.0.1:8000/api/projects/", formData);
-        router.push("/dashboard");
+        router.push("/dashboard/find-work/most-recent");
       } catch (error) {
         setError(error.response.data.error);
         window.scrollTo({

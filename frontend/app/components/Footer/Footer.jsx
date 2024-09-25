@@ -39,7 +39,13 @@ const Footer = () => {
               Complete tasks, earn Embers, and unlock new opportunities to grow
               your skills. Learn more about how you can start earning today
             </p>
-            <Button href={isAuthenticated ? "/dashboard" : "/auth/register"}>
+            <Button
+              href={
+                isAuthenticated
+                  ? "/dashboard/find-work/most-recent"
+                  : "/auth/register"
+              }
+            >
               Join
             </Button>
           </div>

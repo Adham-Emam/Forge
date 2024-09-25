@@ -1,0 +1,87 @@
+.DashboardHead h1 {
+  margin: 0;
+  text-align: left;
+}
+.DashboardHead h1 + p {
+  margin: 10px 0;
+  text-align: left;
+}
+.tabDescription {
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+.DashboardHead .tabs {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  list-style: none;
+  margin-bottom: 30px;
+  padding: 20px 0 0;
+  position: relative;
+}
+.DashboardHead .tabs::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 1px;
+  background-color: var(--ash-white);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  opacity: 0.3;
+}
+.DashboardHead .tabs li {
+  padding-bottom: 15px;
+  position: relative;
+}
+.DashboardHead .tabs li a {
+  opacity: 0.6;
+  transition-duration: 0.3s;
+}
+.DashboardHead .tabs li a.active {
+  opacity: 1;
+  color: var(--ember-yellow);
+}
+.DashboardHead .tabs li a::before {
+  content: "";
+  display: block;
+  width: 0%;
+  height: 2px;
+  background-color: var(--ember-yellow);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition-duration: 0.3s;
+}
+.DashboardHead .tabs li a.active::before {
+  width: 100%;
+}
+.DashboardHead .search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--iron-black);
+  border: 1px solid var(--molten-orange);
+  border-radius: 25px;
+  margin-bottom: 30px;
+  padding: 5px;
+}
+.DashboardHead .search input {
+  width: 100%;
+}
+.DashboardHead .search button {
+  font-size: 1.2rem;
+  transition-duration: 0.3s;
+  cursor: pointer;
+}
+.DashboardHead .search button:hover {
+  color: var(--molten-orange);
+}
+.DashboardHead .search input,
+.DashboardHead .search button {
+  padding: 10px 20px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--ash-white);
+}

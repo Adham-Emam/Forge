@@ -1,0 +1,53 @@
+.sidebar {
+  height: 100%;
+  background-color: var(--iron-black);
+  border: 1px solid var(--molten-orange);
+  border-bottom: none;
+  border-radius: 25px 25px 0 0;
+  padding: 50px 20px;
+}
+.sidebar > * {
+  margin-bottom: 20px;
+}
+.sidebar .addProject a {
+  width: 100%;
+}
+.sidebar .sparks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  background-color: var(--charcoal-gray);
+  border-radius: 24px;
+  border: 1px solid var(--molten-orange);
+  padding: 20px 0;
+}
+.sidebar .sparks div {
+  padding: 10px 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.sidebar .sparks ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+}
+.sidebar .sparks ul a {
+  color: var(--ember-yellow);
+  transition-duration: 0.3s;
+}
+.sidebar .sparks ul a:hover {
+  text-decoration: underline;
+  color: var(--forge-red);
+}
+@media (max-width: 991px) {
+  .sidebar {
+    border-radius: 25px;
+    border-bottom: 1px solid var(--molten-orange);
+  }
+}

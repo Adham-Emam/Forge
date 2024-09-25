@@ -23,7 +23,7 @@ const Error404 = () => {
               <a href="/">Home</a>
             </li>
             <li>
-              <a href="/dashboard">Dashboard</a>
+              <a href="/dashboard/find-work/most-recent">Dashboard</a>
             </li>
             <li>
               <a href="/bonfire">Forge Bonfire</a>

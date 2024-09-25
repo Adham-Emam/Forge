@@ -28,7 +28,13 @@ const CTA = () => {
               </p>
             </div>
             <div className={styles.btnContainer}>
-              <Button href={isAuthenticated ? "/dashboard" : "/auth/register"}>
+              <Button
+                href={
+                  isAuthenticated
+                    ? "/dashboard/find-work/most-recent"
+                    : "/auth/register"
+                }
+              >
                 Enter the Forge
               </Button>
               <Button href="#">Learn More About Forge</Button>

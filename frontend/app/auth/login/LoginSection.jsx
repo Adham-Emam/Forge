@@ -49,7 +49,7 @@ const LoginSection = () => {
           "http://127.0.0.1:8000/api/current-user/"
         );
         if (userResponse.data.first_name && userResponse.data.last_name) {
-          router.push("/dashboard");
+          router.push("/dashboard/find-work/most-recent");
         } else {
           router.push("/dashboard/forge-profile");
         }

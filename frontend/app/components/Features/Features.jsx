@@ -66,7 +66,13 @@ const Features = () => {
               Forge is more than just a platform, it’s your workshop for
               building and sharing skills. Here’s how we make that happen
             </p>
-            <Button href={isAuthenticated ? "/dashboard" : "/auth/register"}>
+            <Button
+              href={
+                isAuthenticated
+                  ? "/dashboard/find-work/most-recent"
+                  : "/auth/register"
+              }
+            >
               Enter The Forge
             </Button>
           </div>

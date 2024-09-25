@@ -108,9 +108,9 @@ class ToggleSavedProject(generics.GenericAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ProjectSerializer
 
-    def post(self):
+    def post(self, request, *args, **kwargs):
         user_id = self.request.user.id
-        project_id = self.kwargs['project_id']
+        project_id = self.kwargs.get('project_id')
 
         # Get the user and project objects
         user = get_object_or_404(CustomUser, id=user_id)
@@ -124,8 +124,7 @@ class ToggleSavedProject(generics.GenericAPIView):
             user.saved_projects.add(project)
             message = 'Project added to saved projects'
 
-        return Response({'message': message})
-
+        return Response({'message': message}, status=status.HTTP_200_OK)
 
 class SearchProjects(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
