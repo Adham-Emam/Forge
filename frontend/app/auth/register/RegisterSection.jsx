@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import api from "../../api";
+import { checkAuth } from "../../util";
 
 import styles from "../style.module.css";
 import Button from "../../components/Button/Button";
@@ -16,6 +17,12 @@ import { FaGoogle, FaGithub, FaCheck } from "react-icons/fa";
 
 function RegisterSection() {
   const router = useRouter();
+
+  useEffect(() => {
+    if (checkAuth) {
+      router.push("/dashboard/find-work/most-recent");
+    }
+  }, []);
 
   const googleSignIn = () => {};
   const githubSignIn = () => {};

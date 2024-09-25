@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import api from "../../api";
+import { checkAuth } from "../../util";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../../constants";
 
 import styles from "../style.module.css";
@@ -13,10 +15,15 @@ import Logo from "../../assets/logo.png";
 import { CiUser, CiLock } from "react-icons/ci";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { FaGoogle, FaGithub } from "react-icons/fa";
-import api from "../../api";
 
 const LoginSection = () => {
   const router = useRouter();
+
+  useEffect(() => {
+    if (checkAuth) {
+      router.push("/dashboard/find-work/most-recent");
+    }
+  }, []);
 
   const [formData, SetFormData] = useState({
     username: "",
@@ -67,7 +74,7 @@ const LoginSection = () => {
 
   return (
     <>
-      <div className={`containe ${styles.container}`}>
+      <div className={styles.container}>
         <div className={styles.greeting}>
           <div className={styles.logo}>
             <Image
