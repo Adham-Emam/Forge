@@ -77,3 +77,19 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+
+class Transaction(models.Model):
+    CURRENCY_CHOICES = (
+        ('ember', 'Ember'),
+        ('spark', 'Spark'),
+    )
+
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=255, choices=CURRENCY_CHOICES)
+    amount = models.IntegerField()
+    description = models.CharField(max_length=255, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username

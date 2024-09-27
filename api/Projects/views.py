@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import generics
 from .models import Project, Bid
-from Users.models import CustomUser, Notification
+from Users.models import CustomUser, Notification, Transaction
 from .serializers import ProjectSerializer, BidSerializer
 from rest_framework.permissions import  IsAuthenticatedOrReadOnly
 from django.shortcuts import get_object_or_404
@@ -59,6 +59,8 @@ class ProjectListCreateView(generics.ListCreateAPIView):
                 message='Congratulations! Your project has been successfully created on our platform. Now, talented freelancers can discover it and submit their proposals. Keep an eye on your inbox for updates!'
             )
             notification.save()
+
+
 
             return Response(ProjectSerializer(project).data, status=status.HTTP_201_CREATED)
         except IntegrityError:
@@ -179,6 +181,14 @@ class BidListCreateView(generics.ListCreateAPIView):
             
             user.sparks -= project.bid_amount
             user.save()
+
+            transaction = Transaction(
+                user=user,
+                currency='spark',
+                description='Bid on project',
+                amount=project.bid_amount,
+            )
+            transaction.save()
 
             # Send Notification to the project owner
             notification= Notification.objects.create(
