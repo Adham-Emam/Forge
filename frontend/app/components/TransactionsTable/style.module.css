@@ -1,0 +1,26 @@
+.table {
+  margin: 30px auto;
+  width: 95%;
+  overflow-x: auto;
+  background-color: var(--iron-black);
+  text-align: center;
+}
+.table table {
+  width: 100%;
+  border-color: var(--molten-orange);
+  border-collapse: collapse;
+}
+.table th,
+.table td {
+  border-color: var(--molten-orange);
+  padding: 10px 5px;
+  width: fit-content;
+}
+.table th {
+  background-color: var(--steel-blue);
+  font-weight: 900;
+}
+.table td {
+  color: var(--ash-white);
+  opacity: 0.8;
+}

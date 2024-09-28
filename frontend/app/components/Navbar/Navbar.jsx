@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { checkAuth } from "../../util";
+
 import Logo from "../../assets/logo.png";
 import styles from "./style.module.css";
 import {
@@ -20,8 +23,10 @@ const Navbar = () => {
   const [isActive, setIsActive] = useState(false); // state to toggle mobile menu
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  const router = useRouter();
+
   useEffect(() => {
-    setIsAuthenticated(localStorage.getItem("access") !== null);
+    setIsAuthenticated(checkAuth());
   }, []);
 
   const handleMenuToggle = () => {

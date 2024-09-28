@@ -19,7 +19,7 @@ function RegisterSection() {
   const router = useRouter();
 
   useEffect(() => {
-    if (checkAuth) {
+    if (checkAuth()) {
       router.push("/dashboard/find-work/most-recent");
     }
   }, []);

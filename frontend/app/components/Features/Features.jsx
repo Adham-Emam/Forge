@@ -11,6 +11,7 @@ import {
   FaGlobe,
 } from "react-icons/fa";
 import { AnimatedItem } from "..";
+import { checkAuth } from "../../util";
 
 const features = [
   {
@@ -49,7 +50,7 @@ const Features = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    setIsAuthenticated(localStorage.getItem("access") !== null);
+    setIsAuthenticated(checkAuth());
   }, []);
   return (
     <section id="features" className={styles.features}>

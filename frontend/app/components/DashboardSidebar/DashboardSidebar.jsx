@@ -37,7 +37,7 @@ const DashboardSidebar = () => {
         </div>
         <ul>
           <li>
-            <Link href={"/dashboard/transactions"}>View Details</Link>
+            <Link href={"/dashboard/transactions/all"}>View Details</Link>
           </li>
           <li>
             <Link href={"/add-sparks"}>Purchase Sparks</Link>

@@ -84,10 +84,15 @@ class Transaction(models.Model):
         ('ember', 'Ember'),
         ('spark', 'Spark'),
     )
+    TYPE_CHOICES = (
+        ('received', 'Received'),
+        ('sent', 'Sent'),
+    )
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     currency = models.CharField(max_length=255, choices=CURRENCY_CHOICES)
     amount = models.IntegerField()
+    type = models.CharField(max_length=255, choices=TYPE_CHOICES, null=True)
     description = models.CharField(max_length=255, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 

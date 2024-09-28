@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import styles from "./style.module.css";
 import Button from "../Button/Button";
 import { AnimatedItem } from "..";
-import { ACCESS_TOKEN } from "../../constants";
+import { checkAuth } from "../../util";
 
 const CTA = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   useEffect(() => {
-    setIsAuthenticated(localStorage.getItem(ACCESS_TOKEN) !== null);
+    setIsAuthenticated(checkAuth());
   }, []);
 
   return (

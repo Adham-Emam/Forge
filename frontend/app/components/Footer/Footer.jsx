@@ -13,12 +13,13 @@ import {
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
+import { checkAuth } from "../../util";
 
 const Footer = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    setIsAuthenticated(localStorage.getItem("access") !== null);
+    setIsAuthenticated(checkAuth());
   }, []);
   return (
     <footer className={styles.footer}>

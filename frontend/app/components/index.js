@@ -18,6 +18,7 @@ export { default as DashboardNavbar } from "./DashboardNavbar/DashboardNavbar";
 export { default as DashboardHead } from "./DashboardHead/DashboardHead";
 export { default as DashboardSidebar } from "./DashboardSidebar/DashboardSidebar";
 export { default as DashboardProjects } from "./DashboardProjects/DashboardProjects";
+export { default as TransactionsTable } from "./TransactionsTable/TransactionsTable";
 export { default as ProtectedRoute } from "./ProtectedRoute";
 export { default as LoadingContainer } from "./Loaders/LoadingContainer";
 export { default as Error500 } from "./Error/500";

@@ -1,8 +1,8 @@
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from .models import CustomUser, Notification
-from .serializers import CreateUserSerializer, CustomUserSerializer, NotificationSerializer
+from .models import CustomUser, Notification, Transaction
+from .serializers import CreateUserSerializer, CustomUserSerializer, NotificationSerializer, TransactionSerializer
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -73,3 +73,20 @@ class MarkNotificationAsRead(generics.UpdateAPIView):
     def get_queryset(self):
         user = self.request.user.id
         return Notification.objects.filter(user=user, is_read=False)
+    
+
+class TransactionList(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user.id
+        type = self.kwargs.get('type')
+
+        if type == "received":
+            return Transaction.objects.filter(user=user, type="received")
+        elif type == "sent":
+            return Transaction.objects.filter(user=user , type="sent")
+        else :
+            return Transaction.objects.filter(user=user)
+

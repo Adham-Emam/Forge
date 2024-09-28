@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Notification
+from .models import CustomUser, Notification,Transaction
 
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -74,5 +74,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at']
+
+
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
         fields = '__all__'
         read_only_fields = ['id', 'created_at']
