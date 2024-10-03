@@ -47,28 +47,25 @@ const DashboardHead = ({ activeTab }) => {
       </p>
       <ul className={styles.tabs}>
         <li>
-          <Link
-            href={`/dashboard/find-work/most-recent`}
-            className={activeTab === "recent" ? styles.active : ""}
-          >
-            Most Recent
-          </Link>
+          {activeTab === "recent" ? (
+            <span>Most Recent</span>
+          ) : (
+            <Link href={`/dashboard/find-work/most-recent`}>Most Recent</Link>
+          )}
         </li>
         <li>
-          <Link
-            href={`/dashboard/find-work/best-matches`}
-            className={activeTab === "matches" ? styles.active : ""}
-          >
-            Best Matches
-          </Link>
+          {activeTab === "matches" ? (
+            <span>Best Matches</span>
+          ) : (
+            <Link href={`/dashboard/find-work/best-matches`}>Best Matches</Link>
+          )}
         </li>
         <li>
-          <Link
-            href={`/dashboard/find-work/saved`}
-            className={activeTab === "saved" ? styles.active : ""}
-          >
-            Saved Projects
-          </Link>
+          {activeTab === "saved" ? (
+            <span>Saved Projects</span>
+          ) : (
+            <Link href={`/dashboard/find-work/saved`}>Saved Projects</Link>
+          )}
         </li>
       </ul>
       <form className={styles.search} onSubmit={handleSearch}>

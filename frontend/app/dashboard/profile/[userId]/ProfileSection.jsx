@@ -377,7 +377,11 @@ const ProfileSection = ({ params }) => {
                           {project.owner_location}
                         </span>
                       </div>
-                      <p>{project.description.slice(0, 300) + "..."}</p>
+                      <p>
+                        {project.description.length > 300
+                          ? project.description.slice(0, 300) + "..."
+                          : project.description}
+                      </p>
                       <ul className={styles.skills}>
                         {project.skills_needed.map((skill, i) => {
                           return <li key={i}>{skill}</li>;

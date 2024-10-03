@@ -6,12 +6,133 @@ from Users.models import CustomUser, Notification, Transaction
 from .serializers import ProjectSerializer, BidSerializer
 from rest_framework.permissions import  IsAuthenticatedOrReadOnly
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.db import IntegrityError
 
 class ProjectListCreateView(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        
+        # Access the query parameters
+        query = self.request.query_params.get('search')
+        project_type = self.request.query_params.get('project_type')
+        experience_level = self.request.query_params.get('experience_level')  # e.g., "beginner,intermediate"
+        budget = self.request.query_params.get('budget')  # e.g., "23-42"
+        country = self.request.query_params.get('country')
+        proposals = self.request.query_params.get('proposals')
+        project_length = self.request.query_params.get('project_length')
+        client_history = self.request.query_params.get('client_history')
+
+
+        # Apply the search query first if it exists
+        if not query:
+            queryset = queryset
+        else:
+            queryset = queryset.filter(
+                Q(title__icontains=query) | Q(skills_needed__icontains=query)
+            )
+
+        # Handle the project type filter (Normal, Skill Exchange)
+        if project_type:
+            project_type_list = project_type.split(',')
+            queryset = queryset.filter(type__in=project_type_list)
+
+
+        # Handle the budget query
+        if budget:
+            try:
+                min_budget, max_budget = map(int, budget.split('-'))
+                if min_budget is not None:
+                    queryset = queryset.filter(budget__gte=min_budget)
+                if max_budget is not None:
+                    queryset = queryset.filter(budget__lte=max_budget)
+            except ValueError:
+                return queryset.none()  # Return an empty queryset on invalid format
+
+
+        # Filter by experience level
+        if experience_level:
+            experience_level_list = experience_level.split(',')
+            queryset = queryset.filter(experience_level__in=experience_level_list)
+
+        # Filter by country
+        if country:
+            queryset = queryset.filter(owner__country=country)
+
+        # Filter by proposals
+        if proposals:
+            proposal_ranges = proposals.split(',')
+            filters = Q()  
+
+            # Annotate each project with the number of bids
+            queryset = queryset.annotate(bid_count=Count('bids'))
+
+            for proposal_range in proposal_ranges:
+                try:
+                    # Only process valid proposal ranges, skipping invalid ones
+                    if '-' in proposal_range and proposal_range.replace('-', '').isdigit():
+                        min_proposal, max_proposal = map(int, proposal_range.split('-'))
+                        filters |= Q(bids__gte=min_proposal, bids__lte=max_proposal)
+                except ValueError:
+                    continue  # Skip any invalid ranges
+
+            queryset = queryset.filter(filters)
+
+        # Filter by project length (in months, converting to days)
+        if project_length:
+            project_length_ranges = project_length.split(',')
+            filters = Q()  # Empty Q object to chain multiple ranges
+        
+            for project_length_range in project_length_ranges:
+                try:
+                    min_project_length, max_project_length = map(int, project_length_range.split('-'))
+        
+                    # Convert months to days (assuming 30.44 days per month)
+                    min_days = round(min_project_length * 30.44)
+                    max_days = round(max_project_length * 30.44)
+
+                    # Add each range as a filter
+                    filters |= Q(duration__gte=min_days, duration__lte=max_days)
+                
+                except ValueError:
+                    continue  # Skip invalid ranges in case of errors
+            
+            queryset = queryset.filter(filters)
+
+        
+        # Filter by client history (count completed projects per client)
+        if client_history:
+            client_history_ranges = client_history.split(',')
+            filters = Q()
+
+            # Annotate the queryset with the count of completed projects for each client
+            queryset = queryset.annotate(
+                completed_projects=Count('owner__projects', filter=Q(owner__projects__status='completed'))
+            )
+
+            # Apply the filters based on the client history ranges
+            for history_range in client_history_ranges:
+                if history_range == "10+":  # Special case for "10+"
+                    filters |= Q(completed_projects__gte=10)
+                elif '-' in history_range:  # Handle ranges like "1-9"
+                    try:
+                        min_projects, max_projects = map(int, history_range.split('-'))
+                        filters |= Q(completed_projects__gte=min_projects, completed_projects__lte=max_projects)
+                    except ValueError:
+                        continue  # Skip invalid ranges
+                else:  # Handle single values like "0"
+                    try:
+                        min_projects = int(history_range)
+                        filters |= Q(completed_projects__exact=min_projects)
+                    except ValueError:
+                        continue  # Skip invalid values
+
+            queryset = queryset.filter(filters)
+
+        return queryset.distinct()
 
     def post(self, request):
         user = request.user
@@ -65,7 +186,6 @@ class ProjectListCreateView(generics.ListCreateAPIView):
             return Response(ProjectSerializer(project).data, status=status.HTTP_201_CREATED)
         except IntegrityError:
             return Response({'error': 'Project already exists.'}, status=status.HTTP_400_BAD_REQUEST)
-
 class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -84,18 +204,110 @@ class UserProjectMatchesList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ProjectSerializer
 
+
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         user = get_object_or_404(CustomUser, id=user_id)
-        projects = Project.objects.filter(status='open')
+        
+        # Start with open projects
+        queryset = Project.objects.filter(status='open')
 
+        # Filter projects that match user's skills or interests
         project_ids = []
-        for project in projects:
-            if any(skills in user.skills for skills in project.skills_needed):
+        for project in queryset:
+            if any(skill in user.skills for skill in project.skills_needed) or any(interest in user.interests for interest in project.skills_needed):
                 project_ids.append(project.id)
 
-        return Project.objects.filter(id__in=project_ids)
+        queryset = queryset.filter(id__in=project_ids)
 
+        # Access the query parameters for additional filters
+        project_type = self.request.query_params.get('project_type')
+        experience_level = self.request.query_params.get('experience_level')
+        budget = self.request.query_params.get('budget')
+        country = self.request.query_params.get('country')
+        proposals = self.request.query_params.get('proposals')
+        project_length = self.request.query_params.get('project_length')
+        client_history = self.request.query_params.get('client_history')
+
+        # Handle the project type filter (Normal, Skill Exchange)
+        if project_type:
+            project_type_list = project_type.split(',')
+            queryset = queryset.filter(type__in=project_type_list)
+
+        # Handle the budget query
+        if budget:
+            try:
+                min_budget, max_budget = map(int, budget.split('-'))
+                if min_budget is not None:
+                    queryset = queryset.filter(budget__gte=min_budget)
+                if max_budget is not None:
+                    queryset = queryset.filter(budget__lte=max_budget)
+            except ValueError:
+                return queryset.none()  # Return an empty queryset on invalid format
+
+        # Filter by experience level
+        if experience_level:
+            experience_level_list = experience_level.split(',')
+            queryset = queryset.filter(experience_level__in=experience_level_list)
+
+        # Filter by country
+        if country:
+            queryset = queryset.filter(owner__country=country)
+
+        # Filter by proposals
+        if proposals:
+            proposal_ranges = proposals.split(',')
+            filters = Q()  
+            # Annotate each project with the number of bids
+            queryset = queryset.annotate(bid_count=Count('bids'))
+
+            for proposal_range in proposal_ranges:
+                min_proposal, max_proposal = map(int, proposal_range.split('-'))
+                filters |= Q(bids__gte=min_proposal, bids__lte=max_proposal)
+
+            queryset = queryset.filter(filters)
+
+        # Filter by project length (in months, converting to days)
+        if project_length:
+            project_length_ranges = project_length.split(',')
+            filters = Q()  # Empty Q object to chain multiple ranges
+        
+            for project_length_range in project_length_ranges:
+                try:
+                    min_project_length, max_project_length = map(int, project_length_range.split('-'))
+                    # Convert months to days (assuming 30.44 days per month)
+                    min_days = round(min_project_length * 30.44)
+                    max_days = round(max_project_length * 30.44)
+
+                    # Add each range as a filter
+                    filters |= Q(duration__gte=min_days, duration__lte=max_days)
+                
+                except ValueError:
+                    continue  # Skip invalid ranges in case of errors
+            
+            queryset = queryset.filter(filters)
+
+        # Filter by client history (count completed projects per client)
+        if client_history:
+            client_history_ranges = client_history.split(',')
+            filters = Q()
+
+            # Annotate the queryset with the count of completed projects for each client
+            queryset = queryset.annotate(
+                completed_projects=Count('owner__projects', filter=Q(owner__projects__status='completed'))
+            )
+
+            # Apply the filters based on the client history ranges
+            for history_range in client_history_ranges:
+                if history_range == "10+":  # Special case for "10+"
+                    filters |= Q(completed_projects__gte=10)
+                else:
+                    min_projects, max_projects = map(int, history_range.split('-'))
+                    filters |= Q(completed_projects__gte=min_projects, completed_projects__lte=max_projects)
+
+            queryset = queryset.filter(filters)
+
+        return queryset.distinct()
 
 class UserSavedProjectsList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -104,7 +316,96 @@ class UserSavedProjectsList(generics.ListAPIView):
     def get_queryset(self):
         user_id = self.kwargs['user_id']
         user = get_object_or_404(CustomUser, id=user_id)
-        return user.saved_projects.all()
+        
+        # Start with the user's saved projects
+        queryset = user.saved_projects.all()
+
+        # Access the query parameters for filtering
+        project_type = self.request.query_params.get('project_type')
+        experience_level = self.request.query_params.get('experience_level')
+        budget = self.request.query_params.get('budget')
+        country = self.request.query_params.get('country')
+        proposals = self.request.query_params.get('proposals')
+        project_length = self.request.query_params.get('project_length')
+        client_history = self.request.query_params.get('client_history')
+
+        # Handle project type filter
+        if project_type:
+            project_type_list = project_type.split(',')
+            queryset = queryset.filter(type__in=project_type_list)
+
+        # Handle the budget filter
+        if budget:
+            try:
+                min_budget, max_budget = map(int, budget.split('-'))
+                if min_budget is not None:
+                    queryset = queryset.filter(budget__gte=min_budget)
+                if max_budget is not None:
+                    queryset = queryset.filter(budget__lte=max_budget)
+            except ValueError:
+                return queryset.none()  # Return empty queryset on invalid format
+
+        # Filter by experience level
+        if experience_level:
+            experience_level_list = experience_level.split(',')
+            queryset = queryset.filter(experience_level__in=experience_level_list)
+
+        # Filter by country
+        if country:
+            queryset = queryset.filter(owner__country=country)
+
+        # Filter by proposals
+        if proposals:
+            proposal_ranges = proposals.split(',')
+            filters = Q()  
+
+            # Annotate each project with the number of bids
+            queryset = queryset.annotate(bid_count=Count('bids'))
+
+            for proposal_range in proposal_ranges:
+                min_proposal, max_proposal = map(int, proposal_range.split('-'))
+                filters |= Q(bids__gte=min_proposal, bids__lte=max_proposal)
+
+            queryset = queryset.filter(filters)
+
+        # Filter by project length (in months, converting to days)
+        if project_length:
+            project_length_ranges = project_length.split(',')
+            filters = Q()  # Empty Q object to chain multiple ranges
+
+            for project_length_range in project_length_ranges:
+                try:
+                    min_project_length, max_project_length = map(int, project_length_range.split('-'))
+                    min_days = round(min_project_length * 30.44)  # Convert months to days
+                    max_days = round(max_project_length * 30.44)
+
+                    filters |= Q(duration__gte=min_days, duration__lte=max_days)
+
+                except ValueError:
+                    continue  # Skip invalid ranges
+
+            queryset = queryset.filter(filters)
+
+        # Filter by client history
+        if client_history:
+            client_history_ranges = client_history.split(',')
+            filters = Q()
+
+            # Annotate the queryset with the count of completed projects for each client
+            queryset = queryset.annotate(
+                completed_projects=Count('owner__projects', filter=Q(owner__projects__status='completed'))
+            )
+
+            for history_range in client_history_ranges:
+                if history_range == "10+":  # Special case for "10+"
+                    filters |= Q(completed_projects__gte=10)
+                else:
+                    min_projects, max_projects = map(int, history_range.split('-'))
+                    filters |= Q(completed_projects__gte=min_projects, completed_projects__lte=max_projects)
+
+            queryset = queryset.filter(filters)
+
+        return queryset.distinct()
 
 class ToggleSavedProject(generics.GenericAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -127,22 +428,6 @@ class ToggleSavedProject(generics.GenericAPIView):
             message = 'Project added to saved projects'
 
         return Response({'message': message}, status=status.HTTP_200_OK)
-
-class SearchProjects(generics.ListAPIView):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    serializer_class = ProjectSerializer
-
-    def get(self, request):
-        query = request.GET.get('search')
-
-        if query:
-            projects = Project.objects.filter(
-                Q(title__icontains=query) | Q(skills_needed__icontains=query)
-            )
-            serializer = self.serializer_class(projects, many=True)
-            return Response(serializer.data)
-        else :
-            return Project.objects.none()
 
 
 class BidListCreateView(generics.ListCreateAPIView):

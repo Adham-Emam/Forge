@@ -1,11 +1,22 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { DashboardHead, DashboardProjects } from "../../../components";
 import api from "../../../api";
 import styles from "../style.module.css";
 
 const BestMatch = () => {
-  const [userId, setUserId] = useState();
+  const [userId, setUserId] = useState(null);
+  const [apiUrl, setApiUrl] = useState(null);
+
+  const searchParams = useSearchParams();
+  const projectType = searchParams.get("projectType") || "";
+  const experienceLevel = searchParams.get("experienceLevel") || "";
+  const budget = searchParams.get("budget") || "";
+  const country = searchParams.get("country") || "";
+  const proposals = searchParams.get("proposals") || "";
+  const projectLength = searchParams.get("projectLength") || "";
+  const clientHistory = searchParams.get("clientHistory") || "";
 
   const fetchUserId = async () => {
     try {
@@ -20,13 +31,43 @@ const BestMatch = () => {
     fetchUserId();
   }, []);
 
+  useEffect(() => {
+    const params = new URLSearchParams();
+
+    if (projectType) params.append("project_type", projectType);
+    if (experienceLevel) params.append("experience_level", experienceLevel);
+    if (budget) params.append("budget", budget);
+    if (country) params.append("country", country);
+    if (proposals) params.append("proposals", proposals);
+    if (projectLength) params.append("project_length", projectLength);
+    if (clientHistory) params.append("client_history", clientHistory);
+
+    const queryString = params.toString();
+
+    if (userId) {
+      if (queryString) {
+        setApiUrl(
+          `http://127.0.0.1:8000/api/projects/user/${userId}/matches/?${queryString}`
+        );
+      } else {
+        setApiUrl(`http://127.0.0.1:8000/api/projects/user/${userId}/matches/`);
+      }
+    }
+  }, [
+    userId,
+    searchParams,
+    experienceLevel,
+    budget,
+    country,
+    proposals,
+    projectLength,
+    clientHistory,
+  ]);
+
   return (
     <div className={styles.dashboard}>
       <DashboardHead activeTab={"matches"} />
-      <DashboardProjects
-        apiUrl={`http://127.0.0.1:8000/api/projects/user/${userId}/matches/`}
-        userId={userId}
-      />
+      {apiUrl && <DashboardProjects apiUrl={apiUrl} userId={userId} />}
     </div>
   );
 };

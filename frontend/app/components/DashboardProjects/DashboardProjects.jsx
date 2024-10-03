@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
 import api from "../../api";
 import Link from "next/link";
 import Image from "next/image";
@@ -17,9 +16,6 @@ const DashboardProjects = ({ apiUrl, userId }) => {
   const [projects, setProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [savedProjects, setSavedProjects] = useState([]);
-
-  const searchParams = useSearchParams();
-  const searchQuery = searchParams.get("q") || "";
 
   const fetchProjects = async () => {
     try {
@@ -65,27 +61,6 @@ const DashboardProjects = ({ apiUrl, userId }) => {
       fetchSavedProjects();
     }
   }, [apiUrl, userId]);
-
-  const handleSearch = async () => {
-    try {
-      const response = await api.get(
-        `http://127.0.0.1:8000/api/projects/search/?search=${encodeURIComponent(
-          searchQuery
-        )}`
-      );
-      setProjects(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (searchQuery) {
-      handleSearch();
-    } else {
-      fetchProjects();
-    }
-  }, [searchQuery]);
 
   return (
     <div className={styles.projects}>
@@ -134,7 +109,9 @@ const DashboardProjects = ({ apiUrl, userId }) => {
                       return (
                         <li key={i}>
                           <Link
-                            href={`/dashboard/find-work/most-recent?search=${skill.toLowerCase()}`}
+                            href={`/dashboard/find-work/most-recent?q=${encodeURIComponent(
+                              skill.toLowerCase()
+                            )}`}
                           >
                             {skill}
                           </Link>

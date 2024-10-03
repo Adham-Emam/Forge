@@ -9,8 +9,19 @@
 .sidebar > * {
   margin-bottom: 20px;
 }
+.sidebar .addProject {
+  display: flex;
+  height: fit-content;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
 .sidebar .addProject a {
   width: 100%;
+  height: fit-content;
+}
+.sidebar .addProject a:hover {
+  transform: scale(1.01);
 }
 .sidebar .sparks {
   display: flex;
@@ -46,9 +57,119 @@
   text-decoration: underline;
   color: var(--forge-red);
 }
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 8px;
+}
+.filters > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.filters h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+.filters label {
+  margin-left: 8px;
+  font-size: 0.95rem;
+}
+.filters input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid var(--charcoal-gray);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.filters input[type="checkbox"]:checked {
+  background-color: var(--ember-yellow);
+}
+.filters input[type="checkbox"]:hover {
+  border-color: var(--charcoal-gray) !important;
+}
+.filters input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  margin-left: 10px;
+  border: 2px solid var(--charcoal-gray);
+  color: var(--ash-white);
+  background-color: transparent;
+  border-radius: 4px;
+  box-sizing: border-box;
+  transition-duration: 0.3s;
+}
+.filters input::-webkit-outer-spin-button,
+.filters input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+.filters input[type="number"] {
+  -moz-appearance: textfield;
+}
+.filters select {
+  padding: 8px;
+  border: 2px solid var(--charcoal-gray);
+  color: var(--ash-white);
+  border-radius: 4px;
+  background-color: transparent;
+  cursor: pointer;
+}
+.filters input[type="number"]:hover,
+.filters select:hover,
+.filters input[type="number"]:focus,
+.filters select:focus {
+  border-color: var(--molten-orange);
+  outline: none;
+}
+.filters input[type="number"]:focus,
+.filters select:focus {
+  background-color: var(--charcoal-gray);
+}
+.filters input[type="number"]::placeholder {
+  color: #888;
+}
+.filters div div {
+  display: flex;
+  align-items: center;
+}
+.dropdownIcon {
+  display: none;
+  font-size: 2rem;
+  color: #ccc;
+  margin: 20px auto 0;
+  width: fit-content;
+  cursor: pointer;
+}
 @media (max-width: 991px) {
   .sidebar {
     border-radius: 25px;
     border-bottom: 1px solid var(--molten-orange);
+    background-color: transparent;
+    border: none;
+    padding: 20px;
+    overflow: hidden;
+    max-height: 100px;
+    transition: max-height 1s, background-color 0.3s 1.5s;
+  }
+  .sidebar select,
+  .sidebar input[type="number"] {
+    width: 100%;
+  }
+  .sidebar.active {
+    background-color: var(--iron-black);
+    border: 1px solid var(--molten-orange);
+    max-height: 1300px;
+    transition: max-height 1s 0.5s, background-color 0.3s;
+  }
+  .dropdownIcon {
+    display: block;
   }
 }
