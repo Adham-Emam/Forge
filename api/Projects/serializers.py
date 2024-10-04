@@ -9,12 +9,17 @@ class ProjectSerializer(serializers.ModelSerializer):
     owner_last_name = serializers.ReadOnlyField(source='owner.last_name')
     owner_title = serializers.ReadOnlyField(source='owner.user_title')
     owner_location = serializers.ReadOnlyField(source='owner.country')
+    bids = serializers.SerializerMethodField() 
 
 
     class Meta:
         model = Project
         fields = '__all__'
         read_only_fields = ['id', 'created_at', 'updated_at']
+
+    def get_bids(self, obj):
+        # Assuming a ForeignKey relationship: Bid.project
+        return Bid.objects.filter(project=obj).count()
 
 class BidSerializer(serializers.ModelSerializer):
     bidder_first_name = serializers.ReadOnlyField(source='user.first_name')

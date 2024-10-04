@@ -36,8 +36,6 @@ class Project(models.Model):
         CustomUser, related_name='projects', on_delete=models.CASCADE)
     assigned_to = models.ForeignKey(
         CustomUser, related_name='assigned_projects', on_delete=models.SET_NULL, null=True, blank=True)
-    applicants = models.ManyToManyField(CustomUser, related_name='applied_projects', blank=True)
-
     type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='freelancer')
     exchange_for = models.TextField(null=True, blank=True)
 

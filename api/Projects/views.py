@@ -474,6 +474,7 @@ class BidListCreateView(generics.ListCreateAPIView):
             Transaction.objects.create(
                 user=user,
                 currency='spark',
+                type='payment',
                 description='Bid on project',
                 amount=project.bid_amount,
             )

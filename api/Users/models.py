@@ -86,7 +86,7 @@ class Transaction(models.Model):
     )
     TYPE_CHOICES = (
         ('received', 'Received'),
-        ('sent', 'Sent'),
+        ('payment', 'payment'),
     )
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
