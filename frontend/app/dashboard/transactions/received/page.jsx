@@ -3,23 +3,25 @@ import { TransactionsTable } from "../../../components";
 import Link from "next/link";
 import styles from "../style.module.css";
 
-const AllTransactions = () => {
+const ReceivedTransaction = () => {
   return (
     <>
       <ul className={styles.tabs}>
         <li>
-          <span>All</span>
+          <Link href={"/dashboard/transactions/all"}>All</Link>
         </li>
         <li>
           <Link href={"/dashboard/transactions/sent"}>Sent</Link>
         </li>
         <li>
-          <Link href={"/dashboard/transactions/received"}>Received</Link>
+          <span>Received</span>
         </li>
       </ul>
-      <TransactionsTable apiUrl={"http://127.0.0.1:8000/api/transactions"} />
+      <TransactionsTable
+        apiUrl={"http://127.0.0.1:8000/api/transactions/?type=received"}
+      />
     </>
   );
 };
 
-export default AllTransactions;
+export default ReceivedTransaction;
