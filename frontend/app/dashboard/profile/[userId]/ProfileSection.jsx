@@ -6,7 +6,7 @@ import { getTimeDifference } from "../../../util";
 import Button from "../../../components/Button/Button";
 import Link from "next/link";
 import Image from "next/image";
-import Head from "next/head";
+import { DashboardProjects } from "../../../components";
 
 import ember from "../../../assets/ember.png";
 import {
@@ -343,86 +343,10 @@ const ProfileSection = ({ params }) => {
           </aside>
           <div className={styles.userProjects}>
             <h3>Projects</h3>
-            {!isLoading ? (
-              Object.keys(userProjects).length > 0 ? (
-                userProjects.map((project, index) => {
-                  return (
-                    <div key={index} className={styles.project}>
-                      <span className={styles.date}>
-                        {getTimeDifference(project.created_at)}
-                      </span>
-                      <Link href={`/dashboard/projects/${project.id}`}>
-                        <h3>{project.title}</h3>
-                      </Link>
-                      <div className={styles.projectOwner}>
-                        <span>
-                          <Link
-                            href={{
-                              pathname: `/dashboard/profile/${project.owner}`,
-                              query: {
-                                username:
-                                  project.owner_first_name +
-                                  " " +
-                                  project.owner_last_name,
-                                title: project.owner_title,
-                              },
-                            }}
-                          >
-                            <FaUser />
-                            {project.owner_first_name} {project.owner_last_name}
-                          </Link>
-                        </span>
-                        <span>
-                          <FaLocationDot />
-                          {project.owner_location}
-                        </span>
-                      </div>
-                      <p>
-                        {project.description.length > 300
-                          ? project.description.slice(0, 300) + "..."
-                          : project.description}
-                      </p>
-                      <ul className={styles.skills}>
-                        {project.skills_needed.map((skill, i) => {
-                          return <li key={i}>{skill}</li>;
-                        })}
-                      </ul>
-                      <div className={styles.projectGroup}>
-                        <span className={styles.budget}>
-                          <Image
-                            src={ember}
-                            alt="ember"
-                            width={30}
-                            height={30}
-                          />
-                          {project.budget}
-                        </span>
-                        <span className={styles.btn}>
-                          <Button
-                            href={{
-                              pathname: `/dashboard/projects/${project.id}`,
-                              query: {
-                                title: project.title,
-                                description: project.description,
-                              },
-                            }}
-                          >
-                            Browse Project
-                          </Button>
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <p className={styles.noProjects}>No projects found</p>
-              )
-            ) : (
-              <>
-                <LoadingContainer circle={false} />
-                <LoadingContainer circle={false} />
-              </>
-            )}
+            <DashboardProjects
+              apiUrl={`http://127.0.0.1:8000/api/projects/user/${params.userId}/`}
+              userId={params.userId}
+            />
           </div>
         </div>
       </section>

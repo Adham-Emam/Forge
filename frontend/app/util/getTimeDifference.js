@@ -15,17 +15,19 @@ const getTimeDifference = (timestamp) => {
 
   // Return the appropriate time difference
   if (years > 0) {
-    return `${years} year${years > 1 ? "s" : ""} ago`;
+    return `${years === 1 ? years : "a"} year${years > 1 ? "s" : ""} ago`;
   } else if (months > 0) {
-    return `${months} month${months > 1 ? "s" : ""} ago`;
+    return `${months === 1 ? months : "a"} month${months > 1 ? "s" : ""} ago`;
   } else if (weeks > 0) {
-    return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+    return `${weeks === 1 ? weeks : "a"} week${weeks > 1 ? "s" : ""} ago`;
   } else if (days > 0) {
-    return `${days} day${days > 1 ? "s" : ""} ago`;
+    return `${days === 1 ? days : "a"} day${days > 1 ? "s" : ""} ago`;
   } else if (hours > 0) {
-    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    return `${hours === 1 ? hours : "a"} hour${hours > 1 ? "s" : ""} ago`;
   } else if (minutes > 0) {
-    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    return `${minutes === 1 ? minutes : "a"} minute${
+      minutes > 1 ? "s" : ""
+    } ago`;
   } else {
     return `${seconds} second${seconds > 1 ? "s" : ""} ago`;
   }

@@ -7,7 +7,13 @@ import Button from "../Button/Button";
 import { getTimeDifference } from "../../util";
 import { LoadingContainer } from "..";
 
-import { FaUser, FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+  FaUser,
+  FaHeart,
+  FaRegHeart,
+  FaExchangeAlt,
+  FaBrain,
+} from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import ember from "../../assets/ember.png";
 import styles from "./style.module.css";
@@ -62,6 +68,22 @@ const DashboardProjects = ({ apiUrl, userId }) => {
     }
   }, [apiUrl, userId]);
 
+  const proposalsCounter = (proposals) => {
+    if (0 <= proposals <= 5) {
+      return "Less than 5";
+    } else if (5 < proposals <= 10) {
+      return "6 to 10";
+    } else if (10 < proposals <= 20) {
+      return "11 to 20";
+    } else if (20 < proposals <= 30) {
+      return "21 to 30";
+    } else if (30 < proposals <= 50) {
+      return "31 to 50";
+    } else {
+      return "More than 50";
+    }
+  };
+
   return (
     <div className={styles.projects}>
       {!isLoading ? (
@@ -72,35 +94,23 @@ const DashboardProjects = ({ apiUrl, userId }) => {
               !project.assigned_to && (
                 <div key={index} className={styles.project}>
                   <span className={styles.date}>
-                    {getTimeDifference(project.created_at)}
+                    Posted {getTimeDifference(project.created_at)}
                   </span>
                   <Link href={`/dashboard/projects/${project.id}`}>
                     <h3>{project.title}</h3>
                   </Link>
-                  <div className={styles.projectOwner}>
+                  <div className={styles.projectDetails}>
                     <span>
-                      <Link
-                        href={{
-                          pathname: `/dashboard/profile/${project.owner}`,
-                          query: {
-                            username:
-                              project.owner_first_name +
-                              " " +
-                              project.owner_last_name,
-                            title: project.owner_title,
-                          },
-                        }}
-                      >
-                        <FaUser />
-                        {project.owner_first_name} {project.owner_last_name}
-                      </Link>
-                    </span>
-                    <span>
-                      <IoLocationSharp />
+                      {project?.type === "freelancer"
+                        ? "Hire a freelancer"
+                        : "Skill Exchange"}
+                      {" - "}
+                      {project.experience_level}
+                      {" - "}
                       {project.owner_location}
                     </span>
                   </div>
-                  <p>
+                  <p className={styles.ProjectDescription}>
                     {project.description.slice(0, 300)}
                     {project.description.length > 300 && "..."}
                   </p>
@@ -119,6 +129,7 @@ const DashboardProjects = ({ apiUrl, userId }) => {
                       );
                     })}
                   </ul>
+                  <p>{proposalsCounter(project.bids)} proposals</p>
                   <span
                     onClick={() => saveProject(project)}
                     className={styles.save}
@@ -156,8 +167,8 @@ const DashboardProjects = ({ apiUrl, userId }) => {
         )
       ) : (
         <>
-          <LoadingContainer />
-          <LoadingContainer />
+          <LoadingContainer circle={false} />
+          <LoadingContainer circle={false} />
         </>
       )}
     </div>

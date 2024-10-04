@@ -122,14 +122,13 @@ const ProjectSection = ({ projectId }) => {
               </ul>
             </aside>
             <main>
-              <span>{getTimeDifference(project?.created_at)}</span>
+              <span>Posted {getTimeDifference(project?.created_at)}</span>
               <h1>{project?.title}</h1>
               <div className={styles.content}>
                 <p>{project?.description}</p>
               </div>
               {project?.experience_level && (
                 <>
-                  <hr />
                   <div className={styles.levelContainer}>
                     <p className={styles.level}>
                       <FaBrain /> Preferred experience level:{" "}
@@ -157,6 +156,15 @@ const ProjectSection = ({ projectId }) => {
                   <span key={index}>{skill}</span>
                 ))}
               </div>
+              {project?.type === "exchange" && (
+                <>
+                  <hr />
+                  <div className={styles.exchange}>
+                    <h3>Exchange For</h3>
+                    <p>{project.exchange_for}</p>
+                  </div>
+                </>
+              )}
               <div>
                 <hr />
                 <h3>Bids</h3>

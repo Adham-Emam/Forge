@@ -29,6 +29,7 @@ const DashboardHead = ({ activeTab }) => {
     router.push(
       `/dashboard/find-work/most-recent?q=${encodeURIComponent(query)}`
     );
+    e.target[0].value = "";
   };
 
   return (

@@ -14,35 +14,29 @@
 .projects .project h3 {
   font-size: 1.5rem;
   margin: 5px 0 20px;
+  color: var(--ash-white);
+  transition-duration: 0.3s;
 }
-.projects .project .projectOwner {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-.projects .project .projectOwner span {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  width: 100%;
-}
-.projects .project .projectOwner span:first-child a {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-.projects .project .projectOwner span:first-child a:hover {
+.projects .project h3:hover {
   text-decoration: underline;
-}
-.projects .project .projectOwner span svg {
   color: var(--molten-orange);
 }
-.projects .project p {
+.projects .project .projectDetails {
+  opacity: 0.6;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+.projects .project .ProjectDescription {
+  word-break: break-all;
+  margin-bottom: 20px;
+  min-height: 50px;
+  opacity: 1 !important;
+}
+.projects .project p,
+.projects .project .ProjectDescription {
   opacity: 0.6;
   line-height: 1.5;
   font-size: 0.9rem;
-  word-break: break-all;
-  margin-bottom: 20px;
 }
 .projects .project .skills {
   list-style: none;
@@ -65,7 +59,7 @@
   align-items: center;
   justify-content: flex-end;
   gap: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
 }
 .projects .project .budget {
   background-color: var(--charcoal-gray);
