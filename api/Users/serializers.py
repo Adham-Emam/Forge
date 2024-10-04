@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser, Notification,Transaction
-
+from datetime import datetime
 
 class CreateUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -70,6 +70,37 @@ class CustomUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
         read_only_fields = ['id', 'created_at', 'updated_at', 'username','credits','sparks', 'email']
 
+
+    def validate_gender(self, value):
+        if value not in ['Male', 'Female', 'Prefer not to say', None]:  # Add more gender options if needed
+            raise serializers.ValidationError("Gender must be either 'Male', 'Female', or ''.")
+        return value
+
+    def validate_skills(self, value):
+        # Check if skills is a list and not empty
+        if not isinstance(value, list) or not all(isinstance(skill, str) for skill in value):
+            raise serializers.ValidationError("Skills must be a list of strings.")
+        if not value:
+            raise serializers.ValidationError("Skills may not be empty.")
+        return value
+
+    def validate_interests(self, value):
+        # Check if interests is a list and not empty
+        if not isinstance(value, list) or not all(isinstance(interest, str) for interest in value):
+            raise serializers.ValidationError("Interests must be a list of strings.")
+        if not value:
+            raise serializers.ValidationError("Interests may not be empty.")
+        return value
+
+    def validate_birth_date(self, value):
+        # Ensure the birth date is not in the future
+        if value and value > datetime.date.today():
+            raise serializers.ValidationError("Birth date cannot be in the future.")
+        return value
+
+    def validate(self, attrs):
+        # Add any additional cross-field validation if necessary
+        return super().validate(attrs)
 
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,5 +1,5 @@
 from rest_framework import generics, status, viewsets
-from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from .models import CustomUser, Notification, Transaction
 from .serializers import CreateUserSerializer, CustomUserSerializer, NotificationSerializer, TransactionSerializer
@@ -19,7 +19,7 @@ class CreateUserView(generics.CreateAPIView):
         notification = Notification.objects.create(
             user=user,
             type="welcome",
-            url=f"/dashboard/profile/{user.id}?username={user.first_name}+{user.last_name}&title={user.title}",
+            url=f"/dashboard/profile/{user.id}?username={user.first_name}+{user.last_name}&title={user.user_title}",
             message="Welcome to Forge! Get started by creating a project.",
         )
         notification.save()
@@ -27,7 +27,7 @@ class CreateUserView(generics.CreateAPIView):
         return Response({
             "user": CustomUserSerializer(user, context=self.get_serializer_context()).data,
             "message": "User Created Successfully.  Now perform Login to get your token",
-        })
+        }, status=status.HTTP_201_CREATED)
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -37,7 +37,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CurrentUserViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def retrieve(self, request):
         user = request.user
@@ -60,15 +60,15 @@ class CurrentUserViewSet(viewsets.ViewSet):
 
 class NotificationsList(generics.ListAPIView):
     serializer_class = NotificationSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-
+    permission_classes = [IsAuthenticated]
+    
     def get_queryset(self):
         user = self.request.user.id
         return Notification.objects.filter(user=user, is_read=False)
     
 class MarkNotificationAsRead(generics.UpdateAPIView):
     serializer_class = NotificationSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user.id
@@ -77,15 +77,15 @@ class MarkNotificationAsRead(generics.UpdateAPIView):
 
 class TransactionList(generics.ListAPIView):
     serializer_class = TransactionSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user.id
-        type = self.kwargs.get('type')
+        transaction_type = self.request.query_params.get('type', None)
 
-        if type == "received":
+        if transaction_type == "received":
             return Transaction.objects.filter(user=user, type="received")
-        elif type == "sent":
+        elif transaction_type == "sent":
             return Transaction.objects.filter(user=user , type="sent")
         else :
             return Transaction.objects.filter(user=user)

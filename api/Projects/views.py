@@ -1,10 +1,11 @@
 from rest_framework import status
-from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from .models import Project, Bid
 from Users.models import CustomUser, Notification, Transaction
 from .serializers import ProjectSerializer, BidSerializer
-from rest_framework.permissions import  IsAuthenticatedOrReadOnly
+from rest_framework.permissions import  IsAuthenticatedOrReadOnly, IsAuthenticated
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 from django.db import IntegrityError
@@ -186,6 +187,8 @@ class ProjectListCreateView(generics.ListCreateAPIView):
             return Response(ProjectSerializer(project).data, status=status.HTTP_201_CREATED)
         except IntegrityError:
             return Response({'error': 'Project already exists.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
@@ -434,58 +437,56 @@ class BidListCreateView(generics.ListCreateAPIView):
     queryset = Bid.objects.all()
     serializer_class = BidSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    
+
     def get_queryset(self):
         project_id = self.kwargs['project_id']
         return Bid.objects.filter(project=project_id)
-    
-    def post(self, request,  **kwargs):
-        project_id = kwargs['project_id']
+
+
+    def post(self, request, **kwargs):
+        project_id = self.kwargs['project_id']
         project = get_object_or_404(Project, id=project_id)
-        user = request.user
-        proposal = request.data.get('proposal')
-        amount = request.data.get('amount')
-        duration = request.data.get('duration')
+        user = self.request.user
+        proposal = self.request.data.get('proposal')
+        amount = self.request.data.get('amount')
+        duration = self.request.data.get('duration')
         
-        if user == project.owner:
-            return Response({'error': 'You cannot bid on your project'}, status=status.HTTP_403_FORBIDDEN)
-        elif user.sparks < project.bid_amount:
-            return Response({'error': 'You do not have enough sparks to bid on this project'}, status=status.HTTP_400_BAD_REQUEST)
-        elif duration < 1 or duration > 365:
-            return Response({'error': 'Duration must be between 1 and 365 days'}, status=status.HTTP_400_BAD_REQUEST)
-        elif amount <= 0:
-            return Response({'error': 'Amount must be greater than 0'}, status=status.HTTP_400_BAD_REQUEST)
-        elif amount > project.budget:
-            return Response({'error': 'Amount must be less than or equal to project budget'}, status=status.HTTP_400_BAD_REQUEST)
-        elif duration <= 0:
-            return Response({'error': 'Duration must be greater than 0'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Include the project in the request data for validation purposes
+        data = request.data.copy()  
+        data['project'] = project_id  
 
         try:
-            bid = Bid(project=project, user=user, proposal=proposal, amount=amount, duration=duration)
-            bid.save()
-            
+            # Validate the request data
+            serializer = BidSerializer(data=data, context={'request': request, 'project_id': project_id })
+
+            # Validate the data
+            serializer.is_valid(raise_exception=True)
+            # If validation passes, create the bid
+            serializer.save(user=user, project=project, proposal=proposal, amount=amount, duration=duration)
+
+
+            # Reduce sparks
             user.sparks -= project.bid_amount
             user.save()
 
-            transaction = Transaction(
+            # Create the transaction
+            Transaction.objects.create(
                 user=user,
                 currency='spark',
                 description='Bid on project',
                 amount=project.bid_amount,
             )
-            transaction.save()
 
             # Send Notification to the project owner
-            notification= Notification.objects.create(
-            user=project.owner,
-            type="bid",
-            url=f"/dashboard/projects/{project.id}?title={project.title}&description={project.description}",
-            message=f"{user.first_name} {user.last_name} has submitted a bid on your project."
+            Notification.objects.create(
+                user=project.owner,
+                type="bid",
+                url=f"/dashboard/projects/{project.id}?title={project.title}&description={project.description}",
+                message=f"{user.first_name} {user.last_name} has submitted a bid on your project."
             )
-            notification.save()
 
-
+            return Response({'message': 'Bid created successfully'}, status=status.HTTP_201_CREATED)
         except IntegrityError:
-            return Response({'error': 'You have already bid on this project'}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({'message': 'Bid created successfully'})
+            # Handle the case where a duplicate bid is attempted
+            raise ValidationError({'error': 'You cannot apply again for this project.'})

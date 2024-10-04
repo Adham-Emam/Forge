@@ -12,6 +12,7 @@ const ApplyForm = ({ projectId }) => {
     duration: 0,
     proposal: "",
   });
+  const [projectData, setProjectData] = useState({});
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -28,6 +29,21 @@ const ApplyForm = ({ projectId }) => {
     });
   };
 
+  useEffect(() => {
+    const fetchProjectData = async () => {
+      try {
+        const response = await api.get(
+          `http://127.0.0.1:8000/api/projects/${projectId}`
+        );
+        setProjectData(response.data);
+      } catch (error) {
+        console.log(error);
+        router.push("/404");
+      }
+    };
+    fetchProjectData();
+  }, [projectId, router]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -35,9 +51,21 @@ const ApplyForm = ({ projectId }) => {
       await api.post(`http://127.0.0.1:8000/api/projects/${projectId}/bids/`, {
         ...formData,
       });
-      router.push("/dashboard/projects/" + projectId);
+      router.push(
+        `/dashboard/projects/${projectId}?title=${projectData.title}&description=${projectData.description}`
+      );
+      setError("");
     } catch (error) {
-      setError(error.response.data.error);
+      if (error.response.data.duration) {
+        setError(error.response.data.duration[0]);
+        document.getElementById("duration").focus();
+      } else if (error.response.data.error) {
+        setError(error.response.data.error);
+      } else if (error.response.data.error[0]) {
+        setError(error.response.data.error[0]);
+      } else {
+        setError("An error occurred. Please try again.");
+      }
     }
   };
 

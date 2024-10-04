@@ -19,7 +19,7 @@ class Project(models.Model):
     EXPERIENCE_LEVEL_CHOICES = (
         ('beginner', 'Beginner'),
         ('intermediate', 'Intermediate'),
-        ('Expert', 'Expert'),
+        ('expert', 'Expert'),
     )
 
     title = models.CharField(max_length=200)
