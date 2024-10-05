@@ -167,7 +167,7 @@ const ProjectSection = ({ projectId }) => {
               )}
               <div>
                 <hr />
-                <h3>Bids</h3>
+                <h3>Proposals</h3>
                 <ul>
                   {bids.length > 0 ? (
                     bids.map((bid) => (

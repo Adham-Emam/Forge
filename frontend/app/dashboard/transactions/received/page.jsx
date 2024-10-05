@@ -11,7 +11,7 @@ const ReceivedTransaction = () => {
           <Link href={"/dashboard/transactions/all"}>All</Link>
         </li>
         <li>
-          <Link href={"/dashboard/transactions/sent"}>Sent</Link>
+          <Link href={"/dashboard/transactions/payment"}>Payment</Link>
         </li>
         <li>
           <span>Received</span>

@@ -85,8 +85,8 @@ class TransactionList(generics.ListAPIView):
 
         if transaction_type == "received":
             return Transaction.objects.filter(user=user, type="received")
-        elif transaction_type == "sent":
-            return Transaction.objects.filter(user=user , type="sent")
+        elif transaction_type == "payment":
+            return Transaction.objects.filter(user=user , type="payment")
         else :
             return Transaction.objects.filter(user=user)
 

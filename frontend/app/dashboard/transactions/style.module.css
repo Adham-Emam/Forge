@@ -24,18 +24,21 @@
 }
 .tabs li {
   padding: 15px 0;
+  margin: 0 10px;
   width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .tabs li a {
   opacity: 0.3;
   padding: 0 15px;
 }
 .tabs li span {
-  color: var(--ember-yellow);
   padding: 0 15px;
+  color: var(--ember-yellow);
   opacity: 1 !important;
   position: relative;
-  transition-duration: 0.3s;
 }
 .tabs li span::before {
   content: "";
@@ -44,5 +47,6 @@
   background-color: var(--ember-yellow);
   position: absolute;
   bottom: -15px;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
 }
