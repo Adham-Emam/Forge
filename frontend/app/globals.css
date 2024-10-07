@@ -28,7 +28,7 @@
 
 /* Default container width */
 .container {
-  max-width: 1200px;
+  max-width: 1500px;
   padding: 0 50px;
   margin: 0 auto; /* Center the container */
 }
