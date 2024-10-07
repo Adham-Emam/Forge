@@ -19,7 +19,7 @@
   color: var(--ash-white);
   transition-duration: 0.3s;
   border-radius: 5px;
-  padding: 5px;
+  padding: 5px 10px;
   outline: none;
 }
 .pageSize select:hover,

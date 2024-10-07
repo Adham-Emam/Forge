@@ -1,6 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { DashboardHead, DashboardProjects } from "../../../components";
+import {
+  DashboardHead,
+  DashboardProjects,
+  PagesNumber,
+} from "../../../components";
 import { useSearchParams } from "next/navigation";
 import api from "../../../api";
 import styles from "../style.module.css";
@@ -8,6 +12,7 @@ import styles from "../style.module.css";
 const MostRecent = () => {
   const [userId, setUserId] = useState(null);
   const [apiUrl, setApiUrl] = useState("http://127.0.0.1:8000/api/projects/");
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || 1);
@@ -23,10 +28,13 @@ const MostRecent = () => {
 
   const fetchUserId = async () => {
     try {
+      setIsLoading(true);
       const response = await api.get("http://127.0.0.1:8000/api/current-user/");
       setUserId(response.data.id);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -69,6 +77,7 @@ const MostRecent = () => {
     <div className={styles.dashboard}>
       <DashboardHead activeTab={"recent"} />
       {apiUrl && <DashboardProjects apiUrl={apiUrl} userId={userId} />}
+      {!isLoading && <PagesNumber apiUrl={apiUrl} />}
     </div>
   );
 };

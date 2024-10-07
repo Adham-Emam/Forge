@@ -5,14 +5,14 @@ import Link from "next/link";
 import Image from "next/image";
 import Button from "../Button/Button";
 import { getTimeDifference } from "../../util";
-import { LoadingContainer, PagesNumber } from "..";
+import { LoadingContainer } from "..";
 
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ember from "../../assets/ember.png";
 import styles from "./style.module.css";
 
 const DashboardProjects = ({ apiUrl, userId }) => {
-  const [projects, setProjects] = useState([]);
+  const [userProjects, setUserProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [savedProjects, setSavedProjects] = useState([]);
 
@@ -20,7 +20,7 @@ const DashboardProjects = ({ apiUrl, userId }) => {
     try {
       setIsLoading(true);
       const response = await api.get(apiUrl);
-      setProjects(response.data.results);
+      setUserProjects(response.data.results);
     } catch (error) {
       console.log(error);
     } finally {
@@ -80,8 +80,8 @@ const DashboardProjects = ({ apiUrl, userId }) => {
   return (
     <div className={styles.projects}>
       {!isLoading ? (
-        projects.length > 0 ? (
-          projects.map((project, index) => {
+        userProjects.length > 0 ? (
+          userProjects.map((project, index) => {
             return (
               project.status === "open" &&
               !project.assigned_to && (
@@ -164,7 +164,6 @@ const DashboardProjects = ({ apiUrl, userId }) => {
           <LoadingContainer circle={false} />
         </>
       )}
-      {!isLoading && projects.length > 0 && <PagesNumber apiUrl={apiUrl} />}
     </div>
   );
 };

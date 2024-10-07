@@ -2,16 +2,11 @@
 import React, { useState, useEffect } from "react";
 import api from "../../../api";
 import { useRouter } from "next/navigation";
-import { getTimeDifference } from "../../../util";
 import Button from "../../../components/Button/Button";
-import Link from "next/link";
 import Image from "next/image";
-import { DashboardProjects } from "../../../components";
 
-import ember from "../../../assets/ember.png";
 import {
   FaEdit,
-  FaUser,
   FaGlobe,
   FaGithub,
   FaInstagram,
@@ -58,10 +53,10 @@ const ProfileSection = ({ params }) => {
     }
   };
 
-  const fetchUserProjects = async () => {
+  const fetchProjects = async () => {
     try {
       const response = await api.get(
-        `http://127.0.0.1:8000/api/projects/user/${params.userId}/`
+        `http://127.0.0.1:8000/api/projects/${params.userId}/`
       );
       setUserProjects(response.data);
     } catch (error) {
@@ -71,7 +66,7 @@ const ProfileSection = ({ params }) => {
 
   useEffect(() => {
     setIsLoading(true);
-    Promise.all([fetchUserData(), isCurrentUser(), fetchUserProjects()]).then(
+    Promise.all([fetchUserData(), isCurrentUser(), fetchProjects()]).then(
       () => {
         setIsLoading(false);
       }
@@ -341,13 +336,6 @@ const ProfileSection = ({ params }) => {
               </>
             )}
           </aside>
-          <div className={styles.userProjects}>
-            <h3>Projects</h3>
-            <DashboardProjects
-              apiUrl={`http://127.0.0.1:8000/api/projects/user/${params.userId}/`}
-              userId={params.userId}
-            />
-          </div>
         </div>
       </section>
     </>

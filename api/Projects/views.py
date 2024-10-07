@@ -13,7 +13,7 @@ from django.db import IntegrityError
 
 
 class ProjectPagination(PageNumberPagination):
-    page_size = 3  # Number of projects per page
+    page_size = 10  # Number of projects per page
     page_size_query_param = 'page_size'  # Allow client to control page size with a query param
     max_page_size = 100  # Max page size allowed
 
