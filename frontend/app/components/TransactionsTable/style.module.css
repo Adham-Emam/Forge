@@ -2,8 +2,9 @@
   margin: 30px auto;
   width: 95%;
   overflow-x: auto;
-  background-color: var(--iron-black);
+  /* background-color: var(--iron-black); */
   text-align: center;
+  box-shadow: -1px 1px 5px 0px var(--molten-orange);
 }
 .table table {
   width: 100%;
@@ -18,6 +19,7 @@
 }
 .table th {
   background-color: var(--steel-blue);
+  background-color: var(--iron-black);
   font-weight: 900;
 }
 .table td {
