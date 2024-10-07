@@ -10,6 +10,8 @@ const SavedProjects = () => {
   const [apiUrl, setApiUrl] = useState(null);
 
   const searchParams = useSearchParams();
+  const page = parseInt(searchParams.get("page") || 1);
+  const pageSize = searchParams.get("page_size") || 10;
   const projectType = searchParams.get("projectType") || "";
   const experienceLevel = searchParams.get("experienceLevel") || "";
   const budget = searchParams.get("budget") || "";
@@ -34,6 +36,8 @@ const SavedProjects = () => {
   useEffect(() => {
     const params = new URLSearchParams();
 
+    if (page) params.append("page", page);
+    if (pageSize) params.append("page_size", pageSize);
     if (projectType) params.append("project_type", projectType);
     if (experienceLevel) params.append("experience_level", experienceLevel);
     if (budget) params.append("budget", budget);

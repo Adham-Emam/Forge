@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+from rest_framework.pagination import PageNumberPagination
 from .models import Project, Bid
 from Users.models import CustomUser, Notification, Transaction
 from .serializers import ProjectSerializer, BidSerializer
@@ -10,9 +11,19 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q, Count
 from django.db import IntegrityError
 
+
+class ProjectPagination(PageNumberPagination):
+    page_size = 3  # Number of projects per page
+    page_size_query_param = 'page_size'  # Allow client to control page size with a query param
+    max_page_size = 100  # Max page size allowed
+
+
+
 class ProjectListCreateView(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    pagination_class = ProjectPagination
+
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -206,7 +217,7 @@ class UserProjectsList(generics.ListAPIView):
 class UserProjectMatchesList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ProjectSerializer
-
+    pagination_class = ProjectPagination
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']
@@ -315,6 +326,7 @@ class UserProjectMatchesList(generics.ListAPIView):
 class UserSavedProjectsList(generics.ListAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = ProjectSerializer
+    pagination_class = ProjectPagination
 
     def get_queryset(self):
         user_id = self.kwargs['user_id']

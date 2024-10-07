@@ -10,6 +10,8 @@ const MostRecent = () => {
   const [apiUrl, setApiUrl] = useState("http://127.0.0.1:8000/api/projects/");
 
   const searchParams = useSearchParams();
+  const page = parseInt(searchParams.get("page") || 1);
+  const pageSize = searchParams.get("page_size") || 10;
   const searchQuery = searchParams.get("q") || "";
   const projectType = searchParams.get("projectType") || "";
   const experienceLevel = searchParams.get("experienceLevel") || "";
@@ -35,6 +37,8 @@ const MostRecent = () => {
   useEffect(() => {
     const params = new URLSearchParams();
 
+    if (page) params.append("page", page);
+    if (pageSize) params.append("page_size", pageSize);
     if (searchQuery) params.append("search", searchQuery);
     if (projectType) params.append("project_type", projectType);
     if (experienceLevel) params.append("experience_level", experienceLevel);

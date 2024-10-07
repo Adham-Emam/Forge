@@ -5,16 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import Button from "../Button/Button";
 import { getTimeDifference } from "../../util";
-import { LoadingContainer } from "..";
+import { LoadingContainer, PagesNumber } from "..";
 
-import {
-  FaUser,
-  FaHeart,
-  FaRegHeart,
-  FaExchangeAlt,
-  FaBrain,
-} from "react-icons/fa";
-import { IoLocationSharp } from "react-icons/io5";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import ember from "../../assets/ember.png";
 import styles from "./style.module.css";
 
@@ -27,7 +20,7 @@ const DashboardProjects = ({ apiUrl, userId }) => {
     try {
       setIsLoading(true);
       const response = await api.get(apiUrl);
-      setProjects(response.data);
+      setProjects(response.data.results);
     } catch (error) {
       console.log(error);
     } finally {
@@ -39,7 +32,7 @@ const DashboardProjects = ({ apiUrl, userId }) => {
     const response = await api.get(
       `http://127.0.0.1:8000/api/projects/user/${userId}/saved/`
     );
-    setSavedProjects(response.data);
+    setSavedProjects(response.data.results);
   };
 
   const isProjectSaved = (project) => {
@@ -171,6 +164,7 @@ const DashboardProjects = ({ apiUrl, userId }) => {
           <LoadingContainer circle={false} />
         </>
       )}
+      {!isLoading && projects.length > 0 && <PagesNumber apiUrl={apiUrl} />}
     </div>
   );
 };
