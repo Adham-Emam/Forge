@@ -223,7 +223,7 @@ class TransactionListTests(APITestCase):
         )
         self.sent_transaction = Transaction.objects.create(
             user=self.user,
-            type="sent",
+            type="payment",
             amount=50
         )
 
@@ -238,7 +238,7 @@ class TransactionListTests(APITestCase):
         self.assertEqual(response.data[0]['amount'], 100)  # Check content
 
     def test_get_sent_transactions_authenticated(self):
-        response = self.client.get(f'{self.sent_url}?type=sent', **{'HTTP_AUTHORIZATION': f'Bearer {self.token}'}, format='json')
+        response = self.client.get(f'{self.sent_url}?type=payment', **{'HTTP_AUTHORIZATION': f'Bearer {self.token}'}, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)  # Should return only sent transactions
         self.assertEqual(response.data[0]['amount'], 50)  # Check content
