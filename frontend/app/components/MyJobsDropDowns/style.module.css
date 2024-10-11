@@ -13,7 +13,6 @@
 .dropdown h3 {
   width: fit-content;
   color: var(--ash-white);
-  pointer-events: none;
 }
 .head {
   background-color: var(--iron-black);
@@ -54,6 +53,25 @@
 .hint svg:hover {
   opacity: 1;
   color: var(--molten-orange);
+}
+.hint svg:hover + span {
+  opacity: 1;
+}
+.hint span {
+  position: absolute;
+  min-width: 150px;
+  max-width: 250px;
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translateY(-50%);
+  background-color: var(--charcoal-gray);
+  border: 1px solid var(--molten-orange);
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: var(--ash-white);
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 .show {
   border: 1px solid var(--molten-orange);
@@ -101,5 +119,29 @@
 }
 .item p {
   opacity: 0.7;
+  font-size: 0.8rem;
+  line-height: 1.4;
   word-break: break-all;
+}
+.btn {
+  display: block;
+  width: fit-content;
+  margin-top: 20px;
+  margin-left: auto;
+}
+.btn a:hover {
+  color: var(--ash-white);
+  text-decoration: none;
+  transform: none;
+}
+@media (max-width: 767px) {
+  .hint svg {
+    display: none;
+  }
+  .body {
+    padding: 0 10px;
+  }
+  .item {
+    padding: 20px 10px;
+  }
 }

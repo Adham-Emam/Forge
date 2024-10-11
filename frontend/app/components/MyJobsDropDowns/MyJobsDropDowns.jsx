@@ -3,12 +3,13 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import api from "../../api";
 import { getTimeDifference } from "../../util";
+import Button from "../Button/Button";
 
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { AiFillQuestionCircle } from "react-icons/ai";
 import styles from "./style.module.css";
 
-const MyJobsDropDowns = ({ title, hint, apiUrl, type }) => {
+const MyJobsDropDowns = ({ title, hint, apiUrl, type, accept = false }) => {
   const [show, setShow] = useState(false);
   const [items, setItems] = useState([]);
 
@@ -38,8 +39,9 @@ const MyJobsDropDowns = ({ title, hint, apiUrl, type }) => {
           {title} ({items.length})
         </h3>
         {hint && (
-          <div className={styles.hint} title={hint}>
+          <div className={styles.hint}>
             <AiFillQuestionCircle />
+            <span>{hint}</span>
           </div>
         )}
         {items.length > 0 && (
@@ -66,7 +68,20 @@ const MyJobsDropDowns = ({ title, hint, apiUrl, type }) => {
               >
                 <h4>{type === "projects" ? item.title : item.project_title}</h4>
               </Link>
-              <p>{type === "projects" ? item.description : item.proposal}</p>
+              <p>
+                {type === "projects"
+                  ? item.description.length > 300
+                    ? `${item.description.slice(0, 300)}...`
+                    : item.description
+                  : item.proposal.length > 300
+                  ? `${item.proposal.slice(0, 300)}...`
+                  : item.proposal}
+              </p>
+              {type === "proposals" && accept && (
+                <div className={styles.btn}>
+                  <Button href={"#"}>Accept Proposal</Button>
+                </div>
+              )}
             </div>
           ))}
         </div>

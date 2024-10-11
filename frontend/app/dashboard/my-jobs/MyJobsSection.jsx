@@ -55,6 +55,7 @@ const MyJobsSection = () => {
             hint="Proposals on your own projects."
             apiUrl={`http://127.0.0.1:8000/api/projects/user/bids/?owner=true`}
             type={activeTab}
+            accept
           />
         </>
       )}
