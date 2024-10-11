@@ -1,4 +1,5 @@
 from django.urls import reverse
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.test import APIClient, APITestCase
 from rest_framework import status
 from .models import Project, Bid
@@ -582,3 +583,73 @@ class BidListCreateViewTests(APITestCase):
         self.assertEqual(response.data['error'][0], 'Amount must be less than or equal to the project budget.')
 
 
+class UsersBidsListTests(APITestCase):
+
+    def setUp(self):
+
+
+        # Create a user
+        self.user = CustomUser.objects.create_user(username='testuser',email='example1@ex.io', password='testpassword')
+
+        self.refresh_token = RefreshToken.for_user(self.user)
+        self.token = str(self.refresh_token.access_token)
+
+        # Create another user
+        self.other_user = CustomUser.objects.create_user(username='otheruser',email='example2@ex.io', password='otherpassword')
+
+        
+        # Create a project owner
+        self.owner = CustomUser.objects.create_user(username='testowner',email='example3@ex.io', password='testpassword')
+
+        # Create a project
+        self.project = Project.objects.create(
+            title="Java Project",
+            description="A simple Java project",
+            skills_needed=["Java"],
+            duration=30,
+            budget=1000,
+            bid_amount=10,
+            type="freelancer",
+            experience_level="beginner",
+            owner=self.owner
+        )
+
+        # Create bids for the users
+        self.user_bid = Bid.objects.create(user=self.user, project=self.project, amount=100)
+        self.other_user_bid = Bid.objects.create(user=self.other_user, project=self.project, amount=200)
+
+        # Set up the API client
+        self.client = APIClient()
+
+    def test_authenticated_user_gets_own_bids(self):
+        # Get the user's bids
+        url = reverse('user-bids-list') 
+        response = self.client.get(url, format='json')
+
+        # Check the response status
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Check that the user receives only their own bids
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['user'], self.user.id)
+
+    def test_unauthenticated_user_cannot_access_bids(self):
+        # Attempt to get bids without authentication
+        url = reverse('user-bids-list') 
+        response = self.client.get(url ,  **{'HTTP_AUTHORIZATION': f'Bearer {self.token}'}, format='json')
+
+        # Ensure the response is forbidden (or allowed for read-only access)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_other_user_cannot_see_another_user_bids(self):
+
+        # Get the other user's bids
+        url = reverse('user-bids-list') 
+        response = self.client.get(url ,  **{'HTTP_AUTHORIZATION': f'Bearer {self.token}'}, format='json')
+
+        # Check the response status
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        # Ensure the other user only sees their own bids
+        self.assertEqual(len(response.data), 1)
+        self.assertEqual(response.data[0]['user'], self.other_user.id)

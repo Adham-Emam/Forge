@@ -9,7 +9,6 @@ class Project(models.Model):
         ('open', 'Open'),
         ('in_progress', 'In Progress'),
         ('closed', 'Closed'),
-        ('completed', 'Completed'),
     )
     TYPE_CHOICES = (
         ('exchange', 'Exchange'),

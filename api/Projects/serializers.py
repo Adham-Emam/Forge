@@ -24,6 +24,9 @@ class ProjectSerializer(serializers.ModelSerializer):
 class BidSerializer(serializers.ModelSerializer):
     bidder_first_name = serializers.ReadOnlyField(source='user.first_name')
     bidder_last_name = serializers.ReadOnlyField(source='user.last_name')
+    project_title = serializers.ReadOnlyField(source='project.title')
+    project_description = serializers.ReadOnlyField(source='project.description')
+
     class Meta:
         model = Bid
         fields = '__all__'

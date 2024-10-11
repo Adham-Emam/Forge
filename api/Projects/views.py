@@ -210,8 +210,17 @@ class UserProjectsList(generics.ListAPIView):
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
-        user_id = self.kwargs['user_id']
+        user_id = self.request.user.id
         user = get_object_or_404(CustomUser, id=user_id)
+        status = self.request.query_params.get('status')
+        if status == 'open':
+            return Project.objects.filter(owner=user, status='open')
+        elif status == 'in_progress':
+            return Project.objects.filter(status='in_progress', assigned_to=user)
+        elif status == 'my_in_progress':
+            return Project.objects.filter(owner=user, status='in_progress')
+        elif status == 'closed':
+            return Project.objects.filter(owner=user, status='closed')
         return Project.objects.filter(owner=user)
 
 class UserProjectMatchesList(generics.ListAPIView):
@@ -503,3 +512,22 @@ class BidListCreateView(generics.ListCreateAPIView):
         except IntegrityError:
             # Handle the case where a duplicate bid is attempted
             raise ValidationError({'error': 'You cannot apply again for this project.'})
+
+
+class UsersBidsList(generics.ListAPIView):
+    serializer_class = BidSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        status = self.request.query_params.get('status')
+        owner = self.request.query_params.get('owner', 'false')
+
+        if status == 'open':
+            return Bid.objects.filter(user=user, project__status='open')
+        elif status == 'in_progress':
+            return Bid.objects.filter(user=user, project__status='in_progress', project__assigned_to=user)
+        elif owner == 'true':
+            return Bid.objects.filter(project__owner=user, project__status='open')
+
+        return Bid.objects.filter(user=user, project__status__in=['open', 'in_progress', 'closed'])

@@ -210,7 +210,7 @@ const DashboardNavbar = () => {
           </Link>
         </li>
         <li>
-          <Link href="/my-jobs">
+          <Link href="/dashboard/my-jobs">
             <IoMdBriefcase /> My Jobs
           </Link>
         </li>
