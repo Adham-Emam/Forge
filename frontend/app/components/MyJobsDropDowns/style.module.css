@@ -96,6 +96,7 @@
   padding: 20px;
   border-radius: 20px;
   margin-bottom: 20px;
+  position: relative;
 }
 .item a {
   display: block;
@@ -125,14 +126,87 @@
 }
 .btn {
   display: block;
+  background-color: var(--molten-orange);
+  color: var(--ash-white);
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
   width: fit-content;
   margin-top: 20px;
   margin-left: auto;
+  transition: 0.3s;
+  font-weight: 700;
+  cursor: pointer;
 }
-.btn a:hover {
+.btn:hover {
+  background-color: var(--forge-red);
+}
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 400;
+}
+.edit {
+  position: absolute;
+  top: 20px;
+  right: 50px;
   color: var(--ash-white);
-  text-decoration: none;
-  transform: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition-duration: 0.3s;
+}
+.edit:hover {
+  color: var(--molten-orange);
+}
+.delete {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--ash-white);
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition-duration: 0.3s;
+}
+.delete:hover {
+  color: var(--forge-red);
+}
+.popup {
+  display: none;
+  padding: 20px;
+  background-color: var(--charcoal-gray);
+  border-radius: 20px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid var(--molten-orange);
+  z-index: 500;
+}
+.overlay.active,
+.popup.active {
+  display: block;
+}
+.popup h3 {
+  margin-bottom: 10px;
+}
+.popup .buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.popup .buttons .btn {
+  margin-left: 10px;
 }
 @media (max-width: 767px) {
   .hint svg {

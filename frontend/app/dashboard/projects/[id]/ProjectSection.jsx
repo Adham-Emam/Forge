@@ -192,7 +192,7 @@ const ProjectSection = ({ projectId }) => {
                       </li>
                     ))
                   ) : (
-                    <p>No bids yet</p>
+                    <p className={styles.noBids}>No bids yet</p>
                   )}
                 </ul>
               </div>

@@ -528,6 +528,6 @@ class UsersBidsList(generics.ListAPIView):
         elif status == 'in_progress':
             return Bid.objects.filter(user=user, project__status='in_progress', project__assigned_to=user)
         elif owner == 'true':
-            return Bid.objects.filter(project__owner=user, project__status='open')
+            return Bid.objects.filter(project__owner=user, project__status='open', project__assigned_to=None)
 
         return Bid.objects.filter(user=user, project__status__in=['open', 'in_progress', 'closed'])

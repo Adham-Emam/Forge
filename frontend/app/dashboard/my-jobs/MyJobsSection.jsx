@@ -73,16 +73,16 @@ const MyJobsSection = () => {
             apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=open`}
           />
           <MyJobsDropDowns
-            title="Active projects"
+            title="Your active projects"
             hint="Projects you hired someone to do."
             type={activeTab}
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=in_progress`}
+            apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=my_in_progress`}
           />
           <MyJobsDropDowns
             title="In progress projects"
             hint="Projects you are currently working on."
             type={activeTab}
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=my_in_progress`}
+            apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=in_progress`}
           />
           <MyJobsDropDowns
             title="Closed projects"
