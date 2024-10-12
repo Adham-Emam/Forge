@@ -238,6 +238,9 @@
   .navbar .navMenu {
     gap: 10px;
   }
+  .navbar .notifications ul {
+    right: -50px;
+  }
 }
 @media (max-width: 767px) {
   .navbar .ember {
