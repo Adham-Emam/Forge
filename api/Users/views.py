@@ -1,6 +1,7 @@
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.exceptions import NotFound, ValidationError
 from .models import CustomUser, Notification, Transaction, Subscriber
 from .serializers import CreateUserSerializer, CustomUserSerializer, NotificationSerializer, TransactionSerializer, SubscriberSerializer
 
@@ -102,6 +103,28 @@ class SubscribersListView(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
 
-class UnSubscriberView(generics.DestroyAPIView):
+class UnSubscribeView(generics.DestroyAPIView):
+    queryset = Subscriber.objects.all()
     serializer_class = SubscriberSerializer
     permission_classes = [AllowAny]
+
+    def get_object(self):
+        # Get the email from the request data
+        email = self.request.data.get('email')
+
+        # Validate that email is provided
+        if not email:
+            raise ValidationError({'message': "Email is required for unsubscribing."})
+
+        try:
+            # Try to get the subscriber by email
+            subscriber = Subscriber.objects.get(email=email)
+            return subscriber
+        except Subscriber.DoesNotExist:
+            raise NotFound({'message': "Subscriber with this email not found."})
+
+    def delete(self, request, *args, **kwargs):
+        # Call get_object to retrieve and validate the subscriber
+        subscriber = self.get_object()
+        subscriber.delete()  # Delete the subscriber from the database
+        return Response({"message": "Successfully unsubscribed"}, status=status.HTTP_204_NO_CONTENT)
