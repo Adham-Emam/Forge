@@ -14,13 +14,38 @@ import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
 import { checkAuth } from "../../util";
+import api from "../../api";
 
 const Footer = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [message, setMessage] = useState("");
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    const email = e.currentTarget.elements["email"].value;
+    try {
+      await api.post("http://127.0.0.1:8000/api/subscribe/", {
+        email: email,
+      });
+      setMessage("Subscription successful");
+      setErrorMessage("");
+    } catch (error) {
+      setMessage("");
+      // Check if error.response is available and contains data
+      if (error.response && error.response.data && error.response.data.email) {
+        setErrorMessage(error.response.data.email[0]);
+      } else {
+        // Fallback for when error.response is undefined
+        setErrorMessage("An error occurred. Please try again.");
+      }
+    }
+  };
 
   useEffect(() => {
     setIsAuthenticated(checkAuth());
   }, []);
+
   return (
     <footer className={styles.footer}>
       <div className={`container ${styles.container}`}>
@@ -80,11 +105,23 @@ const Footer = () => {
             </p>
           </div>
           <div>
-            <form method="GET">
-              <input type="email" placeholder="Email" required />
+            <form onSubmit={handleSubscribe}>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Email"
+                required
+              />
               <button value="submit">Subscribe</button>
             </form>
-            <span>We respect your privacy. No spam, ever.</span>
+            {message ? (
+              <span className={styles.success}>{message}</span>
+            ) : errorMessage ? (
+              <span className={styles.error}>{errorMessage}</span>
+            ) : (
+              <span>We respect your privacy. No spam, ever.</span>
+            )}
           </div>
         </div>
         <div className={styles.socialContainer}>

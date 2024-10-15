@@ -115,6 +115,15 @@
   font-size: 0.8rem;
   opacity: 0.6;
 }
+.subscribe .error {
+  color: var(--forge-red);
+  opacity: 1;
+  text-transform: capitalize;
+}
+.subscribe .success {
+  color: var(--ember-yellow);
+  opacity: 1;
+}
 .socialContainer {
   padding: 20px;
   display: flex;
