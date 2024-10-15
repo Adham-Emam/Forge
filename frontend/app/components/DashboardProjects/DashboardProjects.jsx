@@ -131,7 +131,13 @@ const DashboardProjects = ({ apiUrl, userId }) => {
                   </span>
                   <div className={styles.projectGroup}>
                     <span className={styles.budget}>
-                      <Image src={ember} alt="ember" width={30} height={30} />
+                      <Image
+                        src={ember}
+                        alt="ember"
+                        width={30}
+                        height={30}
+                        loading="eager"
+                      />
                       {project.budget}
                     </span>
                     <span className={styles.btn}>

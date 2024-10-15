@@ -203,6 +203,7 @@ const ProjectForm = ({ title }) => {
             placeholder="Enter a project title"
             defaultValue={formData.title}
             onChange={handleChange}
+            style={{ fontFamily: "inherit" }}
           />
         </div>
         <div>
@@ -214,6 +215,7 @@ const ProjectForm = ({ title }) => {
             minLength={20}
             defaultValue={formData.description}
             onChange={handleChange}
+            style={{ fontFamily: "inherit" }}
           />
         </div>
         <div>
@@ -229,6 +231,7 @@ const ProjectForm = ({ title }) => {
             onChangeInput={handleSuggestions}
             maxTags={15}
             onlyUnique
+            style={{ fontFamily: "inherit" }}
           />
           {suggestions.length > 0 && (
             <ul className={styles.suggestions}>
@@ -255,6 +258,7 @@ const ProjectForm = ({ title }) => {
             placeholder="Enter number of days"
             defaultValue={formData.duration}
             onChange={handleChange}
+            style={{ fontFamily: "inherit" }}
           />
           <small>Number of days you need to complete the project</small>
         </div>
@@ -268,6 +272,7 @@ const ProjectForm = ({ title }) => {
             placeholder="Enter the budget in Ember"
             defaultValue={formData.budget}
             onChange={handleChange}
+            style={{ fontFamily: "inherit" }}
           />
           <small>
             The number of Ember the freelancer will get after completion.
@@ -284,6 +289,7 @@ const ProjectForm = ({ title }) => {
             max={40}
             defaultValue={formData.bid_amount}
             onChange={handleChange}
+            style={{ fontFamily: "inherit" }}
           />
           <small>
             This is the number of sparks freelancers will spend to apply for
@@ -323,6 +329,7 @@ const ProjectForm = ({ title }) => {
             defaultValue={formData.exchange_for}
             onChange={handleChange}
             disabled={!isExchange ? true : false}
+            style={{ fontFamily: "inherit" }}
           ></textarea>
         </div>
         <div>
@@ -332,6 +339,7 @@ const ProjectForm = ({ title }) => {
             name="experience_level"
             defaultValue={formData.experience_level}
             onChange={handleChange}
+            // style={{ fontFamily: "Roboto" }}
           >
             <option value="">No preference</option>
             <option value="beginner">Beginner</option>

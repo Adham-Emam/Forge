@@ -73,7 +73,7 @@
 
 .active {
   background-color: var(--molten-orange);
-  font-weight: bold;
+  font-weight: 900;
   cursor: default;
   border: none;
 }

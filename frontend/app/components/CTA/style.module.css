@@ -3,7 +3,7 @@
   padding: 50px;
   margin: 50px 0;
   border-radius: 2rem;
-  font-weight: 600;
+  font-weight: 700;
   position: relative;
   z-index: 0;
   overflow: hidden;
@@ -17,17 +17,17 @@
   z-index: -1;
 }
 .cta .container::before {
-    background-color: var(--forge-red);
-    bottom: -200px;
-    right: -200px;
-    width: 400px;
-    opacity: 0.5;
+  background-color: var(--forge-red);
+  bottom: -200px;
+  right: -200px;
+  width: 400px;
+  opacity: 0.5;
 }
 .cta .container::after {
-    background-color: var(--molten-orange);
-    bottom: -400px;
-    right: -400px;
-    width: 800px;
+  background-color: var(--molten-orange);
+  bottom: -400px;
+  right: -400px;
+  width: 800px;
   opacity: 0.3;
 }
 .cta h2 {

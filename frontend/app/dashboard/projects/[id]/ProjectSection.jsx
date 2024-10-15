@@ -80,7 +80,13 @@ const ProjectSection = ({ projectId }) => {
             <aside className={styles.info}>
               <div className={styles.budget}>
                 <h3>Budget</h3>
-                <Image src={ember} alt="ember" width={50} height={50} />
+                <Image
+                  src={ember}
+                  alt="ember"
+                  width={50}
+                  height={50}
+                  loading="eager"
+                />
                 {project?.budget}
               </div>
               <div
@@ -88,7 +94,13 @@ const ProjectSection = ({ projectId }) => {
                 title="Amount needed to submit a bid for this project"
               >
                 <h3>Sparks</h3>
-                <Image src={spark} alt="Spark" width={50} height={50} />
+                <Image
+                  src={spark}
+                  alt="Spark"
+                  width={50}
+                  height={50}
+                  loading="eager"
+                />
                 {project?.bid_amount}
               </div>
               {isMyProject ? (
@@ -185,6 +197,7 @@ const ProjectSection = ({ projectId }) => {
                             alt="ember"
                             width={40}
                             height={40}
+                            loading="eager"
                           />
                           <span>{bid.amount}</span>
                           Embers

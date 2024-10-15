@@ -75,7 +75,7 @@ const DashboardHead = ({ activeTab }) => {
           name="search"
           placeholder="Search projects by skills or title..."
         />
-        <button type="submit">
+        <button type="submit" aria-label="Search">
           <FaSearch />
         </button>
       </form>

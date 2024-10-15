@@ -15,7 +15,13 @@ const Error404 = () => {
       <nav>
         <div className="container">
           <Link className="logo" href="/">
-            <Image src={Logo} alt="Forge Logo" width={50} height={50} />
+            <Image
+              src={Logo}
+              alt="Forge Logo"
+              width={50}
+              height={50}
+              loading="eager"
+            />
             <strong>Forge</strong>
           </Link>
           <ul>
@@ -44,7 +50,13 @@ const Error404 = () => {
           <button onClick={() => router.back()}>Go Back</button>
         </div>
         <div className="image">
-          <Image src={error} alt="404" width={400} height={400} />
+          <Image
+            src={error}
+            alt="404"
+            width={400}
+            height={400}
+            loading="eager"
+          />
         </div>
       </div>
     </div>

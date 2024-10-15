@@ -1,4 +1,3 @@
-import { DashboardNavbar } from "../../../components";
 import ProjectSection from "./ProjectSection";
 
 export function generateMetadata({ searchParams }) {

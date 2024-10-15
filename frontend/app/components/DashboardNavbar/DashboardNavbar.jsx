@@ -74,7 +74,8 @@ const DashboardNavbar = () => {
               alt="ember"
               width={50}
               height={50}
-              priority={true}
+              priority
+              loading="eager"
             />
             <strong>Forge</strong>
           </Link>
@@ -84,7 +85,11 @@ const DashboardNavbar = () => {
                 menuOpen ? styles.active : ""
               }`}
             >
-              <button type="button" onClick={() => setMenuOpen(!menuOpen)}>
+              <button
+                aria-label="Notifications"
+                type="button"
+                onClick={() => setMenuOpen(!menuOpen)}
+              >
                 <IoIosNotificationsOutline />
               </button>
               {notificationCount > 0 && (
@@ -132,7 +137,8 @@ const DashboardNavbar = () => {
                 width={40}
                 height={40}
                 quality={100}
-                priority={true}
+                priority
+                loading="eager"
               />
               <span className={styles.emberCount}>{user.credits}</span>
               <Link href="/add-embers">
@@ -152,6 +158,7 @@ const DashboardNavbar = () => {
                   alt="profile"
                   sizes="(40px, 40px)"
                   fill
+                  loading="eager"
                 />
               ) : user.first_name ? (
                 `${user.first_name?.[0]}${user.last_name?.[0]}`
@@ -178,7 +185,8 @@ const DashboardNavbar = () => {
               width={40}
               height={40}
               quality={100}
-              priority={true}
+              priority
+              loading="eager"
             />
             <span className={styles.emberCount}>{user.credits}</span>
             <Link href="/add-embers">

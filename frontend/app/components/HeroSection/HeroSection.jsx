@@ -51,14 +51,14 @@ const HeroSection = () => {
           <AnimatedItem
             initial={{ opacity: 0, filter: "blur(5px)" }}
             animate={{ opacity: 1, filter: "blur(0px)" }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5 }}
           >
             <Image
               src={HeroImage}
               alt="Forge Hero Section"
-              width={450}
-              height={450}
-              priority={true}
+              width={350}
+              height={350}
+              loading="lazy"
             />
           </AnimatedItem>
         </section>

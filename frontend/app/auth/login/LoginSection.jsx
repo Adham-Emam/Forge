@@ -82,7 +82,7 @@ const LoginSection = () => {
               alt="Logo Image"
               width={50}
               height={50}
-              priority={true}
+              loading="eager"
             />
             <strong>Forge</strong>
           </div>
@@ -97,10 +97,10 @@ const LoginSection = () => {
             Mastery and Innovation.
           </p>
           <div className={styles.authProviders}>
-            <button onClick={googleSignIn}>
+            <button onClick={googleSignIn} aria-label="Login using Google">
               <FaGoogle />
             </button>
-            <button onClick={githubSignIn}>
+            <button onClick={githubSignIn} aria-label="Login using Github">
               <FaGithub />
             </button>
           </div>

@@ -143,6 +143,7 @@ const ProfileSection = ({ params }) => {
                   alt="profile"
                   fill
                   sizes="(100px, 100px)"
+                  loading="eager"
                 />
               ) : (
                 <>
@@ -169,7 +170,8 @@ const ProfileSection = ({ params }) => {
                     alt="profile"
                     fill
                     sizes="(100px, 100px)"
-                    priority={true}
+                    priority
+                    loading="eager"
                   />
                 ) : userData.first_name ? (
                   `${userData.first_name?.[0]}${userData.last_name?.[0]}`

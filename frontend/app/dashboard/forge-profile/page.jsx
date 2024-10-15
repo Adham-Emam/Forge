@@ -481,6 +481,7 @@ const StepOne = ({ handleChange, formData }) => (
       <div className={styles.textareaContainer}>
         <label htmlFor="description">Description</label>
         <textarea
+          style={{ fontFamily: "inherit" }}
           type="text"
           id="description"
           name="description"

@@ -24,7 +24,6 @@
   background-color: var(--charcoal-gray);
   color: var(--ash-white);
   transition: border-color 0.3s ease;
-  font-family: "Roboto", "Helvetica Neue", sans-serif;
   font-size: 0.8rem;
 }
 .form div > input:focus,

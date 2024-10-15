@@ -146,6 +146,7 @@ const MyJobsDropDowns = ({ title, hint, apiUrl, type, accept = false }) => {
           )}
           {items.length > 0 && (
             <button
+              aria-label={`Show ${show ? "Less" : "More"}`}
               onClick={() => {
                 setShow(!show);
               }}
@@ -199,6 +200,7 @@ const MyJobsDropDowns = ({ title, hint, apiUrl, type, accept = false }) => {
                 )}
                 {type === "projects" && (
                   <button
+                    aria-label="Delete project"
                     className={styles.delete}
                     onClick={() => {
                       handleDeletePopup(item);

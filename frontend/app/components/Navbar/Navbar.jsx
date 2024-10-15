@@ -45,7 +45,13 @@ const Navbar = () => {
     >
       <nav className={`${styles.navbar} ${isActive ? styles.active : ""}`}>
         <Link className={styles.logo} href="/">
-          <Image src={Logo} alt="Forge Logo" width={50} height={50} />
+          <Image
+            src={Logo}
+            alt="Forge Logo"
+            width={50}
+            height={50}
+            loading="eager"
+          />
           <strong>Forge</strong>
         </Link>
         <ul className={`${styles.navLinks} ${isActive ? styles.active : ""}`}>

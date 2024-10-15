@@ -42,7 +42,13 @@ const About = () => {
             animate={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 0.5, delay: 1 }}
           >
-            <Image src={img1} alt="About Image" width={400} height={400} />
+            <Image
+              src={img1}
+              alt="About Image"
+              width={400}
+              height={400}
+              loading="eager"
+            />
           </AnimatedItem>
         </div>
         <div className={`${styles.aboutSection} ${styles.even}`}>
@@ -55,38 +61,38 @@ const About = () => {
               <h3>Our Values</h3>
             </AnimatedItem>
             <ul>
-              <AnimatedItem
-                initial={{ y: 50, opacity: 0, filter: "blur(5px)" }}
-                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <li>
+              <li>
+                <AnimatedItem
+                  initial={{ y: 50, opacity: 0, filter: "blur(5px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  transition={{ duration: 0.5, delay: 0.3 }}
+                >
                   <strong>Craftsmanship:</strong> We honor the art of
                   skill-building, where every connection is an opportunity to
                   create something meaningful.
-                </li>
-              </AnimatedItem>
-              <AnimatedItem
-                initial={{ y: 50, opacity: 0, filter: "blur(5px)" }}
-                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                <li>
+                </AnimatedItem>
+              </li>
+              <li>
+                <AnimatedItem
+                  initial={{ y: 50, opacity: 0, filter: "blur(5px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  transition={{ duration: 0.5, delay: 0.6 }}
+                >
                   <strong>Community:</strong> Forge is built on the strength of
                   its members, where learning and teaching go hand in hand.
-                </li>
-              </AnimatedItem>
-              <AnimatedItem
-                initial={{ y: 50, opacity: 0, filter: "blur(5px)" }}
-                animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
-                transition={{ duration: 0.5, delay: 0.9 }}
-              >
-                <li>
+                </AnimatedItem>
+              </li>
+              <li>
+                <AnimatedItem
+                  initial={{ y: 50, opacity: 0, filter: "blur(5px)" }}
+                  animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+                  transition={{ duration: 0.5, delay: 0.9 }}
+                >
                   <strong>Mastery:</strong> We believe in the relentless pursuit
                   of excellence, where every skill can be honed, and every
                   talent can shine
-                </li>
-              </AnimatedItem>
+                </AnimatedItem>
+              </li>
             </ul>
           </div>
           <AnimatedItem
@@ -94,7 +100,13 @@ const About = () => {
             animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 0.5, delay: 1.2 }}
           >
-            <Image src={img2} alt="About Image" width={400} height={400} />
+            <Image
+              src={img2}
+              alt="About Image"
+              width={400}
+              height={400}
+              loading="eager"
+            />
           </AnimatedItem>
         </div>
         <div className={styles.aboutSection}>
@@ -124,7 +136,13 @@ const About = () => {
             animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
             transition={{ duration: 0.5, delay: 1.5 }}
           >
-            <Image src={img3} alt="About Image" width={400} height={400} />
+            <Image
+              src={img3}
+              alt="About Image"
+              width={400}
+              height={400}
+              loading="eager"
+            />
           </AnimatedItem>
         </div>
       </div>

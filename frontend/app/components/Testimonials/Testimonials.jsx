@@ -35,7 +35,13 @@ const Testimonials = () => {
           >
             <div className={styles.testimonial}>
               <div>
-                <Image src={user1} alt="User" width={50} height={50} />
+                <Image
+                  src={user1}
+                  alt="User"
+                  width={50}
+                  height={50}
+                  loading="eager"
+                />
                 <div>
                   <Rating count={5} />
                   <h3>Anna S.</h3>
@@ -57,7 +63,13 @@ const Testimonials = () => {
           >
             <div className={styles.testimonial}>
               <div>
-                <Image src={user2} alt="User" width={50} height={50} />
+                <Image
+                  src={user2}
+                  alt="User"
+                  width={50}
+                  height={50}
+                  loading="eager"
+                />
                 <div>
                   <Rating count={5} />
                   <h3>James M.</h3>
@@ -79,7 +91,13 @@ const Testimonials = () => {
           >
             <div className={styles.testimonial}>
               <div>
-                <Image src={user3} alt="User" width={50} height={50} />
+                <Image
+                  src={user3}
+                  alt="User"
+                  width={50}
+                  height={50}
+                  loading="eager"
+                />
                 <div>
                   <Rating count={5} />
                   <h3>Elena R.</h3>

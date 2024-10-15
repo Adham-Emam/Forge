@@ -29,6 +29,26 @@ const ApplyForm = ({ projectId }) => {
     });
   };
 
+  const handleKeyDown = (e) => {
+    // Allow: backspace, delete, tab, escape, enter, and arrow keys
+    if (
+      e.key === "Backspace" ||
+      e.key === "Delete" ||
+      e.key === "Tab" ||
+      e.key === "Escape" ||
+      e.key === "Enter" ||
+      e.key === "ArrowRight" ||
+      e.key === "ArrowLeft"
+    ) {
+      return; // Allow these keys
+    }
+
+    // Prevent non-numeric keys
+    if (!/[0-9]/.test(e.key)) {
+      e.preventDefault(); // Block non-numeric characters
+    }
+  };
+
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
@@ -83,6 +103,7 @@ const ApplyForm = ({ projectId }) => {
             placeholder="Type your proposal here"
             onChange={handleChange}
             required
+            style={{ fontFamily: "inherit" }}
           />
         </div>
         <div>
@@ -93,7 +114,9 @@ const ApplyForm = ({ projectId }) => {
             name="amount"
             id="amount"
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             required
+            style={{ fontFamily: "inherit" }}
           />
         </div>
         <div>
@@ -104,7 +127,9 @@ const ApplyForm = ({ projectId }) => {
             name="duration"
             id="duration"
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             required
+            style={{ fontFamily: "inherit" }}
           />
         </div>
         <button type="submit">Apply</button>

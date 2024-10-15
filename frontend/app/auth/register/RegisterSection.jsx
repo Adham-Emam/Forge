@@ -122,7 +122,13 @@ function RegisterSection() {
     <div className={styles.container}>
       <div className={styles.greeting}>
         <div className={styles.logo}>
-          <Image src={Logo} alt="Logo Image" width={50} height={50} />
+          <Image
+            src={Logo}
+            alt="Logo Image"
+            width={50}
+            height={50}
+            loading="eager"
+          />
           <strong>Forge</strong>
         </div>
         <h2>Welcome Back!</h2>
@@ -136,10 +142,10 @@ function RegisterSection() {
         <h2 className="section-title">Create Account</h2>
         <p>Join the Forge and Ignite Your Path to Mastery</p>
         <div className={styles.authProviders}>
-          <button onClick={googleSignIn}>
+          <button onClick={googleSignIn} aria-label="Login using Google">
             <FaGoogle />
           </button>
-          <button onClick={githubSignIn}>
+          <button onClick={githubSignIn} aria-label="Login using Github">
             <FaGithub />
           </button>
         </div>

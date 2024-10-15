@@ -353,7 +353,10 @@ const DashboardSidebar = () => {
       <div className={styles.sparks}>
         <div>
           <h3>Sparks</h3>
-          <Image src={spark} alt="Spark" width={50} height={50} />
+          <Image src={spark} alt="Spark" width={50} height={50}
+              loading="eager"
+          
+          />
           <span>{userData.sparks}</span>
         </div>
         <ul>

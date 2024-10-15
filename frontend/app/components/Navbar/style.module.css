@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap");
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -19,7 +17,6 @@
 }
 
 .navbar .logo strong {
-  font-family: "Montserrat", sans-serif;
   font-size: 1.5rem;
   color: var(--ash-white);
 }
@@ -45,7 +42,7 @@
   color: var(--ash-white);
   transition-duration: 0.3s;
   padding: 10px 0;
-  font-weight: 600;
+  font-weight: 700;
   position: relative;
 }
 .joinBtn a {
