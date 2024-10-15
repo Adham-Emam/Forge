@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Notification,Transaction
+from .models import CustomUser, Notification, Transaction, Subscriber
 from datetime import datetime
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -114,3 +114,23 @@ class TransactionSerializer(serializers.ModelSerializer):
         model = Transaction
         fields = '__all__'
         read_only_fields = ['id', 'created_at']
+
+
+class SubscriberSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Subscriber
+        fields = '__all__'
+        read_only_fields = ['id']
+
+
+    # Field-level validation
+    def validate_email(self, value):
+        if Subscriber.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already subscribed.")
+        return value
+
+    # Object-level validation
+    def validate(self, data):
+        # Add any custom object-level validation here if needed
+        return data

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import CurrentUserViewSet, CreateUserView, UserViewSet, NotificationsList, MarkNotificationAsRead, TransactionList
+from .views import CurrentUserViewSet, CreateUserView, UserViewSet, NotificationsList, MarkNotificationAsRead, TransactionList, SubscribersListView, UnSubscriberView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
@@ -20,5 +20,7 @@ urlpatterns = [
     path('notifications/', NotificationsList.as_view(), name='user-notifications'),
     path('notifications/<int:pk>/', MarkNotificationAsRead.as_view(), name='notification-detail'),
     path('transactions/', TransactionList.as_view(), name='user-transactions'),
+    path('subscribe/', SubscribersListView.as_view(), name='subscribe'),
+    path('unsubscribe/', UnSubscriberView.as_view(), name='unsubscribe'),
     path('', include(router.urls)),
 ]

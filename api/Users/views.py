@@ -1,8 +1,8 @@
 from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
-from .models import CustomUser, Notification, Transaction
-from .serializers import CreateUserSerializer, CustomUserSerializer, NotificationSerializer, TransactionSerializer
+from .models import CustomUser, Notification, Transaction, Subscriber
+from .serializers import CreateUserSerializer, CustomUserSerializer, NotificationSerializer, TransactionSerializer, SubscriberSerializer
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -23,6 +23,10 @@ class CreateUserView(generics.CreateAPIView):
             message="Welcome to Forge! Get started by creating a project.",
         )
         notification.save()
+
+        email = self.request.data['email']
+        subscriber = Subscriber.objects.create(email=email)
+        subscriber.save()
 
         return Response({
             "user": CustomUserSerializer(user, context=self.get_serializer_context()).data,
@@ -90,3 +94,14 @@ class TransactionList(generics.ListAPIView):
         else :
             return Transaction.objects.filter(user=user)
 
+
+class SubscribersListView(generics.ListCreateAPIView):
+    queryset = Subscriber.objects.all()
+    serializer_class = SubscriberSerializer
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
+
+class UnSubscriberView(generics.DestroyAPIView):
+    serializer_class = SubscriberSerializer
+    permission_classes = [AllowAny]
