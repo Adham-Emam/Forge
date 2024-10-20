@@ -2,8 +2,10 @@ from rest_framework import generics, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, ValidationError
-from .models import CustomUser, Notification, Transaction, Subscriber
-from .serializers import CreateUserSerializer, CustomUserSerializer, NotificationSerializer, TransactionSerializer, SubscriberSerializer
+from .models import CustomUser, Notification, Transaction, Subscriber, Message
+from Projects.models import Project
+from .serializers import CreateUserSerializer, CustomUserSerializer, NotificationSerializer, TransactionSerializer, SubscriberSerializer, MessageSerializer
+from django.db.models import Q
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -128,3 +130,36 @@ class UnSubscribeView(generics.DestroyAPIView):
         subscriber = self.get_object()
         subscriber.delete()  # Delete the subscriber from the database
         return Response({"message": "Successfully unsubscribed"}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+class UserContactsView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        assigned_to = Project.objects.filter(owner=user).values_list('assigned_to', flat=True).distinct()
+        assigned_to_me = Project.objects.filter(assigned_to=user).values_list('owner', flat=True).distinct()
+
+        # Base queryset for contacts
+        queryset = CustomUser.objects.filter(Q(id__in=assigned_to) | Q(id__in=assigned_to_me))
+
+        # Check if there is a search parameter
+        search = self.request.query_params.get('search')
+        if search:
+            queryset = queryset.filter(
+                Q(first_name__icontains=search) | Q(last_name__icontains=search)
+            )
+        
+        return queryset
+
+class UserMessagesView(generics.ListCreateAPIView):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        other_user = self.request.query_params.get('other_user')
+
+        return Message.objects.filter(sender=user, receiver=other_user) | Message.objects.filter(sender=other_user, receiver=user)

@@ -21,6 +21,8 @@ export { default as DashboardProjects } from "./DashboardProjects/DashboardProje
 export { default as TransactionsTable } from "./TransactionsTable/TransactionsTable";
 export { default as PagesNumber } from "./PagesNumber/PagesNumber";
 export { default as MyJobsDropDowns } from "./MyJobsDropDowns/MyJobsDropDowns";
+export { default as MessagesSidebar } from "./MessagesSidebar/MessagesSidebar";
+export { default as MessagesContent } from "./MessagesContent/MessagesContent";
 export { default as ProtectedRoute } from "./ProtectedRoute";
 export { default as LoadingContainer } from "./Loaders/LoadingContainer";
 export { default as Error500 } from "./Error/500";

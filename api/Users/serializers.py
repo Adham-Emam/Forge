@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Notification, Transaction, Subscriber
+from .models import CustomUser, Notification, Transaction, Subscriber, Message
 from datetime import datetime
 
 class CreateUserSerializer(serializers.ModelSerializer):
@@ -134,3 +134,12 @@ class SubscriberSerializer(serializers.ModelSerializer):
     def validate(self, data):
         # Add any custom object-level validation here if needed
         return data
+
+
+
+class MessageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Message
+        fields = '__all__'
+        read_only_fields = ['id', 'created_at']

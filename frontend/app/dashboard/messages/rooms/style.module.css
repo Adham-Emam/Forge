@@ -2,12 +2,17 @@
   display: grid;
   grid-template-columns: 300px 1fr;
   gap: 30px;
-  min-height: calc(100vh - 92px);
+  height: calc(100vh - 92px);
   position: relative;
-  padding-top: 50px;
+  padding-top: 30px;
 }
 @media (max-width: 991px) {
   .container {
     grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 767px) {
+  .container {
+    padding: 30px 20px 0;
   }
 }

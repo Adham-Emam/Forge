@@ -15,6 +15,7 @@ import { GiPartyPopper } from "react-icons/gi";
 import { MdLogout } from "react-icons/md";
 import { FaHome, FaUser, FaFire, FaPlus, FaEnvelope } from "react-icons/fa";
 import { RiDashboardFill } from "react-icons/ri";
+import { FaMessage } from "react-icons/fa6";
 
 const DashboardNavbar = () => {
   const [user, setUser] = useState({});
@@ -195,6 +196,11 @@ const DashboardNavbar = () => {
           </span>
         </li>
         <li>
+          <Link href="/">
+            <FaHome /> Home
+          </Link>
+        </li>
+        <li>
           <Link
             href={{
               pathname: `/dashboard/profile/${user.id}`,
@@ -208,11 +214,6 @@ const DashboardNavbar = () => {
           </Link>
         </li>
         <li>
-          <Link href="/">
-            <FaHome /> Home
-          </Link>
-        </li>
-        <li>
           <Link href="/dashboard/find-work/most-recent">
             <RiDashboardFill /> Dashboard
           </Link>
@@ -220,6 +221,11 @@ const DashboardNavbar = () => {
         <li>
           <Link href="/dashboard/my-jobs">
             <IoMdBriefcase /> My Jobs
+          </Link>
+        </li>
+        <li>
+          <Link href="/dashboard/messages/rooms">
+            <FaMessage /> Messages
           </Link>
         </li>
         <li>

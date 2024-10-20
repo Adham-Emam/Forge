@@ -213,8 +213,9 @@ class UserProjectsList(generics.ListAPIView):
         user_id = self.request.user.id
         user = get_object_or_404(CustomUser, id=user_id)
         status = self.request.query_params.get('status')
+
         if status == 'open':
-            return Project.objects.filter(owner=user, status='open')
+            return Project.objects.filter(owner=user, status='open', assigned_to=None)
         elif status == 'in_progress':
             return Project.objects.filter(status='in_progress', assigned_to=user)
         elif status == 'my_in_progress':
@@ -526,7 +527,7 @@ class UsersBidsList(generics.ListAPIView):
         if status == 'open':
             return Bid.objects.filter(user=user, project__status='open')
         elif status == 'in_progress':
-            return Bid.objects.filter(user=user, project__status='in_progress', project__assigned_to=user)
+            return Bid.objects.filter(project__status='in_progress', project__assigned_to=user)
         elif owner == 'true':
             return Bid.objects.filter(project__owner=user, project__status='open', project__assigned_to=None)
 
