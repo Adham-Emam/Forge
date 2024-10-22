@@ -12,7 +12,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 import Logo from "../../assets/logo.png";
-import { CiUser, CiLock } from "react-icons/ci";
+import { SlEnvolope } from "react-icons/sl";
+import { CiLock } from "react-icons/ci";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 
@@ -25,7 +26,8 @@ const LoginSection = () => {
     }
   }, []);
 
-  const [formData, SetFormData] = useState({
+  const [formData, setFormData] = useState({
+    email: "",
     username: "",
     password: "",
   });
@@ -38,39 +40,78 @@ const LoginSection = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    SetFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await api.post("http://127.0.0.1:8000/api/token/", {
-        ...formData,
-      });
-      if (response.status === 200) {
-        localStorage.setItem(ACCESS_TOKEN, response.data.access);
-        localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+      // const getUsername = await api.post(
+      //   "http://127.0.0.1:8000/api/get_username/",
+      //   {
+      //     email: formData.email,
+      //   }
+      // );
 
-        // Check if the current user have first_name
-        const userResponse = await api.get(
-          "http://127.0.0.1:8000/api/current-user/"
-        );
-        if (userResponse.data.first_name && userResponse.data.last_name) {
-          router.push("/dashboard/find-work/most-recent");
-        } else {
-          router.push("/dashboard/forge-profile");
-        }
-      }
+      fetch("http://127.0.0.1:8000/api/get_username/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setFormData((prevState) => ({
+            ...prevState,
+            username: data.username,
+          }));
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
     } catch (error) {
-      if (error.response && error.response.data) {
-        // Extract and combine error messages
-        const errorMessages = Object.values(error.response.data).flat();
-        setError(errorMessages.join(" "));
-      } else {
-        setError("An unexpected error occurred. Please try again.");
-      }
+      console.log(error);
+      setError(error.message);
     }
   };
+
+  useEffect(() => {
+    const Login = async () => {
+      try {
+        const response = await api.post("http://127.0.0.1:8000/api/token/", {
+          username: formData.username,
+          password: formData.password,
+        });
+
+        if (response.status === 200) {
+          localStorage.setItem(ACCESS_TOKEN, response.data.access);
+          localStorage.setItem(REFRESH_TOKEN, response.data.refresh);
+
+          // Check if the current user have first_name
+          const userResponse = await api.get(
+            "http://127.0.0.1:8000/api/current-user/"
+          );
+          if (userResponse.data.first_name && userResponse.data.last_name) {
+            router.push("/dashboard/find-work/most-recent");
+          } else {
+            router.push("/dashboard/forge-profile");
+          }
+        }
+      } catch (error) {
+        if (error.response && error.response.data) {
+          // Extract and combine error messages
+          const errorMessages = Object.values(error.response.data).flat();
+          setError(errorMessages.join(" "));
+        } else {
+          setError("An unexpected error occurred. Please try again.");
+        }
+      }
+    };
+
+    Login();
+  }, [formData.username]);
 
   return (
     <>
@@ -110,13 +151,13 @@ const LoginSection = () => {
               <p style={{ color: "#ff5555", textAlign: "center" }}>{error}</p>
             )}
             <div>
-              <CiUser />
+              <SlEnvolope />
               <input
-                type="text"
-                id="username"
-                name="username"
-                placeholder="username"
-                value={formData.username}
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Email"
+                value={formData.email}
                 onChange={handleChange}
                 required
               />
