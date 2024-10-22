@@ -28,7 +28,7 @@ const DashboardNavbar = () => {
   const fetchNotifications = async () => {
     try {
       const response = await api.get(
-        "http://127.0.0.1:8000/api/notifications/"
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/`
       );
       setNotifications(response.data);
       setNotificationCount(response.data.length);
@@ -40,7 +40,7 @@ const DashboardNavbar = () => {
   const handleNotificationClick = async (notificationId) => {
     try {
       await api.patch(
-        `http://127.0.0.1:8000/api/notifications/${notificationId}/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/${notificationId}/`,
         {
           is_read: true,
         }
@@ -53,7 +53,9 @@ const DashboardNavbar = () => {
 
   const fetchUserName = async () => {
     try {
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       setUser(response.data);
     } catch (error) {
       console.log(error);
@@ -155,7 +157,7 @@ const DashboardNavbar = () => {
             >
               {user.profile_image ? (
                 <Image
-                  src={`http://127.0.0.1:8000/${user.profile_image}`}
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/${user.profile_image}`}
                   alt="profile"
                   sizes="(40px, 40px)"
                   fill

@@ -12,8 +12,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 import Logo from "../../assets/logo.png";
-import { SlEnvolope } from "react-icons/sl";
-import { CiLock } from "react-icons/ci";
+import { CiMail, CiLock } from "react-icons/ci";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { FaGoogle, FaGithub } from "react-icons/fa";
 
@@ -45,14 +44,7 @@ const LoginSection = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // const getUsername = await api.post(
-      //   "http://127.0.0.1:8000/api/get_username/",
-      //   {
-      //     email: formData.email,
-      //   }
-      // );
-
-      fetch("http://127.0.0.1:8000/api/get_username/", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/get_username/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -80,10 +72,13 @@ const LoginSection = () => {
   useEffect(() => {
     const Login = async () => {
       try {
-        const response = await api.post("http://127.0.0.1:8000/api/token/", {
-          username: formData.username,
-          password: formData.password,
-        });
+        const response = await api.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/token/`,
+          {
+            username: formData.username,
+            password: formData.password,
+          }
+        );
 
         if (response.status === 200) {
           localStorage.setItem(ACCESS_TOKEN, response.data.access);
@@ -91,7 +86,7 @@ const LoginSection = () => {
 
           // Check if the current user have first_name
           const userResponse = await api.get(
-            "http://127.0.0.1:8000/api/current-user/"
+            `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
           );
           if (userResponse.data.first_name && userResponse.data.last_name) {
             router.push("/dashboard/find-work/most-recent");
@@ -110,6 +105,9 @@ const LoginSection = () => {
       }
     };
 
+    if (!formData.username) {
+      return;
+    }
     Login();
   }, [formData.username]);
 
@@ -145,13 +143,13 @@ const LoginSection = () => {
               <FaGithub />
             </button>
           </div>
-          <form className={styles.form} onSubmit={handleSubmit}>
+          <form className={styles.form} method="POST" onSubmit={handleSubmit}>
             <p>Or use your Username for Login.</p>
             {error && (
               <p style={{ color: "#ff5555", textAlign: "center" }}>{error}</p>
             )}
             <div>
-              <SlEnvolope />
+              <CiMail />
               <input
                 type="email"
                 id="email"

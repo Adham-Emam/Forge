@@ -62,7 +62,9 @@ const forgeProfile = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       Object.keys(formData).forEach((key) => {
         setFormData((prevState) => ({
           ...prevState,
@@ -333,7 +335,7 @@ const forgeProfile = () => {
     e.preventDefault();
 
     await api
-      .patch("http://127.0.0.1:8000/api/current-user/", formData)
+      .patch(`${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`, formData)
       .then((response) => {
         // remove the local storage
         localStorage.removeItem("forge-form-data");

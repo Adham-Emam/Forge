@@ -15,7 +15,9 @@ const MessagesContent = () => {
 
   const fetchCurrentUser = async () => {
     try {
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       setCurrentUser(response.data);
       // console.log(response.data);
     } catch (error) {
@@ -26,7 +28,7 @@ const MessagesContent = () => {
   const fetchOtherUser = async () => {
     try {
       const response = await api.get(
-        `http://127.0.0.1:8000/api/users/${roomId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/${roomId}`
       );
       setOtherUserData(response.data);
     } catch (error) {
@@ -37,7 +39,7 @@ const MessagesContent = () => {
   const fetchMessages = async () => {
     try {
       const response = await api.get(
-        `http://127.0.0.1:8000/api/user/messages/?other_user=${roomId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/messages/?other_user=${roomId}`
       );
       setMessages(response.data);
     } catch (error) {
@@ -97,7 +99,7 @@ const MessagesContent = () => {
     let message = document.getElementById("send_message").value;
     if (message) {
       const response = await api.post(
-        `http://127.0.0.1:8000/api/user/messages/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/messages/`,
         {
           sender: currentUser.id,
           receiver: roomId,

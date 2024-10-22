@@ -101,7 +101,7 @@ function RegisterSection() {
 
     try {
       const response = await api.post(
-        "http://127.0.0.1:8000/api/user/register/",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/register/`,
         { ...formData }
       );
       if (response.status === 201) {
@@ -149,7 +149,7 @@ function RegisterSection() {
             <FaGithub />
           </button>
         </div>
-        <form className={styles.form} onSubmit={handleSubmit}>
+        <form className={styles.form} method="POST" onSubmit={handleSubmit}>
           <p>Or use your email for registration.</p>
           {error && (
             <p style={{ color: "#ff5555", textAlign: "center" }}>{error}</p>

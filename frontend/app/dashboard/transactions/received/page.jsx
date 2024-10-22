@@ -18,7 +18,7 @@ const ReceivedTransaction = () => {
         </li>
       </ul>
       <TransactionsTable
-        apiUrl={"http://127.0.0.1:8000/api/transactions/?type=received"}
+        apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/transactions/?type=received`}
       />
     </>
   );

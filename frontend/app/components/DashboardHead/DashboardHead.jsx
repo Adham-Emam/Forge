@@ -12,7 +12,9 @@ const DashboardHead = ({ activeTab }) => {
 
   const fetchUserData = async () => {
     try {
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       setUserData(response.data);
     } catch (error) {
       console.log(error);

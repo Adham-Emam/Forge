@@ -25,7 +25,7 @@ const Footer = () => {
     e.preventDefault();
     const email = e.currentTarget.elements["email"].value;
     try {
-      await api.post("http://127.0.0.1:8000/api/subscribe/", {
+      await api.post(`${process.env.NEXT_PUBLIC_API_URL}/api/subscribe/`, {
         email: email,
       });
       setMessage("Subscription successful");

@@ -23,7 +23,6 @@ import { LoadingContainer } from "../../../components";
 const ProfileSection = ({ params }) => {
   const [userData, setUserData] = useState([]);
   const [profileImage, setProfileImage] = useState(null);
-  const [userProjects, setUserProjects] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(false);
   const [popupActive, setPopupActive] = useState(false);
@@ -32,7 +31,9 @@ const ProfileSection = ({ params }) => {
 
   const isCurrentUser = async () => {
     try {
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       const currentUserId = response.data.id;
       setCurrentUser(currentUserId == params.userId);
     } catch (error) {
@@ -44,7 +45,7 @@ const ProfileSection = ({ params }) => {
   const fetchUserData = async () => {
     try {
       const response = await api.get(
-        `http://127.0.0.1:8000/api/users/${params.userId}/`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/${params.userId}/`
       );
       setUserData(response.data);
     } catch (error) {
@@ -53,24 +54,11 @@ const ProfileSection = ({ params }) => {
     }
   };
 
-  const fetchProjects = async () => {
-    try {
-      const response = await api.get(
-        `http://127.0.0.1:8000/api/projects/${params.userId}/`
-      );
-      setUserProjects(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     setIsLoading(true);
-    Promise.all([fetchUserData(), isCurrentUser(), fetchProjects()]).then(
-      () => {
-        setIsLoading(false);
-      }
-    );
+    Promise.all([fetchUserData(), isCurrentUser()]).then(() => {
+      setIsLoading(false);
+    });
   }, []);
 
   const handleChange = (e) => {
@@ -99,7 +87,7 @@ const ProfileSection = ({ params }) => {
 
     try {
       const response = await api.patch(
-        `http://127.0.0.1:8000/api/current-user/`,
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`,
         formData,
         {
           headers: {

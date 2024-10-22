@@ -322,7 +322,9 @@ const DashboardSidebar = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       setUserData(response.data);
     } catch (error) {
       console.log(error);
@@ -353,9 +355,12 @@ const DashboardSidebar = () => {
       <div className={styles.sparks}>
         <div>
           <h3>Sparks</h3>
-          <Image src={spark} alt="Spark" width={50} height={50}
-              loading="eager"
-          
+          <Image
+            src={spark}
+            alt="Spark"
+            width={50}
+            height={50}
+            loading="eager"
           />
           <span>{userData.sparks}</span>
         </div>

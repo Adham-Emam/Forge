@@ -14,7 +14,7 @@ const MessagesSidebar = () => {
   const [contacts, setContacts] = useState([]);
   const [lastMessages, setLastMessages] = useState({});
   const [apiUrl, setApiUrl] = useState(
-    "http://127.0.0.1:8000/api/user/contacts/"
+    `${process.env.NEXT_PUBLIC_API_URL}/api/user/contacts/`
   );
   const searchParams = useSearchParams();
   const [roomId, setRoomId] = useState(searchParams.get("room") || null);
@@ -23,7 +23,7 @@ const MessagesSidebar = () => {
   const fetchLastMessages = async (id) => {
     try {
       const response = await api.get(
-        `http://127.0.0.1:8000/api/user/messages/?other_user=${id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/messages/?other_user=${id}`
       );
 
       let lastMessage =
@@ -51,9 +51,11 @@ const MessagesSidebar = () => {
     e.preventDefault();
     const search = e.target.value;
     if (search === "") {
-      setApiUrl("http://127.0.0.1:8000/api/user/contacts/");
+      setApiUrl(`${process.env.NEXT_PUBLIC_API_URL}/api/user/contacts/`);
     } else {
-      setApiUrl(`http://127.0.0.1:8000/api/user/contacts/?search=${search}`);
+      setApiUrl(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/user/contacts/?search=${search}`
+      );
     }
   };
 

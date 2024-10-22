@@ -30,10 +30,13 @@ const MyJobsDropDowns = ({ title, hint, apiUrl, type, accept = false }) => {
 
   const assignProject = async () => {
     try {
-      await api.patch(`http://127.0.0.1:8000/api/projects/${projectId}/`, {
-        assigned_to: bidder,
-        status: "in_progress",
-      });
+      await api.patch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${projectId}/`,
+        {
+          assigned_to: bidder,
+          status: "in_progress",
+        }
+      );
       fetchItems();
       closePopup();
     } catch (error) {
@@ -43,7 +46,9 @@ const MyJobsDropDowns = ({ title, hint, apiUrl, type, accept = false }) => {
 
   const deleteProject = async () => {
     try {
-      await api.delete(`http://127.0.0.1:8000/api/projects/${projectId}/`);
+      await api.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${projectId}/`
+      );
       fetchItems();
       closePopup();
     } catch (error) {

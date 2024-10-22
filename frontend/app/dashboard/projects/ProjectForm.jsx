@@ -168,14 +168,17 @@ const ProjectForm = ({ title }) => {
       try {
         if (title === "Edit Project") {
           await api.patch(
-            `http://127.0.0.1:8000/api/projects/${data.id}/`,
+            `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${data.id}/`,
             formData
           );
           router.push(
             `/dashboard/projects/${data.id}?title=${formData.title}&description=${formData.description}`
           );
         } else {
-          await api.post("http://127.0.0.1:8000/api/projects/", formData);
+          await api.post(
+            `${process.env.NEXT_PUBLIC_API_URL}/api/projects/`,
+            formData
+          );
           router.push("/dashboard/find-work/most-recent");
         }
       } catch (error) {

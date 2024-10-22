@@ -35,25 +35,25 @@ const MyJobsSection = () => {
         <>
           <MyJobsDropDowns
             title="All proposals"
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/bids/`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/bids/`}
             type={activeTab}
           />
           <MyJobsDropDowns
             title="Pending proposals"
             hint="Proposals you applied but not yet accepted or declined."
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/bids/?status=open`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/bids/?status=open`}
             type={activeTab}
           />
           <MyJobsDropDowns
             title="Accepted proposals"
             hint="Proposals you were accepted by project owner."
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/bids/?status=in_progress`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/bids/?status=in_progress`}
             type={activeTab}
           />
           <MyJobsDropDowns
             title="Proposals on my projects"
             hint="Proposals on your own projects."
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/bids/?owner=true`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/bids/?owner=true`}
             type={activeTab}
             accept
           />
@@ -63,31 +63,31 @@ const MyJobsSection = () => {
         <>
           <MyJobsDropDowns
             title="All projects"
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/`}
             type={activeTab}
           />
           <MyJobsDropDowns
             title="Pending projects"
             hint="Projects you created but not yet hired someone to do."
             type={activeTab}
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=open`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/?status=open`}
           />
           <MyJobsDropDowns
             title="Your active projects"
             hint="Projects you hired someone to do."
             type={activeTab}
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=my_in_progress`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/?status=my_in_progress`}
           />
           <MyJobsDropDowns
             title="In progress projects"
             hint="Projects you are currently working on."
             type={activeTab}
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=in_progress`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/?status=in_progress`}
           />
           <MyJobsDropDowns
             title="Closed projects"
             type={activeTab}
-            apiUrl={`http://127.0.0.1:8000/api/projects/user/?status=closed`}
+            apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/?status=closed`}
           />
         </>
       )}

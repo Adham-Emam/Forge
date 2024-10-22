@@ -53,7 +53,7 @@ const ApplyForm = ({ projectId }) => {
     const fetchProjectData = async () => {
       try {
         const response = await api.get(
-          `http://127.0.0.1:8000/api/projects/${projectId}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${projectId}`
         );
         setProjectData(response.data);
       } catch (error) {
@@ -68,9 +68,12 @@ const ApplyForm = ({ projectId }) => {
     e.preventDefault();
 
     try {
-      await api.post(`http://127.0.0.1:8000/api/projects/${projectId}/bids/`, {
-        ...formData,
-      });
+      await api.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${projectId}/bids/`,
+        {
+          ...formData,
+        }
+      );
       router.push(
         `/dashboard/projects/${projectId}?title=${projectData.title}&description=${projectData.description}`
       );

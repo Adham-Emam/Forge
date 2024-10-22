@@ -11,7 +11,9 @@ import styles from "../style.module.css";
 
 const MostRecent = () => {
   const [userId, setUserId] = useState(null);
-  const [apiUrl, setApiUrl] = useState("http://127.0.0.1:8000/api/projects/");
+  const [apiUrl, setApiUrl] = useState(
+    `${process.env.NEXT_PUBLIC_API_URL}/api/projects/`
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const searchParams = useSearchParams();
@@ -29,7 +31,9 @@ const MostRecent = () => {
   const fetchUserId = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       setUserId(response.data.id);
     } catch (error) {
       console.log(error);
@@ -59,9 +63,11 @@ const MostRecent = () => {
     const queryString = params.toString();
 
     if (queryString) {
-      setApiUrl(`http://127.0.0.1:8000/api/projects?${queryString}`);
+      setApiUrl(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects?${queryString}`
+      );
     } else {
-      setApiUrl("http://127.0.0.1:8000/api/projects/");
+      setApiUrl(`${process.env.NEXT_PUBLIC_API_URL}/api/projects/`);
     }
   }, [
     searchParams,

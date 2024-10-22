@@ -31,7 +31,7 @@ const ProjectSection = ({ projectId }) => {
   const getProjectData = async () => {
     try {
       const response = await api.get(
-        `http://127.0.0.1:8000/api/projects/${projectId}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${projectId}`
       );
       setProject(response.data);
     } catch (error) {
@@ -46,7 +46,7 @@ const ProjectSection = ({ projectId }) => {
     try {
       setIsLoading(true);
       const response = await api.get(
-        `http://127.0.0.1:8000/api/projects/${projectId}/bids`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${projectId}/bids`
       );
       setBids(response.data);
     } catch (error) {
@@ -58,7 +58,9 @@ const ProjectSection = ({ projectId }) => {
 
   const getCurrentUser = async () => {
     try {
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       setUserId(response.data.id);
     } catch (error) {
       console.log(error);

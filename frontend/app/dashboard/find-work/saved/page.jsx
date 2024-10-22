@@ -28,7 +28,9 @@ const SavedProjects = () => {
   const fetchUserId = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get("http://127.0.0.1:8000/api/current-user/");
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/current-user/`
+      );
       setUserId(response.data.id);
     } catch (error) {
       console.log(error);
@@ -59,10 +61,12 @@ const SavedProjects = () => {
     if (userId) {
       if (queryString) {
         setApiUrl(
-          `http://127.0.0.1:8000/api/projects/user/${userId}/saved/?${queryString}`
+          `${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/${userId}/saved/?${queryString}`
         );
       } else {
-        setApiUrl(`http://127.0.0.1:8000/api/projects/user/${userId}/saved/`);
+        setApiUrl(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/${userId}/saved/`
+        );
       }
     }
   }, [

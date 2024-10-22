@@ -17,7 +17,9 @@ const AllTransactions = () => {
           <Link href={"/dashboard/transactions/received"}>Received</Link>
         </li>
       </ul>
-      <TransactionsTable apiUrl={"http://127.0.0.1:8000/api/transactions"} />
+      <TransactionsTable
+        apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/transactions`}
+      />
     </>
   );
 };

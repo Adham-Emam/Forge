@@ -30,7 +30,7 @@ const DashboardProjects = ({ apiUrl, userId }) => {
 
   const fetchSavedProjects = async () => {
     const response = await api.get(
-      `http://127.0.0.1:8000/api/projects/user/${userId}/saved/`
+      `${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/${userId}/saved/`
     );
     setSavedProjects(response.data.results);
   };
@@ -98,8 +98,8 @@ const DashboardProjects = ({ apiUrl, userId }) => {
                         ? "Hire a freelancer"
                         : "Skill Exchange"}
                       {" - "}
-                      {project.experience_level}
-                      {" - "}
+                      {project.experience_level &&
+                        project.experience_level + " - "}
                       {project.owner_location}
                     </span>
                   </div>
