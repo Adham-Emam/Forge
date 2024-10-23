@@ -3,7 +3,7 @@
   border-right: 1px solid var(--iron-black);
   transition-duration: 0.5s;
   height: 100%;
-  z-index: 201;
+  z-index: 101;
 }
 
 .sidebar h1 {
@@ -127,7 +127,7 @@
   border: 1px solid var(--iron-black);
   transition-duration: 0.3s;
   display: none;
-  z-index: 200;
+  z-index: 100;
 }
 .activeContact:hover {
   border: 1px solid var(--molten-orange);
@@ -142,6 +142,7 @@
   outline: none;
   cursor: pointer;
   transition-duration: 0.3s;
+  display: none;
 }
 .closeBtn:hover {
   color: var(--molten-orange);
@@ -163,6 +164,9 @@
     width: 260px;
   }
   .activeContact {
+    display: block;
+  }
+  .closeBtn {
     display: block;
   }
 }
