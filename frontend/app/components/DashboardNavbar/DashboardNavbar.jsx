@@ -69,6 +69,12 @@ const DashboardNavbar = () => {
   useEffect(() => {
     fetchUserName();
     fetchNotifications();
+
+    // Set interval to fetch data every 3 minutes
+    const intervalId = setInterval(fetchNotifications, 180000); // 3 minutes
+
+    // Clean up interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   const approveProject = async () => {
