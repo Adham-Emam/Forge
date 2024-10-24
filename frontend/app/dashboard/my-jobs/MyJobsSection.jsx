@@ -49,6 +49,7 @@ const MyJobsSection = () => {
             hint="Proposals you were accepted by project owner."
             apiUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/projects/user/bids/?status=in_progress`}
             type={activeTab}
+            finish
           />
           <MyJobsDropDowns
             title="Proposals on my projects"

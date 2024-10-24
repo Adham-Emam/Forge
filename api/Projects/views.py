@@ -532,3 +532,88 @@ class UsersBidsList(generics.ListAPIView):
             return Bid.objects.filter(project__owner=user, project__status='open', project__assigned_to=None)
 
         return Bid.objects.filter(user=user, project__status__in=['open', 'in_progress', 'closed'])
+
+
+class RequestProjectApproval(generics.GenericAPIView):
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user_id = self.kwargs['bidder_id']
+        user = get_object_or_404(CustomUser, id=user_id)
+        project_id = self.kwargs['project_id']
+        project = get_object_or_404(Project, id=project_id)
+        
+        Notification.objects.create(
+            user=project.owner,
+            type="request_approval",
+            url="#",
+            project=project,
+            message=f"{user.first_name} {user.last_name} has requested your approval to complete the project: {project.title}."
+        )
+
+        Notification.objects.create(
+            user=user,
+            type="project",
+            url=f"/dashboard/my-jobs?tab=projects",
+            message=f"Project request approval has been sent successfully."
+        )
+        
+        
+        return Response({'message': 'Project approval requested successfully'}, status=status.HTTP_200_OK)
+
+
+
+class ApproveProject(generics.GenericAPIView):
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        project_id = self.kwargs['project_id']
+        project = get_object_or_404(Project, id=project_id)
+        user = project.owner
+        assigned_to = project.assigned_to
+
+        if user.credits >= project.budget:
+            user.credits -= project.budget
+            user.save()
+
+            Transaction.objects.create(
+                user=user,
+                currency='embers',
+                type='payment',
+                description='Project Completion',
+                amount=project.budget,
+            )
+
+            Notification.objects.create(
+                user=user,
+                type="project",
+                url=f"/dashboard/my-jobs?tab=projects",
+                message=f"Your project has been approved successfully."
+            )
+
+            assigned_to.credits += project.budget
+            assigned_to.save()
+
+            Transaction.objects.create(
+                user=assigned_to,
+                currency='embers',
+                type='received',
+                description='Project Completion',
+                amount=project.budget,
+            )
+
+            Notification.objects.create(
+                user=assigned_to,
+                type="project",
+                url=f"/dashboard/my-jobs?tab=projects",
+                message=f"The project has been completed successfully. Embers have been credited to your account."
+            )
+
+            project.status = 'closed'
+            project.save()
+            
+            return Response({'message': 'Project approved successfully.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'message': 'Insufficient credits, Please purchase more Embers.'}, status=status.HTTP_400_BAD_REQUEST)

@@ -22,6 +22,10 @@ const DashboardNavbar = () => {
   const [notificationCount, setNotificationCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [project, setProject] = useState({});
+  const [notificationId, setNotificationId] = useState(null);
+  const [error, setError] = useState(null);
 
   const [menuClicked, setMenuClicked] = useState(false);
 
@@ -67,8 +71,71 @@ const DashboardNavbar = () => {
     fetchNotifications();
   }, []);
 
+  const approveProject = async () => {
+    try {
+      await api.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${project.id}/approve/`
+      );
+      setPopupOpen(false);
+      setProject(null);
+      handleNotificationClick(notificationId);
+    } catch (error) {
+      setError(error.response.data.message);
+    }
+  };
+
+  const openPopup = async (project, notificationId) => {
+    setMenuOpen(false);
+    setPopupOpen(true);
+    setNotificationId(notificationId);
+
+    try {
+      const response = await api.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/projects/${project}/`
+      );
+      setProject(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
+      {popupOpen && (
+        <>
+          <div
+            className={styles.overlay}
+            onClick={() => setPopupOpen(false)}
+          ></div>
+          <div className={styles.popup}>
+            {error && <p className={styles.error}>{error}</p>}
+            <h3>Project Completion Request</h3>
+            <p>
+              Are you sure you want to approve this project?
+              <br />
+              Please review the work before making a decision. Once approved,
+              the freelancer will receive payment.
+            </p>
+            <div className={styles.buttons}>
+              <button onClick={approveProject}>Approve</button>
+              <button
+                onClick={() => {
+                  setPopupOpen(false);
+                  setProject(null);
+                  handleNotificationClick(notificationId);
+                }}
+              >
+                Decline
+              </button>
+              <Link
+                href={`/dashboard/projects/${project.id}?title=${project.title}&description=${project.description}`}
+              >
+                Review Project
+              </Link>
+            </div>
+          </div>
+        </>
+      )}
       <div className="container">
         <nav className={styles.navbar}>
           <Link className={styles.logo} href="/">
@@ -108,9 +175,11 @@ const DashboardNavbar = () => {
                         <br />
                         <Link
                           href={notification.url}
-                          onClick={() =>
-                            handleNotificationClick(notification.id)
-                          }
+                          onClick={() => {
+                            notification.url === "#"
+                              ? openPopup(notification.project, notification.id)
+                              : handleNotificationClick(notification.id);
+                          }}
                         >
                           <span>
                             {getTimeDifference(notification.created_at)}

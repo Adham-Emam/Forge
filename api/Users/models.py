@@ -66,6 +66,7 @@ class Notification(models.Model):
         ('bid', 'Bid'),
     )
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    project = models.ForeignKey('Projects.Project', on_delete=models.CASCADE, null=True, blank=True)
     type = models.CharField(max_length=255, choices=NOTIFICATION_TYPE_CHOICES)
     url = models.URLField()
     message = models.TextField()
