@@ -24,9 +24,6 @@ function RegisterSection() {
     }
   }, []);
 
-  const googleSignIn = () => {};
-  const githubSignIn = () => {};
-
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -141,16 +138,7 @@ function RegisterSection() {
       <div className={styles.registerContainer}>
         <h2 className="section-title">Create Account</h2>
         <p>Join the Forge and Ignite Your Path to Mastery</p>
-        <div className={styles.authProviders}>
-          <button onClick={googleSignIn} aria-label="Login using Google">
-            <FaGoogle />
-          </button>
-          <button onClick={githubSignIn} aria-label="Login using Github">
-            <FaGithub />
-          </button>
-        </div>
         <form className={styles.form} method="POST" onSubmit={handleSubmit}>
-          <p>Or use your email for registration.</p>
           {error && (
             <p style={{ color: "#ff5555", textAlign: "center" }}>{error}</p>
           )}

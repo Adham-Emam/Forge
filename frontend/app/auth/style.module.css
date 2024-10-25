@@ -90,33 +90,6 @@
   margin: 0 auto 20px;
   text-align: center;
 }
-.authProviders {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-.authProviders button {
-  background-color: transparent;
-  border: 1px solid var(--ash-white);
-  border-radius: 50%;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  outline: none;
-  color: var(--ash-white);
-  transition-duration: 0.3s;
-  cursor: pointer;
-}
-.authProviders button:hover {
-  color: var(--molten-orange);
-  border: 1px solid var(--molten-orange);
-}
-.authProviders svg {
-  font-size: 1.5rem;
-}
 .form p {
   margin: 10px auto 20px;
   text-align: center;
