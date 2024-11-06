@@ -1,0 +1,10 @@
+# Ignore node modules and other unneeded files
+node_modules
+.next
+out
+.git
+.env
+.env.local
+.dockerignore
+npm-debug.log
+Dockerfile

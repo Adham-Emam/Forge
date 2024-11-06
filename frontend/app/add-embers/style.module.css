@@ -1,0 +1,101 @@
+.cardContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  margin-bottom: 30px;
+}
+.card {
+  min-height: 320px;
+  background-color: var(--iron-black);
+  box-shadow: -2px 2px 2px 0 var(--iron-black);
+  border: 1px solid var(--iron-black);
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 50px 10px;
+  position: relative;
+  transition-duration: 0.3s;
+}
+.card.selected {
+  border-color: var(--molten-orange);
+}
+.card button {
+  background-color: var(--molten-orange);
+  border: 1px solid var(--molten-orange);
+  color: var(--ash-black);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 900;
+  cursor: pointer;
+  transition-duration: 0.3s;
+}
+.card button:hover {
+  border-color: var(--forge-red);
+  background-color: var(--forge-red);
+}
+.embersContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+.popularBadge {
+  background-color: var(--molten-orange);
+  font-weight: 700;
+  position: absolute;
+  top: 0;
+  right: 50%;
+  transform: translate(50%, -50%);
+  color: var(--ash-black);
+  font-weight: 700;
+  padding: 5px 20px;
+  border-radius: 25px;
+  background-size: 400% 400%;
+  background-image: linear-gradient(
+    -45deg,
+    var(--ember-yellow) 0%,
+    var(--molten-orange) 50%,
+    var(--forge-red) 100%
+  );
+  animation: gradient 2s ease-in-out infinite;
+}
+.price {
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+.price span {
+  font-size: 0.8rem;
+  font-weight: 400;
+  opacity: 0.5;
+}
+.description {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  text-align: center;
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@media screen and (max-width: 991px) {
+  .cardContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 767px) {
+  .cardContainer {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}
