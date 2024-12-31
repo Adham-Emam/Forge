@@ -32,7 +32,7 @@ const Error404 = () => {
               <a href="/dashboard/find-work/most-recent">Dashboard</a>
             </li>
             <li>
-              <a href="/bonfire">Forge Bonfire</a>
+              <a href="/bonfire">Bonfire</a>
             </li>
           </ul>
         </div>
