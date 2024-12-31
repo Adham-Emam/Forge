@@ -34,10 +34,7 @@ const bonfire = () => {
               <a href="/dashboard/find-work/most-recent">Dashboard</a>
             </li>
             <li>
-              <a href="/auth/login">Login</a>
-            </li>
-            <li>
-              <a href="/auth/register">Register</a>
+              <a href="/bonfire">Bonfire</a>
             </li>
           </ul>
         </div>
