@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Menu, X, Hammer } from 'lucide-react'
+import { checkAuth } from '@/lib/auth'
 
 const navigation = [
   { name: 'Exchange Hub', href: '/exchange-hub' },
@@ -15,6 +16,15 @@ const navigation = [
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+
+  useEffect(() => {
+    const verifyAuth = async () => {
+      const { isAuthenticated } = await checkAuth()
+      setIsAuthenticated(isAuthenticated)
+    }
+    verifyAuth()
+  }, [])
 
   return (
     <header className="relative z-50">
@@ -63,14 +73,24 @@ export default function Navbar() {
                     ))}
                   </div>
                   <div className="py-6 space-y-2">
-                    <Link href="/login">
-                      <Button variant="outline" className="w-full">
-                        Sign in
-                      </Button>
-                    </Link>
-                    <Link href="/register">
-                      <Button className="w-full">Get Started</Button>
-                    </Link>
+                    {isAuthenticated ? (
+                      <Link href="/logout">
+                        <Button variant="outline" className="w-full mb-2">
+                          Sign out
+                        </Button>
+                      </Link>
+                    ) : (
+                      <>
+                        <Link href="/login">
+                          <Button variant="outline" className="w-full mb-2">
+                            Sign in
+                          </Button>
+                        </Link>
+                        <Link href="/register">
+                          <Button className="w-full">Get Started</Button>
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -110,12 +130,20 @@ export default function Navbar() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end gap-4">
-          <Link href="/login">
-            <Button variant="outline">Sign in</Button>
-          </Link>
-          <Link href="/register">
-            <Button>Get Started</Button>
-          </Link>
+          {isAuthenticated ? (
+            <Link href="/logout">
+              <Button variant="outline">Sign out</Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="outline">Sign in</Button>
+              </Link>
+              <Link href="/register">
+                <Button>Get Started</Button>
+              </Link>
+            </>
+          )}
         </div>
       </nav>
     </header>
