@@ -1,5 +1,7 @@
 # Backend
 /api
+/api2
+/.venv
 
 # dependencies
 /node_modules

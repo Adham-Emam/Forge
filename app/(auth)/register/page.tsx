@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import AuthForm from '@/components/auth-form'
 import {
   Card,
   CardContent,
@@ -45,33 +45,14 @@ export default function RegisterPage() {
                 </span>
               </div>
             </div>
-            <div className="space-y-2">
-              <Input type="text" placeholder="Full Name" className="w-full" />
-              <Input
-                type="email"
-                placeholder="name@example.com"
-                className="w-full"
-              />
-              <Input
-                type="password"
-                placeholder="Create a password"
-                className="w-full"
-              />
-              <Input
-                type="password"
-                placeholder="Confirm your password"
-                className="w-full"
-              />
-              <Button className="w-full" type="submit">
-                Create Account
-              </Button>
-            </div>
+            <div className="space-y-2"></div>
+            <AuthForm action={'register'} />
           </CardContent>
           <CardFooter>
             <div className="text-sm text-muted-foreground text-center w-full">
               Already have an account?{' '}
               <Link
-                href="/auth/login"
+                href="/login"
                 className="hover:text-primary underline underline-offset-4"
               >
                 Sign in
