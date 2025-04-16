@@ -1,15 +1,20 @@
 'use client'
 import { useRouter } from 'next/navigation'
-import { useState, FormEvent, useEffect } from 'react'
+import { useState, FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { checkAuth } from '@/lib/auth'
+import { Eye, EyeOff } from 'lucide-react'
 
 const AuthForm = ({ action }: { action: string }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
+  const [showPassword, setShowPassword] = useState(false)
+
+  // const handlePassword = () => {}
 
   const router = useRouter()
   const verifyAuth = async () => {
@@ -178,21 +183,31 @@ const AuthForm = ({ action }: { action: string }) => {
         />
       </div>
 
-      <div className="space-y-2">
+      <div
+        className={`space-y-2 flex items-center border rounded-md overflow-hidden pr-2 ${fieldErrors.password ? 'border-red-500' : ''}`}
+      >
         <Input
-          type="password"
+          type={showPassword ? 'text' : 'password'}
           placeholder={
             action === 'register' ? 'Create a password' : 'Enter your password'
           }
           name="password"
-          className={`w-full ${fieldErrors.password ? 'border-red-500' : ''}`}
+          className="w-full focus-visible:ring-transparent border-transparent bg-transparent"
         />
+        <div
+          onClick={() => {
+            setShowPassword(!showPassword)
+          }}
+          className="!m-2 p-1 hover:bg-accent rounded-md cursor-pointer"
+        >
+          {showPassword ? <EyeOff /> : <Eye />}
+        </div>
       </div>
 
       {action === 'register' && (
         <div className="space-y-2">
           <Input
-            type="password"
+            type={showPassword ? 'text' : 'password'}
             placeholder="Confirm your password"
             name="confirm-password"
             className={`w-full ${fieldErrors['confirm-password'] ? 'border-red-500' : ''}`}
