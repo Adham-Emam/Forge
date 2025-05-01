@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Menu, X, Hammer } from 'lucide-react'
-import { checkAuth } from '@/lib/auth'
+import useAuth from '@/hooks/useAuth'
+import { Loader2 } from 'lucide-react'
 
 const navigation = [
   { name: 'Exchange Hub', href: '/exchange-hub' },
@@ -16,15 +17,18 @@ const navigation = [
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-  useEffect(() => {
-    const verifyAuth = async () => {
-      const { isAuthenticated } = await checkAuth()
-      setIsAuthenticated(isAuthenticated)
-    }
-    verifyAuth()
-  }, [])
+  const { accessToken, loading } = useAuth()
+
+  const isAuthenticated = !!accessToken
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <header className="relative z-50">

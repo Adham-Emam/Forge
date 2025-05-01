@@ -16,12 +16,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
 
   // fetch data
-  const product = await fetch(
+  const post = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}blog/posts/${slug}`
   ).then((res) => res.json())
 
   return {
-    title: product.title,
+    title: post.title,
+    description: post.excerpt,
   }
 }
 

@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation'
 import { useState, FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { checkAuth } from '@/lib/auth'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import useAuth from '@/hooks/useAuth'
 
 const AuthForm = ({ action }: { action: string }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -14,16 +14,22 @@ const AuthForm = ({ action }: { action: string }) => {
 
   const [showPassword, setShowPassword] = useState(false)
 
-  // const handlePassword = () => {}
-
   const router = useRouter()
-  const verifyAuth = async () => {
-    const { isAuthenticated } = await checkAuth()
-    if (isAuthenticated) {
-      router.push('/')
-    }
+
+  const { accessToken, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin" />
+      </div>
+    )
   }
-  verifyAuth()
+
+  if (accessToken) {
+    router.push('/')
+    return
+  }
 
   const getFirstError = () => {
     const errors = Object.entries(fieldErrors)
@@ -66,10 +72,9 @@ const AuthForm = ({ action }: { action: string }) => {
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}users/${action}/`,
+        `${process.env.NEXT_PUBLIC_API_URL}users/${action == 'register' ? 'register' : 'token'}/`,
         {
           method: 'POST',
-          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -91,6 +96,7 @@ const AuthForm = ({ action }: { action: string }) => {
       )
 
       const data = await response.json()
+      console.log(data)
 
       if (!response.ok) {
         const errors: Record<string, string> = {}
@@ -110,9 +116,18 @@ const AuthForm = ({ action }: { action: string }) => {
         return
       }
 
+      localStorage.setItem(
+        'auth',
+        JSON.stringify({
+          access: data.access,
+          refresh: data.refresh,
+          user: data.user,
+        })
+      )
+
       if (action === 'register') {
         setSuccess('Registration successful! You can now login.')
-        setTimeout(() => router.push('/login'), 1500)
+        setTimeout(() => router.push('/'), 1500)
       } else {
         setSuccess('Login successful! Redirecting...')
         const searchParams = new URLSearchParams(window.location.search)

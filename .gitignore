@@ -1,7 +1,9 @@
 # Backend
-/api
-/api2
-/.venv
+.venv
+*.rest
+.env
+__pycache__
+*.sqlite3
 
 # dependencies
 /node_modules

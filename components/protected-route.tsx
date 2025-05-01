@@ -1,37 +1,75 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
-import { checkAuth } from '@/lib/auth'
+import { jwtDecode } from 'jwt-decode'
 
-export default function ProtectedRoute({
-  children,
-}: {
+interface Props {
   children: React.ReactNode
-}) {
+}
+
+interface DecodedToken {
+  exp: number
+  [key: string]: any
+}
+
+export default function ProtectedRoute({ children }: Props) {
   const router = useRouter()
-  const pathname = usePathname()
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const verifyAuth = async () => {
-      const { isAuthenticated } = await checkAuth()
-      if (!isAuthenticated) {
-        router.push(`/login?next=${encodeURIComponent(pathname)}`)
+    const stored = localStorage.getItem('auth')
+
+    if (!stored) {
+      router.push('/login')
+      return
+    }
+
+    const { access, refresh, user } = JSON.parse(stored)
+
+    try {
+      const decoded: DecodedToken = jwtDecode(access)
+      const isExpired = decoded.exp * 1000 < Date.now()
+
+      if (isExpired) {
+        // try to refresh
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}users/token/refresh/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ refresh }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.access) {
+              // update localStorage
+              localStorage.setItem(
+                'auth',
+                JSON.stringify({
+                  access: data.access,
+                  refresh,
+                  user,
+                })
+              )
+              setIsLoading(false)
+            } else {
+              localStorage.removeItem('auth')
+              router.push('/login')
+            }
+          })
+          .catch(() => {
+            localStorage.removeItem('auth')
+            router.push('/login')
+          })
       } else {
         setIsLoading(false)
       }
+    } catch (err) {
+      localStorage.removeItem('auth')
+      router.push('/login')
     }
-    verifyAuth()
-  }, [router, pathname])
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    )
-  }
+  }, [router])
 
   if (isLoading) {
     return (
