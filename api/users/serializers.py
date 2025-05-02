@@ -101,6 +101,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
+        educations_data = validated_data.pop("educations", None)
+        experiences_data = validated_data.pop("experiences", None)
+
         # Handle skills update
         if "skills" in validated_data:
             skills_data = validated_data.pop("skills")
@@ -113,8 +116,21 @@ class CustomUserSerializer(serializers.ModelSerializer):
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
-        if "password" in validated_data:
-            instance.set_password(validated_data["password"])
+        # Handle nested educations
+        if educations_data is not None:
+            # Clear old ones (optional — depends on your logic)
+            instance.educations.all().delete()
+
+            for edu_data in educations_data:
+                UserEducation.objects.create(user=instance, **edu_data)
+
+        # Handle nested educations
+        if experiences_data is not None:
+            # Clear old ones (optional — depends on your logic)
+            instance.experiences.all().delete()
+
+            for exp_data in experiences_data:
+                UserWorkExperience.objects.create(user=instance, **exp_data)
 
         instance.save()
         return instance
@@ -143,3 +159,9 @@ class CustomUserRegisterSerializer(serializers.ModelSerializer):
         validated_data.pop("password2")
         user = CustomUser.objects.create_user(**validated_data)
         return user
+
+
+class SkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Skill
+        fields = ["name"]

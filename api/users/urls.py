@@ -18,6 +18,6 @@ urlpatterns = [
     path("register/", views.UserRegisterView.as_view(), name="user-register"),
     path("", views.UserListView.as_view(), name="user-list"),
     path("<pk>/", views.UserDetailView.as_view(), name="user-detail"),
-    path("update/<pk>/", views.UserUpdateView.as_view(), name="user-detail"),
+    path("<pk>/update/", views.UserUpdateView.as_view(), name="user-update"),
     path("", include(router.urls)),
 ]

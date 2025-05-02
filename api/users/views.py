@@ -2,6 +2,8 @@ from rest_framework import generics, permissions, status, viewsets
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .serializers import (
@@ -10,8 +12,9 @@ from .serializers import (
     CustomUserRegisterSerializer,
     UserEducationSerializer,
     UserWorkExperienceSerializer,
+    SkillSerializer,
 )
-from .models import CustomUser, UserEducation, UserWorkExperience
+from .models import CustomUser, UserEducation, UserWorkExperience, Skill
 from .permissions import IsOwnerOrReadOnly, IsAdminOrSelf
 from .token import CustomAccessToken
 
@@ -48,6 +51,8 @@ class UserRegisterView(generics.CreateAPIView):
 
 
 class UserListView(generics.ListAPIView):
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.IsAdminUser]
@@ -59,7 +64,7 @@ class UserListView(generics.ListAPIView):
 class UserDetailView(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
 
 
 class UserUpdateView(generics.UpdateAPIView):
@@ -94,3 +99,9 @@ class UserWorkExperienceViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class SkillViewSet(viewsets.ModelViewSet):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+    permission_classes = [permissions.IsAdminUser, permissions.IsAuthenticated]
