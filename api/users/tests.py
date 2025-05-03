@@ -45,7 +45,7 @@ class UserTests(APITestCase):
         self.assertIn("refresh", response.data)
 
     def test_token_obtain(self):
-        user = User.objects.create_user(**self.user_data)
+        User.objects.create_user(**self.user_data)
         url = reverse("token_obtain_pair")
         response = self.client.post(
             url,
