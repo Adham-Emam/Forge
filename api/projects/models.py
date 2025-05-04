@@ -7,10 +7,9 @@ class Project(models.Model):
     STATUS_CHOICES = [
         ("active", "Active"),
         ("paused", "Paused"),
+        ("in_progress", "In Progress"),
         ("pending", "Pending"),
         ("completed", "Completed"),
-        ("accepted", "Accepted"),
-        ("rejected", "Rejected"),
     ]
 
     title = models.CharField(max_length=255)

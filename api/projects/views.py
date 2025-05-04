@@ -1,13 +1,18 @@
 from rest_framework import generics, permissions, filters
+from rest_framework.exceptions import ValidationError
 from django_filters.rest_framework import (
     DjangoFilterBackend,
     FilterSet,
     CharFilter,
     NumberFilter,
 )
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 
 from .models import Project, Proposal
 from .serializers import ProjectSerializer, ProposalSerializer
+
+User = get_user_model()
 
 
 class ProjectFilter(FilterSet):
@@ -67,13 +72,33 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.owner == request.user
 
 
-class ProjectDetailView(generics.RetrieveUpdateDestroyAPIView):
+class ProjectDetailView(generics.RetrieveAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class ProjectUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def perform_update(self, serializer):
-        serializer.save(owner=self.get_object().owner)
+        project = self.get_object()
+        assigned_user_id = self.request.data.get("assign_to")
+
+        update_kwargs = {"owner": project.owner}
+
+        if assigned_user_id:
+            assigned_user = get_object_or_404(User, id=assigned_user_id)
+
+            if assigned_user == self.request.user:
+                raise ValidationError("You can not assign a project to yourself.")
+
+            update_kwargs["assigned_to"] = assigned_user
+            update_kwargs["status"] = "in_progress"
+
+        serializer.save(**update_kwargs)
 
 
 class ProposalListView(generics.ListAPIView):
@@ -98,7 +123,7 @@ class ProposalDetailView(generics.RetrieveUpdateDestroyAPIView):
         queryset = self.get_queryset()
         proposal_id = self.kwargs.get("proposal_id")
 
-        return generics._get_object_or_404(queryset, id=proposal_id)
+        return generics.get_object_or_404(queryset, id=proposal_id)
 
 
 class ProposalCreateView(generics.CreateAPIView):
@@ -107,8 +132,14 @@ class ProposalCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        user_id = self.request.data.get("user")
+        user = self.request.user
         project_id = self.kwargs.get("project_id")
+        project = generics.get_object_or_404(Project, id=project_id)
 
-        # Save the proposal with the project_id and user_id
-        serializer.save(user_id=user_id, project_id=project_id, status="active")
+        if project.owner == user:
+            raise ValidationError("You cannot apply to your own project.")
+
+        if Proposal.objects.filter(user=user, project=project).exists():
+            raise ValidationError("You have already applied to this project.")
+
+        serializer.save(user=user, project=project, status="active")

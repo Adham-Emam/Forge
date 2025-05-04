@@ -14,25 +14,29 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def validate(self, data):
-        if data["category"] == "exchange":
-            if not data.get("request_title"):
+        project_type = data.get("project_type")
+
+        if project_type != "exchange":
+            return data
+
+        for field in ["request_title", "request_description", "request_value"]:
+            value = data.get(field)
+            if value is None and self.instance:
+                value = getattr(self.instance, field, None)
+
+            if value is None or value == "":
                 raise serializers.ValidationError(
-                    "Exchange projects must include a request title."
+                    {
+                        field: f"Exchange projects must include {field.replace('_', ' ')}."
+                    }
                 )
-            elif not data.get("request_decription"):
-                raise serializers.ValidationError(
-                    "Exchange projects must include a request description."
-                )
-            elif not data.get("request_value"):
-                raise serializers.ValidationError(
-                    "Exchange projects must include a request value."
-                )
+
         return data
 
 
 class ProposalSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
-    project = serializers.PrimaryKeyRelatedField(queryset=Project.objects.all())
+    project = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Proposal
