@@ -43,7 +43,6 @@ class ProjectProposalTests(APITestCase):
         self.client.force_authenticate(user=self.user1)
         url = reverse("project-create")
         data = {
-            "owner": self.user1.id,
             "title": "New Project",
             "category": "Design",
             "project_type": "traditional",

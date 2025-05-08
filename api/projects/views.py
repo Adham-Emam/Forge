@@ -57,8 +57,7 @@ class ProjectCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        owner_id = self.request.data.get("owner")
-        serializer.save(owner_id=owner_id, status="active")
+        serializer.save(owner=self.request.user, status="active")
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -99,6 +98,11 @@ class ProjectUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
             update_kwargs["status"] = "in_progress"
 
         serializer.save(**update_kwargs)
+
+    def perform_destroy(self, instance):
+        if instance.status == "in_progress":
+            raise ValidationError("You can not delete a project if it's in progress.")
+        instance.delete()
 
 
 class ProposalListView(generics.ListAPIView):
