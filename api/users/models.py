@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.core.validators import MinValueValidator
 from .managers import CustomUserManager
 
 
@@ -25,6 +26,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     # Freelancer-specific fields
+    credit_amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     title = models.CharField(max_length=200, blank=True, null=True)
     overview = models.TextField(blank=True, null=True)
     skills = models.ManyToManyField("Skill", blank=True)
