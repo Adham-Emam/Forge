@@ -237,7 +237,7 @@ export function Navbar() {
               </Avatar>
 
               {isOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-card/85 backdrop-blur-md border-b shadow-sm rounded z-50 border">
+                <div className="absolute top-full right-0 mt-2 w-48 bg-card/90 backdrop-blur-lg border-b shadow-sm rounded z-50 border">
                   <NavigationMenu className="w-full flex flex-col list-none">
                     <NavigationMenuItem className="px-3 py-2">
                       <NavigationMenuLink
