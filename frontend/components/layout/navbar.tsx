@@ -43,10 +43,6 @@ const routes = [
     name: 'Blog',
     path: '/blog',
   },
-  {
-    name: 'Messages',
-    path: '/messages',
-  },
 ]
 
 const profileDropdown = [
@@ -65,6 +61,10 @@ const profileDropdown = [
   {
     name: 'Feedback',
     path: '/feedback',
+  },
+  {
+    name: 'Log Out',
+    path: '/logout',
   },
 ]
 
@@ -197,6 +197,21 @@ export function Navbar() {
                   )}
                 </NavigationMenuItem>
               ))}
+              {isLoggedIn && (
+                <NavigationMenuItem className="p-3">
+                  <NavigationMenuLink
+                    href="/messages"
+                    className={cn(
+                      'font-medium',
+                      pathname === '/messages"'
+                        ? 'text-accent'
+                        : 'text-foreground'
+                    )}
+                  >
+                    Messages
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              )}
             </NavigationMenuList>
           </NavigationMenu>
         </div>
