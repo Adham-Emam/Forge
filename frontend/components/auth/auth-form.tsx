@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,6 +19,7 @@ import { ArrowRight, Loader2 } from 'lucide-react'
 import { Eye, EyeOff } from 'lucide-react'
 
 import { checkAuth } from '@/lib/auth'
+import Loader from '@/components/layout/loader'
 
 const loginFormSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -44,13 +45,21 @@ const registerFormSchema = z
 
 const AuthForm = ({ action }: { action: 'login' | 'register' }) => {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true)
 
   // Check if user is already authenticated
   useEffect(() => {
     const checkUserAuth = async () => {
-      const isAuthenticated = await checkAuth()
-      if (isAuthenticated) {
-        router.push('/')
+      try {
+        const isAuthenticated = await checkAuth()
+        if (isAuthenticated) {
+          router.push('/')
+        } else {
+          setIsCheckingAuth(false)
+        }
+      } catch (error) {
+        console.error('Error checking authentication:', error)
       }
     }
     checkUserAuth()
@@ -79,6 +88,11 @@ const AuthForm = ({ action }: { action: 'login' | 'register' }) => {
             password: '',
           },
   })
+
+  // If loading, show a loader
+  if (isCheckingAuth) {
+    return <Loader />
+  }
 
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
     setIsLoading(true)
@@ -129,7 +143,10 @@ const AuthForm = ({ action }: { action: 'login' | 'register' }) => {
         localStorage.setItem('forge-auth-token', data.access)
         localStorage.setItem('forge-refresh-token', data.refresh)
         localStorage.setItem('forge-user', JSON.stringify(data.user))
-        router.push('/')
+
+        // Redirect to the next page or home
+        const next = searchParams.get('next')
+        router.push(next ? next : '/')
         setIsLoading(false)
       })
       .catch((error) => {
