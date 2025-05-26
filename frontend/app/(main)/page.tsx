@@ -423,10 +423,10 @@ export default function Home() {
               <div className="absolute -inset-1 rounded-lg bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 blur"></div>
               <div className="relative bg-card border border-border rounded-lg p-8 shadow-sm">
                 <p className="text-lg italic mb-6">
-                  "Forge has completely transformed how I collaborate with other
-                  professionals. The skill exchange feature allowed me to trade
-                  my UI design skills for web development help, saving me
-                  thousands while building valuable connections."
+                  &quot;Forge has completely transformed how I collaborate with
+                  other professionals. The skill exchange feature allowed me to
+                  trade my UI design skills for web development help, saving me
+                  thousands while building valuable connections.&quot;
                 </p>
                 <div className="flex items-center justify-center space-x-4">
                   <div className="relative w-12 h-12 rounded-full overflow-hidden">
@@ -455,7 +455,7 @@ export default function Home() {
                 <h3 className="text-xl font-bold">Verified Skills</h3>
               </div>
               <p className="text-muted-foreground">
-                Our community members validate each other's work, ensuring
+                Our community members validate each other&apos;s work, ensuring
                 quality and trust.
               </p>
             </div>

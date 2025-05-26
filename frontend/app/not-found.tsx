@@ -9,7 +9,7 @@ export default function NotFound() {
         The page you are looking for does not exist. It might have been moved or
         deleted. You can try searching for it or check the URL for any mistakes.
       </p>
-      <Link href="/" className="">
+      <Link href="/">
         <Badge
           variant="destructive"
           className="cursor-pointer px-4 py-2 text-sm font-semibold transition-colors hover:bg-red-600 hover:text-white"

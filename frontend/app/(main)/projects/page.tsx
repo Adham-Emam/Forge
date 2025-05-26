@@ -550,8 +550,9 @@ export default function ProjectsPage() {
                   <Hammer className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="text-xl font-bold mb-2">No projects found</h3>
                   <p className="text-muted-foreground max-w-md mx-auto mb-6">
-                    We couldn't find any projects matching your current filters.
-                    Try adjusting your search criteria or post your own project.
+                    We couldn&apos;t find any projects matching your current
+                    filters. Try adjusting your search criteria or post your own
+                    project.
                   </p>
                   <Button asChild>
                     <Link href="/projects/create">

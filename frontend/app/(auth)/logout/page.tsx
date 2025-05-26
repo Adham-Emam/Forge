@@ -23,7 +23,7 @@ export default function Logout() {
 
     // Cleanup the timer on component unmount
     return () => clearTimeout(timer)
-  }, [])
+  }, [router])
 
   return (
     <div>
