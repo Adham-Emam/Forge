@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -14,12 +14,16 @@ import {
   NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+import {
+  Sheet,
+  SheetTitle,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
-import { Hammer, Menu, X } from 'lucide-react'
+import { Hammer, Loader2, Menu, X } from 'lucide-react'
 import { checkAuth } from '@/lib/auth'
-import path from 'node:path'
 
 const routes = [
   {
@@ -45,6 +49,25 @@ const routes = [
   },
 ]
 
+const profileDropdown = [
+  {
+    name: 'Bonfire',
+    path: '/bonfire',
+  },
+  {
+    name: 'Notifications',
+    path: '/notifications',
+  },
+  {
+    name: 'Help & Support',
+    path: '/help',
+  },
+  {
+    name: 'Feedback',
+    path: '/feedback',
+  },
+]
+
 export function Navbar() {
   const pathname = usePathname()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
@@ -52,7 +75,11 @@ export function Navbar() {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
 
-  // Simulating login state - would be replaced with actual auth
+  const [isOpen, setIsOpen] = useState(false)
+  const toggleDropdown = () => setIsOpen(!isOpen)
+  // Reference for the dropdown to handle clicks outside
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     async function checkLoginStatus() {
       const isAuthenticated = await checkAuth()
@@ -61,19 +88,29 @@ export function Navbar() {
       setFirstName(user ? JSON.parse(user).first_name : '')
       setLastName(user ? JSON.parse(user).last_name : '')
     }
-
     checkLoginStatus()
   }, [pathname])
 
   useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 10) {
-        setIsScrolled(true)
-      } else {
-        setIsScrolled(false)
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        event.target &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false)
       }
     }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10)
+    }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -129,40 +166,34 @@ export function Navbar() {
                       <NavigationMenuContent>
                         <div className="w-[220px] p-3">
                           {route.subMenu.map((subItem) => (
-                            <Link
-                              key={subItem.path}
+                            <NavigationMenuLink
+                              className={cn(
+                                'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent/10 focus:bg-accent/10',
+                                pathname === subItem.path && 'bg-accent/10'
+                              )}
                               href={subItem.path}
-                              legacyBehavior
-                              passHref
+                              key={subItem.path}
                             >
-                              <NavigationMenuLink
-                                className={cn(
-                                  'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent/10 focus:bg-accent/10',
-                                  pathname === subItem.path && 'bg-accent/10'
-                                )}
-                              >
-                                <div className="text-sm font-medium leading-none">
-                                  {subItem.name}
-                                </div>
-                              </NavigationMenuLink>
-                            </Link>
+                              <div className="text-sm font-medium leading-none">
+                                {subItem.name}
+                              </div>
+                            </NavigationMenuLink>
                           ))}
                         </div>
                       </NavigationMenuContent>
                     </>
                   ) : (
-                    <Link href={route.path} legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={cn(
-                          'font-medium',
-                          pathname === route.path
-                            ? 'text-accent'
-                            : 'text-foreground'
-                        )}
-                      >
-                        {route.name}
-                      </NavigationMenuLink>
-                    </Link>
+                    <NavigationMenuLink
+                      href={route.path}
+                      className={cn(
+                        'font-medium',
+                        pathname === route.path
+                          ? 'text-accent'
+                          : 'text-foreground'
+                      )}
+                    >
+                      {route.name}
+                    </NavigationMenuLink>
                   )}
                 </NavigationMenuItem>
               ))}
@@ -175,16 +206,51 @@ export function Navbar() {
           <ModeToggle />
 
           {isLoggedIn ? (
-            <Avatar className="cursor-pointer">
-              <AvatarImage
-                src="https://images.pexels"
-                alt={`${firstName}${lastName}`}
-              />
-              <AvatarFallback className="bg-secondary">
-                {firstName?.split('', 1)}
-                {lastName?.split('', 1)}
-              </AvatarFallback>
-            </Avatar>
+            <div
+              className="hidden md:flex items-center space-x-3 relative"
+              ref={dropdownRef}
+            >
+              <Avatar className="cursor-pointer" onClick={toggleDropdown}>
+                <AvatarImage
+                  src="https://images.pexels"
+                  alt={`${firstName} ${lastName}`}
+                />
+                <AvatarFallback className="bg-secondary">
+                  {firstName?.charAt(0)}
+                  {lastName?.charAt(0)}
+                </AvatarFallback>
+              </Avatar>
+
+              {isOpen && (
+                <div className="absolute top-full right-0 mt-2 w-48 bg-card/85 backdrop-blur-md border-b shadow-sm rounded z-50 border">
+                  <NavigationMenu className="w-full flex flex-col list-none">
+                    <NavigationMenuItem className="px-3 py-2">
+                      <NavigationMenuLink
+                        href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
+                        onClick={() => setIsOpen(false)}
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent/10 focus:bg-accent/10"
+                      >
+                        {firstName} {lastName}
+                      </NavigationMenuLink>
+                    </NavigationMenuItem>
+                    {profileDropdown.map((item) => (
+                      <NavigationMenuItem
+                        key={item.path}
+                        className="w-full px-3 py-2"
+                      >
+                        <NavigationMenuLink
+                          href={item.path}
+                          onClick={() => setIsOpen(false)}
+                          className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent/10 focus:bg-accent/10"
+                        >
+                          {item.name}
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    ))}
+                  </NavigationMenu>
+                </div>
+              )}
+            </div>
           ) : (
             <div className="hidden md:flex space-x-2">
               <Button variant="ghost" size="sm" asChild>
@@ -208,6 +274,7 @@ export function Navbar() {
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
+            <SheetTitle className="sr-only">Menu</SheetTitle>
             <SheetContent className="flex flex-col">
               <Link href="/" className="flex items-center gap-x-2 py-6">
                 <Hammer className="h-6 w-6 text-accent" />
@@ -215,7 +282,7 @@ export function Navbar() {
                   <span className="molten-text">FORGE</span>
                 </span>
               </Link>
-              <nav className="flex flex-col gap-y-6 text-lg">
+              <nav className="overflow-y-auto flex flex-col gap-y-6 text-lg">
                 {routes.map((route) => (
                   <div key={route.path} className="space-y-3">
                     <Link
@@ -245,19 +312,84 @@ export function Navbar() {
                     )}
                   </div>
                 ))}
+                {isLoggedIn && (
+                  <div className="space-y-3">
+                    <Link
+                      href="/notifications"
+                      className={cn(
+                        'text-foreground/80 hover:text-foreground transition-colors',
+                        pathname === '/notifications' &&
+                          'text-accent font-semibold'
+                      )}
+                    >
+                      Notifications
+                    </Link>
+                  </div>
+                )}
+                <div className="space-y-3">
+                  <Link
+                    href="/bonfire"
+                    className={cn(
+                      'text-foreground/80 hover:text-foreground transition-colors',
+                      pathname === '/bonfire' && 'text-accent font-semibold'
+                    )}
+                  >
+                    Bonfire
+                  </Link>
+                </div>
+                <div className="space-y-3">
+                  <Link
+                    href="/help"
+                    className={cn(
+                      'text-foreground/80 hover:text-foreground transition-colors',
+                      pathname === '/help' && 'text-accent font-semibold'
+                    )}
+                  >
+                    Help & Support
+                  </Link>
+                </div>
+                <div className="space-y-3">
+                  <Link
+                    href="/feedback"
+                    className={cn(
+                      'text-foreground/80 hover:text-foreground transition-colors',
+                      pathname === '/feedback' && 'text-accent font-semibold'
+                    )}
+                  >
+                    Feedback
+                  </Link>
+                </div>
               </nav>
               <div className="mt-auto pt-6">
                 {isLoggedIn ? (
                   <div className="flex items-center gap-x-4">
-                    <Avatar>
-                      <AvatarImage
-                        src="https://images.pexels.com/photos/1933873/pexels-photo-1933873.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
-                        alt="@username"
-                      />
-                      <AvatarFallback>U</AvatarFallback>
+                    <Avatar className="cursor-pointer">
+                      <Link
+                        href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
+                        className="block text-sm font-medium"
+                      >
+                        <AvatarImage
+                          src="https://images.pexels"
+                          alt={`${firstName}${lastName}`}
+                        />
+                      </Link>
+                      <AvatarFallback className="bg-secondary">
+                        <Link
+                          href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
+                          className="block text-sm font-medium"
+                        >
+                          {firstName?.split('', 1)}
+                          {lastName?.split('', 1)}
+                        </Link>
+                      </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="text-sm font-medium">Alex Morgan</p>
+                      <Link
+                        href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
+                        className="block text-sm font-medium"
+                      >
+                        {firstName} {lastName}
+                      </Link>
                       <Link
                         className="px-0 text-sm text-muted-foreground hover:text-foreground"
                         href="/logout"
