@@ -230,7 +230,7 @@ export function Navbar() {
                   src="https://images.pexels"
                   alt={`${firstName} ${lastName}`}
                 />
-                <AvatarFallback className="bg-secondary">
+                <AvatarFallback className="bg-card text-foreground">
                   {firstName?.charAt(0)}
                   {lastName?.charAt(0)}
                 </AvatarFallback>
@@ -388,7 +388,7 @@ export function Navbar() {
                           alt={`${firstName}${lastName}`}
                         />
                       </Link>
-                      <AvatarFallback className="bg-secondary">
+                      <AvatarFallback className="bg-card text-foreground">
                         <Link
                           href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
                           className="block text-sm font-medium"
