@@ -91,8 +91,14 @@ class ProjectUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
         if assigned_user_id:
             assigned_user = get_object_or_404(User, id=assigned_user_id)
 
-            if assigned_user == self.request.user:
-                raise ValidationError("You can not assign a project to yourself.")
+            if project.status != "active":
+                raise ValidationError("You can only assign a project that is active.")
+            if project.assigned_to and project.assigned_to != assigned_user:
+                raise ValidationError(
+                    "You can not assign a project that is already assigned to another user."
+                )
+            if project.owner == assigned_user:
+                raise ValidationError("You can not assign a project to its owner.")
 
             update_kwargs["assigned_to"] = assigned_user
             update_kwargs["status"] = "in_progress"

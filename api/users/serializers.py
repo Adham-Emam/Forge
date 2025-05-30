@@ -1,7 +1,10 @@
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from .models import CustomUser, Skill, UserEducation, UserWorkExperience
+from .models import CustomUser, Badge
 from .token import CustomAccessToken
+
+from projects.serializers import ProjectSerializer
+from badges.serializers import BadgeSerializer
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -24,44 +27,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-class SkillSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Skill
-        fields = ["id", "name"]
-
-
-class UserEducationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserEducation
-        fields = [
-            "id",
-            "institution",
-            "degree",
-            "field_of_study",
-            "start_year",
-            "end_year",
-            "description",
-        ]
-
-
-class UserWorkExperienceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserWorkExperience
-        fields = [
-            "id",
-            "company",
-            "position",
-            "start_date",
-            "end_date",
-            "currently_working",
-            "description",
-        ]
-
-
 class CustomUserSerializer(serializers.ModelSerializer):
-    skills = SkillSerializer(many=True, required=False)
-    educations = UserEducationSerializer(many=True, required=False)
-    experiences = UserWorkExperienceSerializer(many=True, required=False)
+    badges = BadgeSerializer(many=True, read_only=True)
+    posted_projects = ProjectSerializer(many=True, read_only=True)
+    assigned_projects = ProjectSerializer(many=True, read_only=True)
 
     class Meta:
         model = CustomUser
@@ -74,66 +43,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "email"]
 
     def create(self, validated_data):
-        # Handle nested skills creation
-        skills_data = validated_data.pop("skills", [])
-        educations_data = validated_data.pop("educations", [])
-        experiences_data = validated_data.pop("experiences", [])
-
         password = validated_data.pop("password", None)
         user = CustomUser(**validated_data)
         if password:
             user.set_password(password)
         user.save()
 
-        # Add skills
-        for skill_data in skills_data:
-            skill, _ = Skill.objects.get_or_create(name=skill_data["name"])
-            user.skills.add(skill)
-
-        # Create educations
-        for education_data in educations_data:
-            UserEducation.objects.create(user=user, **education_data)
-
-        # Create experiences
-        for experience_data in experiences_data:
-            UserWorkExperience.objects.create(user=user, **experience_data)
-
         return user
-
-    def update(self, instance, validated_data):
-        educations_data = validated_data.pop("educations", None)
-        experiences_data = validated_data.pop("experiences", None)
-
-        # Handle skills update
-        if "skills" in validated_data:
-            skills_data = validated_data.pop("skills")
-            instance.skills.clear()
-            for skill_data in skills_data:
-                skill, _ = Skill.objects.get_or_create(name=skill_data["name"])
-                instance.skills.add(skill)
-
-        # Update regular fields
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-
-        # Handle nested educations
-        if educations_data is not None:
-            # Clear old ones (optional — depends on your logic)
-            instance.educations.all().delete()
-
-            for edu_data in educations_data:
-                UserEducation.objects.create(user=instance, **edu_data)
-
-        # Handle nested educations
-        if experiences_data is not None:
-            # Clear old ones (optional — depends on your logic)
-            instance.experiences.all().delete()
-
-            for exp_data in experiences_data:
-                UserWorkExperience.objects.create(user=instance, **exp_data)
-
-        instance.save()
-        return instance
 
 
 class CustomUserRegisterSerializer(serializers.ModelSerializer):
@@ -159,9 +75,3 @@ class CustomUserRegisterSerializer(serializers.ModelSerializer):
         validated_data.pop("password2")
         user = CustomUser.objects.create_user(**validated_data)
         return user
-
-
-class SkillSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Skill
-        fields = ["name"]

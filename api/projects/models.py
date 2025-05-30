@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import CustomUser, Skill
+from users.models import CustomUser
 
 
 class Project(models.Model):
@@ -26,7 +26,9 @@ class Project(models.Model):
     request_description = models.TextField(blank=True)
     request_value = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
-    skills = models.ManyToManyField(Skill)
+    skills = models.JSONField(
+        blank=True, null=True, default=list, help_text="List of required skills"
+    )
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
 
     owner = models.ForeignKey(
@@ -47,6 +49,12 @@ class Project(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def get_proposals(self):
+        return self.proposals.all()
 
 
 class Proposal(models.Model):

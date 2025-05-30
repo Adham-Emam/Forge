@@ -5,7 +5,7 @@ urlpatterns = [
     path("", views.ProjectListView.as_view(), name="project-list"),
     path("<int:pk>/", views.ProjectDetailView.as_view(), name="project-detail"),
     path(
-        "<int:pk>/update-destroy",
+        "<int:pk>/update-destroy/",
         views.ProjectUpdateDestroyView.as_view(),
         name="project-update-destroy",
     ),

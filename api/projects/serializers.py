@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
 from .models import Project, Proposal
-from users.serializers import CustomUserSerializer, SkillSerializer
+
+# from users.serializers import CustomUserSerializer
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    owner = CustomUserSerializer(read_only=True)
-    assigned_to = CustomUserSerializer(read_only=True)
-    skills = SkillSerializer(many=True, read_only=True)
+    # owner = CustomUserSerializer(read_only=True)
+    # assigned_to = CustomUserSerializer(read_only=True)
 
     class Meta:
         model = Project
@@ -35,7 +35,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
 
 class ProposalSerializer(serializers.ModelSerializer):
-    user = CustomUserSerializer(read_only=True)
+    # user = CustomUserSerializer(read_only=True)
     project = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:

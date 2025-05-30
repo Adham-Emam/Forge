@@ -47,3 +47,19 @@ export const checkAuth = async (): Promise<boolean> => {
     return false
   }
 }
+
+export const isCurrentUser = async (userId: number): Promise<boolean> => {
+  const isAuth = await checkAuth()
+  if (!isAuth) return false
+
+  const access = localStorage.getItem('forge-auth-token')
+  if (!access) return false
+
+  try {
+    const decoded = jwtDecode<{ user_id: number }>(access)
+    return decoded.user_id === userId
+  } catch (error) {
+    console.error('Error decoding token:', error)
+    return false
+  }
+}

@@ -22,7 +22,9 @@ import {
 } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
-import { Hammer, Loader2, Menu, X } from 'lucide-react'
+import { Hammer, Menu } from 'lucide-react'
+
+import { UserProps } from '@/types/user'
 import { checkAuth } from '@/lib/auth'
 
 const routes = [
@@ -72,8 +74,7 @@ export function Navbar() {
   const pathname = usePathname()
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [user, setUser] = useState<UserProps | null>(null)
 
   const [isOpen, setIsOpen] = useState(false)
   const toggleDropdown = () => setIsOpen(!isOpen)
@@ -85,8 +86,7 @@ export function Navbar() {
       const isAuthenticated = await checkAuth()
       setIsLoggedIn(isAuthenticated)
       const user = localStorage.getItem('forge-user')
-      setFirstName(user ? JSON.parse(user).first_name : '')
-      setLastName(user ? JSON.parse(user).last_name : '')
+      setUser(user ? JSON.parse(user) : '')
     }
     checkLoginStatus()
   }, [pathname])
@@ -228,11 +228,11 @@ export function Navbar() {
               <Avatar className="cursor-pointer" onClick={toggleDropdown}>
                 <AvatarImage
                   src="https://images.pexels"
-                  alt={`${firstName} ${lastName}`}
+                  alt={`${user?.first_name} ${user?.last_name}`}
                 />
                 <AvatarFallback className="bg-card text-foreground">
-                  {firstName?.charAt(0)}
-                  {lastName?.charAt(0)}
+                  {user?.first_name.charAt(0)}
+                  {user?.last_name.charAt(0)}
                 </AvatarFallback>
               </Avatar>
 
@@ -241,11 +241,11 @@ export function Navbar() {
                   <NavigationMenu className="w-full flex flex-col list-none">
                     <NavigationMenuItem className="px-3 py-2">
                       <NavigationMenuLink
-                        href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
+                        href={`/profile/${user?.id}`}
                         onClick={() => setIsOpen(false)}
                         className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent/10 focus:bg-accent/10"
                       >
-                        {firstName} {lastName}
+                        {user?.first_name} {user?.last_name}
                       </NavigationMenuLink>
                     </NavigationMenuItem>
                     {profileDropdown.map((item) => (
@@ -380,30 +380,30 @@ export function Navbar() {
                   <div className="flex items-center gap-x-4">
                     <Avatar className="cursor-pointer">
                       <Link
-                        href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
+                        href={`/profile/${user?.id}`}
                         className="block text-sm font-medium"
                       >
                         <AvatarImage
                           src="https://images.pexels"
-                          alt={`${firstName}${lastName}`}
+                          alt={`${user?.first_name} ${user?.last_name}`}
                         />
                       </Link>
                       <AvatarFallback className="bg-card text-foreground">
                         <Link
-                          href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
+                          href={`/profile/${user?.id}`}
                           className="block text-sm font-medium"
                         >
-                          {firstName?.split('', 1)}
-                          {lastName?.split('', 1)}
+                          {user?.first_name?.split('', 1)}
+                          {user?.last_name?.split('', 1)}
                         </Link>
                       </AvatarFallback>
                     </Avatar>
                     <div>
                       <Link
-                        href={`/profile/${firstName.toLowerCase()}-${lastName.toLowerCase()}`}
+                        href={`/profile/${user?.id}`}
                         className="block text-sm font-medium"
                       >
-                        {firstName} {lastName}
+                        {user?.first_name} {user?.last_name}
                       </Link>
                       <Link
                         className="px-0 text-sm text-muted-foreground hover:text-foreground"

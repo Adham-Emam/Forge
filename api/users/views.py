@@ -1,5 +1,6 @@
-from rest_framework import generics, permissions, status, viewsets
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -10,17 +11,23 @@ from .serializers import (
     CustomTokenObtainPairSerializer,
     CustomUserSerializer,
     CustomUserRegisterSerializer,
-    UserEducationSerializer,
-    UserWorkExperienceSerializer,
-    SkillSerializer,
+    BadgeSerializer,
 )
-from .models import CustomUser, UserEducation, UserWorkExperience, Skill
-from .permissions import IsOwnerOrReadOnly, IsAdminOrSelf
+from .models import CustomUser, Badge
+from .permissions import IsAdminOrSelf
 from .token import CustomAccessToken
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+
+class CurrentUserView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        serializer = CustomUserSerializer(request.user)
+        return Response(serializer.data)
 
 
 class UserRegisterView(generics.CreateAPIView):
@@ -71,37 +78,3 @@ class UserUpdateView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.IsAuthenticated, IsAdminOrSelf]
-
-
-class UserEducationViewSet(viewsets.ModelViewSet):
-    serializer_class = UserEducationSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            return UserEducation.objects.all()
-        return UserEducation.objects.filter(user=user)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-class UserWorkExperienceViewSet(viewsets.ModelViewSet):
-    serializer_class = UserWorkExperienceSerializer
-    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
-
-    def get_queryset(self):
-        user = self.request.user
-        if user.is_staff:
-            return UserWorkExperience.objects.all()
-        return UserWorkExperience.objects.filter(user=user)
-
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
-
-
-class SkillViewSet(viewsets.ModelViewSet):
-    queryset = Skill.objects.all()
-    serializer_class = SkillSerializer
-    permission_classes = [permissions.IsAdminUser, permissions.IsAuthenticated]

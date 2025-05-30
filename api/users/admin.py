@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import CustomUser, Badge
 
 
 class CustomUserAdmin(UserAdmin):
@@ -15,7 +15,8 @@ class CustomUserAdmin(UserAdmin):
                 "fields": (
                     "first_name",
                     "last_name",
-                    # "profile_picture",
+                    "level",
+                    "country_code",
                     "phone_number",
                     "country",
                     "city",
@@ -39,7 +40,10 @@ class CustomUserAdmin(UserAdmin):
             {"fields": ("title", "overview", "skills", "hourly_rate", "availability")},
         ),
         ("Client Info", {"fields": ("company_name", "company_website")}),
+        ("Social Links", {"fields": ("social_links",)}),
+        ("Badges", {"fields": ("badges",)}),
     )
+
     add_fieldsets = (
         (
             None,

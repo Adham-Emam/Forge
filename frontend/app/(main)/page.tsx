@@ -13,51 +13,38 @@ import {
 } from 'lucide-react'
 import ProjectCard from '@/components/projects/project-card'
 import BlogPostCard from '@/components/blog/blog-post-card'
-import { motion } from 'framer-motion'
 
 // Sample featured projects data
 const featuredProjects = [
   {
     id: '1',
     title: 'Mobile App for Sustainable Fashion',
-    description:
+    offer_description:
       'Looking for a React Native developer to build an app that helps users track sustainable fashion choices.',
     skills: ['React Native', 'UI/UX', 'Node.js'],
-    budget: '$2000-$3000',
+    offer_value: 2000,
     type: 'exchange',
-    owner: {
-      name: 'Lisa Chen',
-      avatar:
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    },
+    owner: 1,
   },
   {
     id: '2',
     title: '3D Game Environment Design',
-    description:
+    offer_description:
       'Need a skilled 3D environment artist to create immersive game levels for an indie RPG.',
     skills: ['Blender', 'Unity', '3D Modeling'],
-    budget: '$1500-$2500',
+    offer_value: 1500,
     type: 'traditional',
-    owner: {
-      name: 'Mark Wilson',
-      avatar:
-        'https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    },
+    owner: 1,
   },
   {
     id: '3',
     title: 'Logo Design for Tech Startup',
-    description:
+    offer_description:
       'Looking for a creative designer to create a modern, memorable logo for our AI startup.',
     skills: ['Logo Design', 'Branding', 'Adobe Illustrator'],
-    budget: '$300-$800',
+    offer_value: 800,
     type: 'exchange',
-    owner: {
-      name: 'Sophia Martinez',
-      avatar:
-        'https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-    },
+    owner: 2,
   },
 ]
 
@@ -405,8 +392,8 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+            {featuredProjects.map((project, index) => (
+              <ProjectCard key={index} project={project} />
             ))}
           </div>
         </div>

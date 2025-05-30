@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss';
+import type { Config } from 'tailwindcss'
 
 const config: Config = {
   darkMode: ['class'],
@@ -17,8 +17,10 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
-        'metal-texture': "url('https://images.pexels.com/photos/2303337/pexels-photo-2303337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
-        'forge-pattern': "url('https://images.pexels.com/photos/11323166/pexels-photo-11323166.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
+        'metal-texture':
+          "url('https://images.pexels.com/photos/2303337/pexels-photo-2303337.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
+        'forge-pattern':
+          "url('https://images.pexels.com/photos/11323166/pexels-photo-11323166.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')",
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -86,13 +88,13 @@ const config: Config = {
           },
         },
         glow: {
-          '0%, 100%': { 
+          '0%, 100%': {
             opacity: '0.6',
-            filter: 'blur(20px)'
+            filter: 'blur(20px)',
           },
-          '50%': { 
+          '50%': {
             opacity: '1',
-            filter: 'blur(10px)'  
+            filter: 'blur(10px)',
           },
         },
         float: {
@@ -108,17 +110,30 @@ const config: Config = {
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
+        lavaFlow: {
+          '0%': {
+            backgroundPosition: '0% 50%',
+          },
+          '50%': {
+            backgroundPosition: '100% 50%',
+          },
+          '100%': {
+            backgroundPosition: '0% 50%',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'glow': 'glow 3s ease-in-out infinite',
-        'float': 'float 4s ease-in-out infinite',
-        'forge': 'forge 4s ease-in-out infinite',
-        'shimmer': 'shimmer 2s linear infinite',
+        glow: 'glow 3s ease-in-out infinite',
+        float: 'float 4s ease-in-out infinite',
+        forge: 'forge 4s ease-in-out infinite',
+        shimmer: 'shimmer 2s linear infinite',
+        lavaFlow: 'lavaFlow 8s ease infinite',
+        //
       },
     },
   },
   plugins: [require('tailwindcss-animate')],
-};
-export default config;
+}
+export default config
