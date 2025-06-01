@@ -14,6 +14,7 @@ import ProfileHeader from '@/components/profile/header'
 import BadgesSection from '@/components/profile/badges-section'
 
 import { notFound } from 'next/navigation'
+import { url } from 'node:inspector'
 
 async function getUserData(id: number) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/`, {
@@ -39,9 +40,9 @@ async function getUserData(id: number) {
 export default async function ProfilePage({
   params,
 }: {
-  params: { id: number }
+  params: Promise<{ id: number }>
 }) {
-  const { id } = params
+  const { id } = await params
 
   const user = await getUserData(id)
 
@@ -89,19 +90,22 @@ export default async function ProfilePage({
                       </div>
                     </div>
                     <div className="flex flex-wrap gap-3">
-                      {user.social_links.length > 0 &&
-                        user.social_links.map(
-                          (link: { name: string; url: string }) => (
-                            <Link
-                              key={link.name}
-                              href={link.url}
-                              target="_blank"
-                              title={link.name}
-                              className="text-muted-foreground hover:text-accent transition-colors"
-                            >
-                              <SocialIcon url={link.url} name={link.name} />
-                            </Link>
-                          )
+                      {user.social_links &&
+                        Object.entries(
+                          user.social_links as Record<string, string>
+                        ).map(
+                          ([name, link]) =>
+                            link && (
+                              <Link
+                                key={name}
+                                href={link}
+                                target="_blank"
+                                title={name}
+                                className="text-muted-foreground hover:text-accent transition-colors"
+                              >
+                                <SocialIcon name={name} />
+                              </Link>
+                            )
                         )}
                     </div>
                   </div>

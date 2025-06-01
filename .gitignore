@@ -129,3 +129,6 @@ __pycache__/
 # Ignore Python virtual environments
 .venv/
 *rest
+
+
+migrations/

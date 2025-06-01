@@ -1,17 +1,13 @@
 import React from 'react'
+import { Link, Linkedin, Globe } from 'lucide-react'
 import {
-  Link,
-  Github,
-  Gitlab,
-  Linkedin,
-  Twitter,
-  Facebook,
-  Instagram,
-  Dribbble,
-  Slack,
-  Globe,
-} from 'lucide-react'
-import {
+  FaGithub,
+  FaGitlab,
+  FaFacebook,
+  FaInstagram,
+  FaDribbble,
+  FaTwitch,
+  FaSlack,
   FaBitbucket,
   FaTiktok,
   FaVimeoV,
@@ -26,7 +22,7 @@ import {
   FaSoundcloud,
   FaSpotify,
 } from 'react-icons/fa'
-import { FaUpwork } from 'react-icons/fa6'
+import { FaUpwork, FaXTwitter } from 'react-icons/fa6'
 import {
   SiFreelancer,
   SiToptal,
@@ -37,109 +33,119 @@ import {
 
 interface SocialIconProps {
   name: string
-  url: string
+  classname?: string
   size?: number
 }
 
 export const SocialIcon: React.FC<SocialIconProps> = ({
   name,
-  url,
+  classname,
   size = 24,
 }) => {
-  if (!url) return null
-
-  const lowerUrl = url.toLowerCase()
+  if (!name) return null
 
   let IconComponent
 
-  switch (true) {
-    case name.toLowerCase() === 'website':
+  const normalized = name.toLowerCase()
+
+  switch (normalized) {
+    case 'website':
       IconComponent = Globe
       break
-    case lowerUrl.includes('github'):
-      IconComponent = Github
+    case 'github':
+      IconComponent = FaGithub
       break
-    case lowerUrl.includes('gitlab'):
-      IconComponent = Gitlab
+    case 'gitlab':
+      IconComponent = FaGitlab
       break
-    case lowerUrl.includes('bitbucket'):
+    case 'bitbucket':
       IconComponent = FaBitbucket
       break
-    case lowerUrl.includes('linkedin'):
+    case 'linkedin':
       IconComponent = Linkedin
       break
-    case lowerUrl.includes('twitter'):
-      IconComponent = Twitter
+    case 'twitch':
+      IconComponent = FaTwitch
       break
-    case lowerUrl.includes('upwork'):
+    case 'x':
+    case 'twitter':
+      IconComponent = FaXTwitter
+      break
+    case 'upwork':
       IconComponent = FaUpwork
       break
-    case lowerUrl.includes('freelancer'):
+    case 'freelancer':
       IconComponent = SiFreelancer
       break
-    case lowerUrl.includes('toptal'):
+    case 'toptal':
       IconComponent = SiToptal
       break
-    case lowerUrl.includes('facebook'):
-      IconComponent = Facebook
+    case 'facebook':
+      IconComponent = FaFacebook
       break
-    case lowerUrl.includes('instagram'):
-      IconComponent = Instagram
+    case 'instagram':
+      IconComponent = FaInstagram
       break
-    case lowerUrl.includes('vimeo'):
+    case 'vimeo':
       IconComponent = FaVimeoV
       break
-    case lowerUrl.includes('youtube'):
+    case 'youtube':
       IconComponent = FaYoutube
       break
-    case lowerUrl.includes('pinterest'):
+    case 'pinterest':
       IconComponent = FaPinterestP
       break
-    case lowerUrl.includes('medium'):
+    case 'medium':
       IconComponent = FaMedium
       break
-    case lowerUrl.includes('tiktok'):
+    case 'tiktok':
       IconComponent = FaTiktok
       break
-    case lowerUrl.includes('discord'):
+    case 'discord':
       IconComponent = FaDiscord
       break
-    case lowerUrl.includes('t.me'):
+    case 'telegram':
       IconComponent = FaTelegramPlane
       break
-    case lowerUrl.includes('substack'):
+    case 'substack':
       IconComponent = SiSubstack
       break
-    case lowerUrl.includes('gumroad'):
+    case 'gumroad':
       IconComponent = SiGumroad
       break
-    case lowerUrl.includes('reddit'):
+    case 'reddit':
       IconComponent = FaReddit
       break
-    case lowerUrl.includes('stackoverflow'):
+    case 'stackoverflow':
       IconComponent = FaStackOverflow
       break
-    case lowerUrl.includes('dribbble'):
-      IconComponent = Dribbble
+    case 'dribbble':
+      IconComponent = FaDribbble
       break
-    case lowerUrl.includes('behance'):
+    case 'behance':
       IconComponent = FaBehance
       break
-    case lowerUrl.includes('slack'):
-      IconComponent = Slack
+    case 'slack':
+      IconComponent = FaSlack
       break
-    case lowerUrl.includes('soundcloud'):
+    case 'soundcloud':
       IconComponent = FaSoundcloud
       break
-    case lowerUrl.includes('spotify'):
+    case 'spotify':
       IconComponent = FaSpotify
       break
-    case lowerUrl.includes('apple'):
+    case 'apple':
+    case 'apple_podcasts':
       IconComponent = SiApplepodcasts
+      break
+    case 'other':
+      IconComponent = Link
       break
     default:
       IconComponent = Link
+      break
   }
 
-  return <IconComponent size={size} />
+  if (!IconComponent) return null
+  return <IconComponent size={size} className={classname} />
 }

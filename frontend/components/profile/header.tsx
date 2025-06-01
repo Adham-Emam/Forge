@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { Avatar } from '../ui/avatar'
 import { Button } from '../ui/button'
@@ -73,10 +74,12 @@ export default function ProfileHeader({ user }: { user: UserProps }) {
         </div>
         <div className="mt-4 md:mt-0 flex gap-4">
           {isOwner ? (
-            <Button variant="outline">
-              <Edit className="mr-2 h-4 w-4" />
-              Edit Profile
-            </Button>
+            <Link href={`/profile/${user.id}/edit`}>
+              <Button variant="outline">
+                <Edit className="mr-2 h-4 w-4" />
+                Edit Profile
+              </Button>
+            </Link>
           ) : (
             <Button className="glow">
               <MessageSquare className="mr-2 h-4 w-4" />

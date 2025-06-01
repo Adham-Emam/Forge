@@ -49,11 +49,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     # Freelancer-specific fields
     credit_amount = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     title = models.CharField(max_length=200, blank=True, null=True)
-    overview = models.TextField(blank=True, null=True)
+    overview = models.TextField(max_length=1000, blank=True, null=True)
     skills = models.JSONField(blank=True, null=True, default=list)
-    hourly_rate = models.DecimalField(
-        max_digits=10, decimal_places=2, null=True, blank=True
-    )
+    hourly_rate = models.IntegerField(MinValueValidator(0), default=0)
     availability = models.CharField(
         max_length=100, choices=AVAILABILITY_CHOICES, default="full_time"
     )
