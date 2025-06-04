@@ -1,11 +1,7 @@
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, permissions
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError
-from django_filters.rest_framework import (
-    DjangoFilterBackend,
-    FilterSet,
-    CharFilter,
-    NumberFilter,
-)
+from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
 
@@ -15,38 +11,62 @@ from .serializers import ProjectSerializer, ProposalSerializer
 User = get_user_model()
 
 
-class ProjectFilter(FilterSet):
-    project_type = CharFilter(field_name="project_type", lookup_expr="iexact")
-    min_offering_value = NumberFilter(field_name="offering_value", lookup_expr="gte")
-    max_offering_value = NumberFilter(field_name="offering_value", lookup_expr="lte")
-    min_estimated_duration = NumberFilter(
-        field_name="estimated_duration", lookup_expr="gte"
-    )
-    max_estimated_duration = NumberFilter(
-        field_name="estimated_duration", lookup_expr="lte"
-    )
-
-    class Meta:
-        model = Project
-        fields = [
-            "project_type",
-            "min_offering_value",
-            "max_offering_value",
-            "min_estimated_duration",
-            "max_estimated_duration",
-        ]
+class ProjectPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = "page_size"
+    max_page_size = 100
 
 
 class ProjectListView(generics.ListAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [permissions.AllowAny]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
-    filterset_class = ProjectFilter
-    search_fields = ["title", "offer_title", "offer_description", "skills__name"]
+    pagination_class = ProjectPagination
 
     def get_queryset(self):
-        queryset = Project.objects.filter(status="active", assigned_to__isnull=True)
+        queryset = Project.objects.filter(status="active", assigned_to=None)
+        request = self.request
+        params = request.query_params
+
+        # 1. Search filter (across multiple fields)
+        search = params.get("search", "").lower()
+        if search:
+            queryset = queryset.filter(
+                Q(title__icontains=search)
+                | Q(request_title__icontains=search)
+                | Q(request_description__icontains=search)
+                | Q(offer_title__icontains=search)
+                | Q(offer_description__icontains=search)
+                | Q(skills__icontains=search)
+            )
+
+        # 2. Type filter (e.g., project_type=exchange or traditional)
+        project_type = params.getlist("project_type")  # can accept multiple values
+        if project_type:
+            queryset = queryset.filter(project_type__in=project_type)
+
+        # 3. Budget filter (request_value between min and max)
+        try:
+            budget_min = int(params.get("min_budget", 0))
+            budget_max = int(params.get("max_budget", 5000))
+            queryset = queryset.filter(
+                request_value__gte=budget_min, request_value__lte=budget_max
+            )
+        except ValueError:
+            pass  # Ignore bad budget input
+
+        # 4. Category filter
+        category = params.get("category")
+        if category:
+            queryset = queryset.filter(category=category.capitalize())
+
+        ordering = params.get("ordering")
+        if ordering == "low_to_high":
+            queryset = queryset.order_by("request_value")
+        elif ordering == "high_to_low":
+            queryset = queryset.order_by("-request_value")
+        else:
+            queryset = queryset.order_by("-created_at")
 
         return queryset
 

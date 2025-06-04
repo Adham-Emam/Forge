@@ -14,40 +14,6 @@ import {
 import ProjectCard from '@/components/projects/project-card'
 import BlogPostCard from '@/components/blog/blog-post-card'
 
-// Sample featured projects data
-const featuredProjects = [
-  {
-    id: '1',
-    title: 'Mobile App for Sustainable Fashion',
-    offer_description:
-      'Looking for a React Native developer to build an app that helps users track sustainable fashion choices.',
-    skills: ['React Native', 'UI/UX', 'Node.js'],
-    offer_value: 2000,
-    type: 'exchange',
-    owner: 1,
-  },
-  {
-    id: '2',
-    title: '3D Game Environment Design',
-    offer_description:
-      'Need a skilled 3D environment artist to create immersive game levels for an indie RPG.',
-    skills: ['Blender', 'Unity', '3D Modeling'],
-    offer_value: 1500,
-    type: 'traditional',
-    owner: 1,
-  },
-  {
-    id: '3',
-    title: 'Logo Design for Tech Startup',
-    offer_description:
-      'Looking for a creative designer to create a modern, memorable logo for our AI startup.',
-    skills: ['Logo Design', 'Branding', 'Adobe Illustrator'],
-    offer_value: 800,
-    type: 'exchange',
-    owner: 2,
-  },
-]
-
 // Sample featured blog posts
 const featuredPosts = [
   {
@@ -371,7 +337,7 @@ export default function Home() {
       </section>
 
       {/* Featured Projects Section */}
-      <section className="py-20">
+      {/* <section className="py-20">
         <div className="container mx-auto max-w-7xl px-4 md:px-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-12">
             <div>
@@ -397,7 +363,7 @@ export default function Home() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Testimonial Section */}
       <section className="py-20 bg-muted/30">

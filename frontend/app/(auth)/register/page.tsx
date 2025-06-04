@@ -1,5 +1,8 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
+
 import AuthForm from '@/components/auth/auth-form'
+import Loader from '@/components/layout/loader'
 
 export default function RegisterPage() {
   return (
@@ -16,7 +19,9 @@ export default function RegisterPage() {
           </div>
 
           <div className="bg-card p-6 rounded-lg border shadow-sm">
-            <AuthForm action="register" />
+            <Suspense fallback={<Loader />}>
+              <AuthForm action="register" />
+            </Suspense>
             <div className="mt-6 text-center text-sm">
               <span className="text-muted-foreground">
                 Already have an account?{' '}

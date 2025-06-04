@@ -3,15 +3,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.filters import SearchFilter, OrderingFilter
-from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .serializers import (
     CustomTokenObtainPairSerializer,
     CustomUserSerializer,
     CustomUserRegisterSerializer,
-    BadgeSerializer,
 )
 from .models import CustomUser, Badge
 from .permissions import IsAdminOrSelf
@@ -58,13 +55,10 @@ class UserRegisterView(generics.CreateAPIView):
 
 
 class UserListView(generics.ListAPIView):
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
 
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.IsAdminUser]
-    filterset_fields = ["country", "city"]
-    search_fields = ["first_name", "last_name", "email", "title"]
     ordering_fields = ["date_joined", "hourly_rate"]
 
 

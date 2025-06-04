@@ -226,10 +226,6 @@ export function Navbar() {
               ref={dropdownRef}
             >
               <Avatar className="cursor-pointer" onClick={toggleDropdown}>
-                <AvatarImage
-                  src="https://images.pexels"
-                  alt={`${user?.first_name} ${user?.last_name}`}
-                />
                 <AvatarFallback className="bg-card text-foreground">
                   {user?.first_name.charAt(0)}
                   {user?.last_name.charAt(0)}

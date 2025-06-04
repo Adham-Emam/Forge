@@ -21,6 +21,7 @@ async function getAllBadges() {
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/badges/`, {
       next: { revalidate: 60 },
+      cache: 'no-cache',
     })
     return res.json()
   } catch (error) {

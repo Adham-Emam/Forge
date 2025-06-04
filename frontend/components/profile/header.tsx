@@ -39,21 +39,6 @@ export default function ProfileHeader({ user }: { user: UserProps }) {
     return <Loader className="fixed top-0 left-0 w-screen h-screen" />
   }
 
-  function handleAvailability(availability: string) {
-    switch (availability) {
-      case 'full_time':
-        return 'Full Time'
-      case 'part_time':
-        return 'Part Time'
-      case 'remote':
-        return 'Remote'
-      case 'flexible':
-        return 'Flexible'
-      default:
-        return 'Not Available'
-    }
-  }
-
   return (
     <header className="relative -mt-20">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between">
@@ -111,8 +96,8 @@ export default function ProfileHeader({ user }: { user: UserProps }) {
             <Timer className="h-5 w-5 text-accent mr-2" />
             <div>
               <p className="text-sm text-muted-foreground">Availability</p>
-              <p className="text-xl font-bold">
-                {handleAvailability(user.availability)}
+              <p className="text-xl font-bold capitalize">
+                {user.availability.split('_').join(' ')}
               </p>
             </div>
           </CardContent>

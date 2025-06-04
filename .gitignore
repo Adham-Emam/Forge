@@ -117,6 +117,7 @@ db.sqlite3-journal
 # Ignore database files
 *.sqlite
 *.sqlite3
+db.*
 
 # Ignore environment variable files
 .env

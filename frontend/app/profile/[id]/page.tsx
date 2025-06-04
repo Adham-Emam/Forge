@@ -14,11 +14,11 @@ import ProfileHeader from '@/components/profile/header'
 import BadgesSection from '@/components/profile/badges-section'
 
 import { notFound } from 'next/navigation'
-import { url } from 'node:inspector'
 
 async function getUserData(id: number) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${id}/`, {
     next: { revalidate: 60 },
+    cache: 'no-cache',
   })
 
   if (res.status === 404) {

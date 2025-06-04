@@ -6,12 +6,14 @@ from .models import Project, Proposal
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    # owner = CustomUserSerializer(read_only=True)
-    # assigned_to = CustomUserSerializer(read_only=True)
+    owner_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
         fields = "__all__"
+
+    def get_owner_name(self, obj):
+        return f"{obj.owner.first_name} {obj.owner.last_name}"
 
     def validate(self, data):
         project_type = data.get("project_type")
