@@ -26,6 +26,7 @@ import categories from '@/constants/project-categories'
 import { ProjectProps } from '@/types/project'
 
 import { Users, Hammer, Search, DollarSign, Plus } from 'lucide-react'
+import { set } from 'date-fns'
 
 export default function ProjectsSection() {
   // Projects
@@ -45,7 +46,7 @@ export default function ProjectsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [projectType, setProjectType] = useState<string[]>([])
   const [budgetRange, setBudgetRange] = useState<number[]>([0, 5000])
-  const [category, setCategory] = useState<string>('')
+  const [category, setCategory] = useState<string>('all')
   const [ordering, setOrdering] = useState<string>('')
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export default function ProjectsSection() {
     const types = searchParams.getAll('project_type')
     const minBudget = parseInt(searchParams.get('min_budget') || '0')
     const maxBudget = parseInt(searchParams.get('max_budget') || '5000')
-    const cat = searchParams.get('category') || ''
+    const cat = searchParams.get('category') || 'all'
     const order = searchParams.get('ordering') || ''
     const page =
       parseInt(searchParams.get('page') || '1') > projectsPages
@@ -71,32 +72,83 @@ export default function ProjectsSection() {
     setProjectsPerPage(pageSize)
   }, [searchParams, projectsPages])
 
-  useEffect(() => {
-    const query = new URLSearchParams()
+  function updateQueryParams(params: {
+    search?: string
+    project_type?: string[]
+    min_budget?: number
+    max_budget?: number
+    category?: string
+    ordering?: string
+    page?: number
+    page_size?: number
+  }) {
+    const current = new URLSearchParams(window.location.search)
 
-    if (searchQuery) query.set('search', searchQuery)
-    if (projectType.length > 0) {
-      projectType.forEach((type) => query.append('project_type', type))
+    // 🔍 Detect if any non-page filter is being changed
+    const filterKeys = [
+      'search',
+      'project_type',
+      'min_budget',
+      'max_budget',
+      'category',
+      'ordering',
+    ]
+    const isFilterUpdate = Object.keys(params).some((key) =>
+      filterKeys.includes(key)
+    )
+
+    // 🧹 Remove page if filter changes
+    if (isFilterUpdate) {
+      current.delete('page')
     }
-    if (budgetRange[0] > 0) query.set('min_budget', budgetRange[0].toString())
-    if (budgetRange[1] < 5000)
-      query.set('max_budget', budgetRange[1].toString())
-    if (category && category !== 'all') query.append('category', category)
-    if (ordering) query.set('ordering', ordering)
-    query.set('page', currentPage.toString())
-    query.set('page_size', projectsPerPage.toString())
 
-    router.push(`?${query.toString()}`)
-  }, [
-    router,
-    searchQuery,
-    projectType,
-    budgetRange,
-    category,
-    ordering,
-    currentPage,
-    projectsPerPage,
-  ])
+    // === SAME MERGING LOGIC ===
+    if (params.search !== undefined) {
+      if (params.search.trim() === '') current.delete('search')
+      else current.set('search', params.search.trim())
+    }
+
+    if (params.project_type !== undefined) {
+      current.delete('project_type')
+      if (params.project_type.length > 0) {
+        for (const type of params.project_type) {
+          current.append('project_type', type)
+        }
+      }
+    }
+
+    if (params.min_budget !== undefined) {
+      if (params.min_budget === 0) current.delete('min_budget')
+      else current.set('min_budget', String(params.min_budget))
+    }
+
+    if (params.max_budget !== undefined) {
+      if (params.max_budget === 0) current.delete('max_budget')
+      else current.set('max_budget', String(params.max_budget))
+    }
+
+    if (params.category !== undefined) {
+      if (!params.category) current.delete('category')
+      else current.set('category', params.category)
+    }
+
+    if (params.ordering !== undefined) {
+      if (!params.ordering) current.delete('ordering')
+      else current.set('ordering', params.ordering)
+    }
+
+    if (params.page !== undefined) {
+      if (params.page === 1) current.delete('page')
+      else current.set('page', String(params.page))
+    }
+
+    if (params.page_size !== undefined) {
+      if (params.page_size === 10) current.delete('page_size')
+      else current.set('page_size', String(params.page_size))
+    }
+
+    router.push(`?${current.toString()}`)
+  }
 
   useEffect(() => {
     async function fetchProjects() {
@@ -167,14 +219,6 @@ export default function ProjectsSection() {
     return range
   }
 
-  const updatePaginationInURL = (
-    page: number,
-    pageSize: number = projectsPerPage
-  ) => {
-    setCurrentPage(page)
-    setProjectsPerPage(pageSize)
-  }
-
   return (
     <>
       <div className="lg:col-span-1">
@@ -182,14 +226,16 @@ export default function ProjectsSection() {
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold">Filters</h2>
             <Button
+              type="button"
               variant="ghost"
               size="sm"
               onClick={() => {
                 setSearchQuery('')
                 setProjectType([])
                 setBudgetRange([0, 5000])
-                setCategory('')
+                setCategory('all')
                 setOrdering('')
+                router.push('?')
               }}
             >
               Reset
@@ -204,7 +250,12 @@ export default function ProjectsSection() {
               type="multiple"
               className="justify-start flex-wrap"
               value={projectType}
-              onValueChange={setProjectType}
+              onValueChange={(types) => {
+                setProjectType(types)
+                updateQueryParams({
+                  project_type: types,
+                })
+              }}
             >
               <ToggleGroupItem
                 value="traditional"
@@ -234,7 +285,13 @@ export default function ProjectsSection() {
                 max={5000}
                 step={100}
                 value={budgetRange}
-                onValueChange={setBudgetRange}
+                onValueChange={(range) => {
+                  setBudgetRange(range)
+                  updateQueryParams({
+                    min_budget: range[0],
+                    max_budget: range[1],
+                  })
+                }}
                 className="mb-6"
               />
               <div className="flex items-center justify-between text-sm">
@@ -250,7 +307,12 @@ export default function ProjectsSection() {
             <h3 className="font-medium mb-3">Category</h3>
             <RadioGroup
               value={category}
-              onValueChange={setCategory}
+              onValueChange={(cat) => {
+                setCategory(cat)
+                updateQueryParams({
+                  category: cat,
+                })
+              }}
               className="flex flex-col gap-3"
             >
               <div className="flex items-center space-x-2">
@@ -285,13 +347,23 @@ export default function ProjectsSection() {
                 placeholder="Search projects..."
                 className="pl-10"
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e) => {
+                  setSearchQuery(e.target.value)
+                  updateQueryParams({
+                    search: e.target.value,
+                  })
+                }}
               />
             </div>
             <div className="flex items-center gap-4">
               <Select
                 value={ordering}
-                onValueChange={setOrdering}
+                onValueChange={(value) => {
+                  setOrdering(value)
+                  updateQueryParams({
+                    ordering: value,
+                  })
+                }}
                 defaultValue="newest"
               >
                 <SelectTrigger className="w-[180px]">
@@ -315,14 +387,14 @@ export default function ProjectsSection() {
           <p className="text-muted-foreground">
             Showing{' '}
             <span className="font-medium text-foreground">
-              {projects.length}
+              {projects.length || 0}
             </span>{' '}
             projects
-            {(searchQuery ||
+            {searchQuery ||
               projectType.length > 0 ||
               budgetRange[0] > 0 ||
-              budgetRange[1] < 5000) &&
-              ' matching your filters'}
+              budgetRange[1] < 5000 ||
+              (category !== 'all' && ' matching your filters')}
           </p>
         </div>
         {/* Projects Grid */}
@@ -340,7 +412,7 @@ export default function ProjectsSection() {
               We couldn&apos;t find any projects matching your current filters.
               Try adjusting your search criteria or post your own project.
             </p>
-            <Button asChild>
+            <Button type="button" asChild>
               <Link href="/projects/create">
                 <Plus className="h-4 w-4 mr-2" />
                 Post a Project
@@ -359,9 +431,12 @@ export default function ProjectsSection() {
           <SelectGroup className="flex gap-4 w-full md:w-[400px]">
             <Select
               value={projectsPerPage.toString()}
-              onValueChange={(val) =>
-                updatePaginationInURL(currentPage, Number(val))
-              }
+              onValueChange={(val) => {
+                setProjectsPerPage(parseInt(val))
+                updateQueryParams({
+                  page_size: parseInt(val),
+                })
+              }}
             >
               <SelectLabel>Projects per page</SelectLabel>
               <SelectTrigger className="w-full">
@@ -380,11 +455,15 @@ export default function ProjectsSection() {
             <div className="flex justify-center">
               <div className="flex space-x-2">
                 <Button
+                  type="button"
                   variant="outline"
                   size="icon"
-                  onClick={() =>
-                    updatePaginationInURL(Math.max(1, currentPage - 1))
-                  }
+                  onClick={() => {
+                    setCurrentPage((prev) => Math.max(1, prev - 1))
+                    updateQueryParams({
+                      page: Math.max(1, currentPage - 1),
+                    })
+                  }}
                   disabled={currentPage === 1}
                 >
                   <svg
@@ -400,10 +479,16 @@ export default function ProjectsSection() {
 
                 {getPaginationRange().map((page) => (
                   <Button
+                    type="button"
                     key={page}
                     variant={page === currentPage ? 'default' : 'outline'}
                     size="icon"
-                    onClick={() => updatePaginationInURL(page)}
+                    onClick={() => {
+                      setCurrentPage(Math.min(projectsPages, page))
+                      updateQueryParams({
+                        page: Math.min(projectsPages, page),
+                      })
+                    }}
                     disabled={page === currentPage}
                   >
                     {page}
@@ -411,11 +496,15 @@ export default function ProjectsSection() {
                 ))}
 
                 <Button
+                  type="button"
                   variant="outline"
                   size="icon"
-                  onClick={() =>
+                  onClick={() => {
                     setCurrentPage((prev) => Math.min(projectsPages, prev + 1))
-                  }
+                    updateQueryParams({
+                      page: Math.min(projectsPages, currentPage + 1),
+                    })
+                  }}
                   disabled={currentPage === projectsPages}
                 >
                   <svg

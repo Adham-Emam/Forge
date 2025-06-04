@@ -57,7 +57,7 @@ class ProjectListView(generics.ListAPIView):
 
         # 4. Category filter
         category = params.get("category")
-        if category:
+        if category and category != "all":
             queryset = queryset.filter(category=category.capitalize())
 
         ordering = params.get("ordering")
