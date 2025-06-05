@@ -459,12 +459,15 @@ export default function EditForm({ id }: { id: number }) {
                 <h2 className="text-lg font-semibold">Skills</h2>
               </div>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-t-6">
               <SkillsInput
                 control={form.control}
                 name="skills"
                 suggestions={skillSuggestions}
               />
+              <p className="mt-2 text-xs text-muted-foreground italic">
+                Empower your journey — every skill is a step closer to mastery.
+              </p>
             </CardContent>
           </Card>
         </TabsContent>

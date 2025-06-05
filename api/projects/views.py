@@ -77,7 +77,9 @@ class ProjectCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user, status="active")
+        user = self.request.user
+
+        serializer.save(owner=user, status="active")
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):

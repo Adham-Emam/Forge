@@ -11,6 +11,9 @@ class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = "__all__"
+        read_only_fields = [
+            "owner",
+        ]
 
     def get_owner_name(self, obj):
         return f"{obj.owner.first_name} {obj.owner.last_name}"
@@ -21,7 +24,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         if project_type != "exchange":
             return data
 
-        for field in ["request_title", "request_description", "request_value"]:
+        for field in ["offer_title", "offer_description", "offer_value"]:
             value = data.get(field)
             if value is None and self.instance:
                 value = getattr(self.instance, field, None)

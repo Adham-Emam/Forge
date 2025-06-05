@@ -146,9 +146,6 @@ export const SkillsInput: React.FC<SkillsInputProps> = ({
             </FormControl>
 
             <FormMessage />
-            <p className="mt-2 text-xs text-muted-foreground italic">
-              Empower your journey — every skill is a step closer to mastery.
-            </p>
           </FormItem>
         )
       }}
