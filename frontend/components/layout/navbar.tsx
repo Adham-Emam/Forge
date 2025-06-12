@@ -26,6 +26,7 @@ import { Hammer, Menu } from 'lucide-react'
 
 import { UserProps } from '@/types/user'
 import { checkAuth } from '@/lib/auth'
+import { set } from 'date-fns'
 
 const routes = [
   {
@@ -77,11 +78,15 @@ export function Navbar() {
   const [user, setUser] = useState<UserProps | null>(null)
 
   const [isOpen, setIsOpen] = useState(false)
+
   const toggleDropdown = () => setIsOpen(!isOpen)
   // Reference for the dropdown to handle clicks outside
   const dropdownRef = useRef<HTMLDivElement>(null)
 
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+
   useEffect(() => {
+    setIsSheetOpen(false)
     async function checkLoginStatus() {
       const isAuthenticated = await checkAuth()
       setIsLoggedIn(isAuthenticated)
@@ -274,7 +279,7 @@ export function Navbar() {
           )}
 
           {/* Mobile Menu */}
-          <Sheet>
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
@@ -375,22 +380,13 @@ export function Navbar() {
                 {isLoggedIn ? (
                   <div className="flex items-center gap-x-4">
                     <Avatar className="cursor-pointer">
-                      <Link
-                        href={`/profile/${user?.id}`}
-                        className="block text-sm font-medium"
-                      >
-                        <AvatarImage
-                          src="https://images.pexels"
-                          alt={`${user?.first_name} ${user?.last_name}`}
-                        />
-                      </Link>
                       <AvatarFallback className="bg-card text-foreground">
                         <Link
                           href={`/profile/${user?.id}`}
                           className="block text-sm font-medium"
                         >
-                          {user?.first_name?.split('', 1)}
-                          {user?.last_name?.split('', 1)}
+                          {user?.first_name.charAt(0)}
+                          {user?.last_name.charAt(0)}
                         </Link>
                       </AvatarFallback>
                     </Avatar>
