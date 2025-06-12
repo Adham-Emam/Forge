@@ -78,6 +78,8 @@ class ProjectCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         user = self.request.user
+        if user.credit_amount < serializer.validated_data["request_value"]:
+            raise ValidationError("Insufficient credit for project.")
 
         serializer.save(owner=user, status="active")
 
