@@ -9,8 +9,8 @@ import {
   Timer,
   Briefcase,
   Award,
+  Flame,
   CircleDollarSign,
-  DollarSign,
   MessageSquare,
 } from 'lucide-react'
 import { Card, CardContent } from '../ui/card'
@@ -75,22 +75,36 @@ export default function ProfileHeader({ user }: { user: UserProps }) {
       </div>
 
       {/* Balance */}
-      {isOwner && (
+      {/* {isOwner && (
         <div className="mt-8">
+          
+        </div>
+      )} */}
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+        {isOwner ? (
           <Card>
             <CardContent className="p-4 flex items-center">
-              <DollarSign className="h-5 w-5 text-accent mr-2" />
+              <Flame className="h-5 w-5 text-accent mr-2" />
               <div>
-                <p className="text-sm text-muted-foreground">Balance</p>
+                <p className="text-sm text-muted-foreground">Embers Wallet</p>
                 <p className="text-xl font-bold">{user.credit_amount}</p>
               </div>
             </CardContent>
           </Card>
-        </div>
-      )}
+        ) : (
+          <Card>
+            <CardContent className="p-4 flex items-center">
+              <CircleDollarSign className="h-5 w-5 text-accent mr-2" />
+              <div>
+                <p className="text-sm text-muted-foreground">Hourly Rate</p>
+                <p className="text-xl font-bold">{user.hourly_rate}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
         <Card>
           <CardContent className="p-4 flex items-center">
             <Timer className="h-5 w-5 text-accent mr-2" />
@@ -102,6 +116,7 @@ export default function ProfileHeader({ user }: { user: UserProps }) {
             </div>
           </CardContent>
         </Card>
+
         <Card>
           <CardContent className="relative p-4 flex items-center">
             <Briefcase className="h-5 w-5 text-accent mr-2" />
@@ -113,21 +128,13 @@ export default function ProfileHeader({ user }: { user: UserProps }) {
             </div>
           </CardContent>
         </Card>
+
         <Card>
           <CardContent className="p-4 flex items-center">
             <Award className="h-5 w-5 text-accent mr-2" />
             <div>
               <p className="text-sm text-muted-foreground">Level</p>
               <p className="text-xl font-bold capitalize">{user.level}</p>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4 flex items-center">
-            <CircleDollarSign className="h-5 w-5 text-accent mr-2" />
-            <div>
-              <p className="text-sm text-muted-foreground">Hourly Rate</p>
-              <p className="text-xl font-bold">{user.hourly_rate}</p>
             </div>
           </CardContent>
         </Card>
