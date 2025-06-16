@@ -22,11 +22,10 @@ import {
 } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { motion } from 'framer-motion'
-import { Hammer, Menu } from 'lucide-react'
+import { Hammer, Menu, Plus, Flame } from 'lucide-react'
 
 import { UserProps } from '@/types/user'
 import { checkAuth } from '@/lib/auth'
-import { set } from 'date-fns'
 
 const routes = [
   {
@@ -90,8 +89,18 @@ export function Navbar() {
     async function checkLoginStatus() {
       const isAuthenticated = await checkAuth()
       setIsLoggedIn(isAuthenticated)
-      const user = localStorage.getItem('forge-user')
-      setUser(user ? JSON.parse(user) : '')
+
+      const access = localStorage.getItem('forge-auth-token')
+      if (!access) setIsLoggedIn(false)
+
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/current/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${access}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => setUser(data))
     }
     checkLoginStatus()
   }, [pathname])
@@ -238,9 +247,23 @@ export function Navbar() {
               </Avatar>
 
               {isOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-card/90 backdrop-blur-lg border-b shadow-sm rounded z-50 border">
-                  <NavigationMenu className="w-full flex flex-col list-none">
-                    <NavigationMenuItem className="px-3 py-2">
+                <div className="absolute top-full right-0 mt-2 px-2 bg-card/90 backdrop-blur-lg border-b shadow-sm rounded z-50 border">
+                  <NavigationMenu className="w-48 flex flex-col items-center justify-center list-none">
+                    <NavigationMenuItem className="w-full flex items-center justify-between bg-muted/50 px-3 py-2 mx-auto my-2 border rounded-full">
+                      <Flame className="text-accent" />
+
+                      <span className="text-md text-center font-bold flex-1">
+                        {user?.credit_amount}
+                      </span>
+
+                      <div className="p-1 bg-accent/30 hover:bg-accent/80 duration-200 rounded-full">
+                        <Link href="/embers" className="font-medium">
+                          <Plus />
+                        </Link>
+                      </div>
+                    </NavigationMenuItem>
+
+                    <NavigationMenuItem className="w-full px-3 py-2">
                       <NavigationMenuLink
                         href={`/profile/${user?.id}`}
                         onClick={() => setIsOpen(false)}
@@ -249,6 +272,7 @@ export function Navbar() {
                         {user?.first_name} {user?.last_name}
                       </NavigationMenuLink>
                     </NavigationMenuItem>
+
                     {profileDropdown.map((item) => (
                       <NavigationMenuItem
                         key={item.path}
