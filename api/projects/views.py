@@ -1,6 +1,7 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from django.shortcuts import get_object_or_404
@@ -79,7 +80,10 @@ class ProjectCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         user = self.request.user
         if user.credit_amount < serializer.validated_data["request_value"]:
-            raise ValidationError("Insufficient credit for project.")
+            return Response(
+                {"error": "Insufficient credit for project."},
+                status=status.HTTP_402_PAYMENT_REQUIRED,
+            )
 
         serializer.save(owner=user, status="active")
 

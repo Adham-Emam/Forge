@@ -120,6 +120,7 @@ export default function CreateProjectPage() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true)
 
+    console.log(values)
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/projects/create/`,
@@ -136,7 +137,9 @@ export default function CreateProjectPage() {
       )
 
       if (!response.ok) {
-        throw new Error('Failed to create project')
+        // throw new Error('Failed to create project')
+        console.error('Failed to create project:', response)
+        return
       }
 
       router.push('/projects')
@@ -418,29 +421,10 @@ export default function CreateProjectPage() {
                         <FormItem>
                           <FormLabel>Deadline</FormLabel>
                           <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="estimated_duration"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>
-                            Estimated Duration in Days (Optional)
-                          </FormLabel>
-                          <FormControl>
                             <Input
-                              type="number"
-                              placeholder="0"
+                              type="date"
                               {...field}
-                              onChange={(e) =>
-                                field.onChange(Number(e.target.value))
-                              }
+                              className="cursor-pointer appearance-none [&::-webkit-calendar-picker-indicator]:hidden"
                             />
                           </FormControl>
                           <FormMessage />
